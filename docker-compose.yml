@@ -1,0 +1,49 @@
+services:
+
+  # ── PostgreSQL ───────────────────────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       ${DB_NAME:-challengeme}
+      POSTGRES_USER:     ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME:-challengeme}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # ── Spring Boot backend ──────────────────────────────────────────────────────
+  backend:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_HOST:          db
+      DB_PORT:          5432
+      DB_NAME:          ${DB_NAME:-challengeme}
+      DB_USER:          ${DB_USER}
+      DB_PASS:          ${DB_PASS}
+      ADMIN_USERNAME:   ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD:   ${ADMIN_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ── Nginx + Vue frontend ─────────────────────────────────────────────────────
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+    driver: local

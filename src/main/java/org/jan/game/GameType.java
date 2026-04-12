@@ -1,0 +1,32 @@
+package org.jan.game;
+
+public enum GameType {
+    TIC_TAC_TOE,
+    ROCK_PAPER_SCISSORS,
+    TABLE_FOOTBALL,
+    CHESS,
+    DARTS,
+    PRSIT,
+    TABLE_TENNIS,
+    POOL,
+    JENGA,
+    CONNECT_FOUR,
+    ARM_WRESTLING,
+    MEXICO_DICE,
+    DOMINO,
+    MAU_MAU,
+    BEER_PONG,
+    BLITZ_CHESS,
+    NOHEJBAL,
+    BOWLING,
+    TWENTY_ONE,
+    KNIFFEL,
+    GOMOKU,
+    PENALTY_SHOOTOUT,
+    BADMINTON,
+    LIAR_DICE,
+    FOOTBALL,
+    VOLLEYBALL,
+    BASKETBALL,
+    TENNIS
+}

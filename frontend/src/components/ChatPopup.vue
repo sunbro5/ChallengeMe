@@ -1,15 +1,13 @@
 <template>
   <div class="chat-popup">
-    <!-- Toggle button -->
     <button class="chat-toggle-btn" @click="togglePanel">
       💬
       <span v-if="unreadCount > 0" class="unread-badge">{{ unreadCount }}</span>
     </button>
 
-    <!-- Chat panel -->
     <div v-if="panelOpen" class="chat-panel">
       <div class="panel-header">
-        <span v-if="!activeFriend">Chats</span>
+        <span v-if="!activeFriend">{{ $t('chat.title') }}</span>
         <span v-else>
           <button class="back-btn" @click="activeFriend = null">←</button>
           {{ activeFriend.username }}
@@ -19,7 +17,7 @@
 
       <!-- Friends list view -->
       <div v-if="!activeFriend" class="friends-list">
-        <div v-if="friends.length === 0" class="empty">No friends yet.</div>
+        <div v-if="friends.length === 0" class="empty">{{ $t('chat.noFriends') }}</div>
         <div
           v-for="friend in friends"
           :key="friend.id"
@@ -47,7 +45,7 @@
           <input
             v-model="inputText"
             type="text"
-            placeholder="Type a message..."
+            :placeholder="$t('chat.messagePlaceholder')"
             @keyup.enter="sendMessage"
             class="msg-input"
           />
@@ -65,6 +63,7 @@ import { Client } from '@stomp/stompjs'
 
 export default {
   name: 'ChatPopup',
+  emits: ['notification'],
   data() {
     return {
       panelOpen: false,
@@ -112,13 +111,14 @@ export default {
       }
     },
     connectWebSocket() {
-      // markRaw prevents Vue from wrapping the Client in a reactive Proxy,
-      // which would break @stomp/stompjs internal state and WebSocket callbacks.
       this.stompClient = markRaw(new Client({
         brokerURL: 'ws://localhost:8080/ws',
         reconnectDelay: 5000,
+        connectHeaders: {
+          login: localStorage.getItem('username') || ''
+        },
         onConnect: () => {
-          this.stompClient.subscribe('/user/queue/messages', (frame) => {
+          this.stompClient.subscribe(`/topic/chat/${this.currentUser}`, (frame) => {
             const msg = JSON.parse(frame.body)
             const isCurrentChat = this.activeFriend && msg.senderUsername === this.activeFriend.username
             if (isCurrentChat && this.panelOpen) {
@@ -127,6 +127,10 @@ export default {
             } else {
               this.unreadCount++
             }
+          })
+          this.stompClient.subscribe(`/topic/notifications/${this.currentUser}`, (frame) => {
+            const notif = JSON.parse(frame.body)
+            this.$emit('notification', notif)
           })
         },
         onStompError: (frame) => {
@@ -138,7 +142,6 @@ export default {
     sendMessage() {
       if (!this.inputText.trim() || !this.activeFriend || !this.stompClient?.connected) return
       const content = this.inputText.trim()
-      // Optimistic update — sender sees message immediately without waiting for server echo
       this.messages.push({
         senderUsername: this.currentUser,
         receiverUsername: this.activeFriend.username,
@@ -147,7 +150,11 @@ export default {
       })
       this.stompClient.publish({
         destination: '/app/chat.send',
-        body: JSON.stringify({ receiverUsername: this.activeFriend.username, content })
+        body: JSON.stringify({
+          senderUsername:   this.currentUser,
+          receiverUsername: this.activeFriend.username,
+          content,
+        })
       })
       this.inputText = ''
       this.$nextTick(() => this.scrollToBottom())
@@ -177,35 +184,34 @@ export default {
 }
 
 .chat-toggle-btn {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: #42b883;
-  color: white;
+  background: var(--brand);
+  color: #fff;
   border: none;
-  font-size: 22px;
+  font-size: 20px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: var(--shadow-lg);
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background var(--transition);
 }
-
-.chat-toggle-btn:hover {
-  background: #369f6e;
-}
+.chat-toggle-btn:hover { background: var(--brand-hover); }
 
 .unread-badge {
   position: absolute;
-  top: -4px;
-  right: -4px;
-  background: #e74c3c;
-  color: white;
-  font-size: 11px;
+  top: -3px;
+  right: -3px;
+  background: var(--red);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
   border-radius: 50%;
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  height: 17px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -213,13 +219,14 @@ export default {
 
 .chat-panel {
   position: absolute;
-  bottom: 64px;
+  bottom: 60px;
   right: 0;
   width: 300px;
   height: 420px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -229,31 +236,36 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
-  background: #42b883;
-  color: white;
+  padding: 11px 14px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
   font-weight: 600;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .close-btn {
   background: transparent;
   border: none;
-  color: white;
+  color: var(--text-muted);
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1;
+  transition: color var(--transition);
 }
+.close-btn:hover { color: var(--text-primary); }
 
 .back-btn {
   background: transparent;
   border: none;
-  color: white;
+  color: var(--text-secondary);
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
   margin-right: 6px;
   line-height: 1;
+  transition: color var(--transition);
 }
+.back-btn:hover { color: var(--text-primary); }
 
 .friends-list {
   flex: 1;
@@ -265,37 +277,35 @@ export default {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px;
-  border-radius: 8px;
+  padding: 9px 10px;
+  border-radius: var(--r);
   cursor: pointer;
+  transition: background var(--transition);
 }
-
-.friend-row:hover {
-  background: #f0faf5;
-}
+.friend-row:hover { background: var(--bg-elevated); }
 
 .avatar {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: #42b883;
-  color: white;
+  background: var(--brand-muted);
+  border: 1px solid rgba(66,184,131,.3);
+  color: var(--brand);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 13px;
   flex-shrink: 0;
 }
 
-.fname {
-  font-size: 14px;
-}
+.fname { font-size: 13px; color: var(--text-primary); font-weight: 500; }
 
 .empty {
   text-align: center;
-  color: #999;
+  color: var(--text-muted);
   padding: 40px 0;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .chat-view {
@@ -314,82 +324,59 @@ export default {
   gap: 8px;
 }
 
-.message {
-  display: flex;
-  flex-direction: column;
-}
-
-.message.mine {
-  align-items: flex-end;
-}
-
-.message.theirs {
-  align-items: flex-start;
-}
+.message { display: flex; flex-direction: column; }
+.message.mine   { align-items: flex-end; }
+.message.theirs { align-items: flex-start; }
 
 .bubble {
   max-width: 200px;
-  padding: 8px 12px;
-  border-radius: 16px;
-  font-size: 14px;
+  padding: 7px 12px;
+  border-radius: 14px;
+  font-size: 13px;
   line-height: 1.4;
   word-break: break-word;
 }
+.message.mine .bubble   { background: var(--brand); color: #fff; border-bottom-right-radius: 4px; }
+.message.theirs .bubble { background: var(--bg-elevated); color: var(--text-primary); border-bottom-left-radius: 4px; }
 
-.message.mine .bubble {
-  background: #42b883;
-  color: white;
-  border-bottom-right-radius: 4px;
-}
-
-.message.theirs .bubble {
-  background: #f0f0f0;
-  color: #333;
-  border-bottom-left-radius: 4px;
-}
-
-.time {
-  font-size: 11px;
-  color: #aaa;
-  margin-top: 2px;
-  padding: 0 4px;
-}
+.time { font-size: 10px; color: var(--text-muted); margin-top: 2px; padding: 0 4px; }
 
 .input-row {
   display: flex;
   gap: 8px;
   padding: 10px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border);
 }
 
 .msg-input {
   flex: 1;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  font-size: 14px;
+  padding: 7px 12px;
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  font-size: 13px;
+  font-family: var(--font);
   outline: none;
+  transition: border-color var(--transition);
 }
-
-.msg-input:focus {
-  border-color: #42b883;
-}
+.msg-input::placeholder { color: var(--text-muted); }
+.msg-input:focus { border-color: var(--brand); }
 
 .send-btn {
-  background: #42b883;
-  color: white;
+  background: var(--brand);
+  color: #fff;
   border: none;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background var(--transition);
+  flex-shrink: 0;
 }
-
-.send-btn:hover {
-  background: #369f6e;
-}
+.send-btn:hover { background: var(--brand-hover); }
 </style>

@@ -1,18 +1,18 @@
 <template>
   <div class="admin-page">
     <div class="admin-header">
-      <h2>Admin Panel — Reports</h2>
+      <h2>{{ $t('admin.title') }}</h2>
       <div class="filter-row">
         <label>
           <input type="checkbox" v-model="showResolved" @change="loadReports" />
-          Show resolved
+          {{ $t('admin.showResolved') }}
         </label>
-        <button class="refresh-btn" @click="loadReports">Refresh</button>
+        <button class="refresh-btn" @click="loadReports">{{ $t('admin.refresh') }}</button>
       </div>
     </div>
 
-    <div v-if="loading" class="loading">Loading...</div>
-    <div v-else-if="filtered.length === 0" class="empty">No reports found.</div>
+    <div v-if="loading" class="loading">{{ $t('admin.loading') }}</div>
+    <div v-else-if="filtered.length === 0" class="empty">{{ $t('admin.noReports') }}</div>
 
     <div v-else class="reports-list">
       <div
@@ -28,16 +28,16 @@
         </div>
         <div class="report-body">
           <div class="report-row">
-            <span class="label">Reporter:</span>
+            <span class="label">{{ $t('admin.reporter') }}</span>
             <span>{{ report.reporterUsername }}</span>
           </div>
           <div class="report-row">
-            <span class="label">Reported:</span>
+            <span class="label">{{ $t('admin.reported') }}</span>
             <span>{{ report.reportedUsername }}</span>
-            <span v-if="report.reportedBanned" class="banned-tag">BANNED</span>
+            <span v-if="report.reportedBanned" class="banned-tag">{{ $t('admin.banned') }}</span>
           </div>
           <div class="report-row reason-row">
-            <span class="label">Reason:</span>
+            <span class="label">{{ $t('admin.reason') }}</span>
             <span class="reason-text">{{ report.reason }}</span>
           </div>
         </div>
@@ -46,17 +46,17 @@
             v-if="!report.reportedBanned"
             class="ban-btn"
             @click="banUser(report)"
-          >Ban user</button>
+          >{{ $t('admin.banUser') }}</button>
           <button
             v-else
             class="unban-btn"
             @click="unbanUser(report)"
-          >Unban user</button>
+          >{{ $t('admin.unbanUser') }}</button>
           <button
             v-if="report.status === 'PENDING'"
             class="resolve-btn"
             @click="resolveReport(report)"
-          >Mark resolved</button>
+          >{{ $t('admin.markResolved') }}</button>
         </div>
       </div>
     </div>
@@ -100,7 +100,7 @@ export default {
         await axios.post(`http://localhost:8080/admin/ban/${report.reportedId}`, {}, { withCredentials: true })
         report.reportedBanned = true
       } catch (e) {
-        alert(e.response?.data || 'Failed to ban user')
+        alert(e.response?.data || this.$t('admin.failedBan'))
       }
     },
     async unbanUser(report) {
@@ -108,7 +108,7 @@ export default {
         await axios.post(`http://localhost:8080/admin/unban/${report.reportedId}`, {}, { withCredentials: true })
         report.reportedBanned = false
       } catch (e) {
-        alert(e.response?.data || 'Failed to unban user')
+        alert(e.response?.data || this.$t('admin.failedUnban'))
       }
     },
     async resolveReport(report) {
@@ -116,7 +116,7 @@ export default {
         await axios.post(`http://localhost:8080/admin/resolve/${report.id}`, {}, { withCredentials: true })
         report.status = 'RESOLVED'
       } catch (e) {
-        alert(e.response?.data || 'Failed to resolve report')
+        alert(e.response?.data || this.$t('admin.failedResolve'))
       }
     },
     formatDate(dateStr) {
@@ -129,29 +129,31 @@ export default {
 
 <style scoped>
 .admin-page {
-  padding: 24px;
   max-width: 800px;
   margin: 0 auto;
+  padding: 32px 20px 64px;
 }
 
 .admin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .admin-header h2 {
-  color: #2c3e50;
+  color: var(--text-primary);
   font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -.01em;
 }
 
 .filter-row {
   display: flex;
   align-items: center;
-  gap: 16px;
-  font-size: 14px;
-  color: #555;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text-secondary);
 }
 
 .filter-row label {
@@ -159,83 +161,75 @@ export default {
   align-items: center;
   gap: 6px;
   cursor: pointer;
+  font-size: 13px;
+  color: var(--text-secondary);
 }
 
 .refresh-btn {
-  background: #42b883;
-  color: white;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 6px;
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: 5px 12px;
+  border-radius: var(--r);
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
+  font-family: var(--font);
+  transition: background var(--transition);
 }
-
-.refresh-btn:hover {
-  background: #369f6e;
-}
+.refresh-btn:hover { background: var(--bg-overlay); }
 
 .loading, .empty {
   text-align: center;
-  color: #999;
+  color: var(--text-muted);
   padding: 60px 0;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .reports-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .report-card {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--red);
+  border-radius: var(--r-md);
   padding: 16px;
-  border-left: 4px solid #e74c3c;
+  transition: border-color var(--transition);
 }
-
 .report-card.resolved {
-  border-left-color: #bdc3c7;
-  opacity: 0.75;
+  border-left-color: var(--border);
+  opacity: .65;
 }
 
 .report-meta {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 12px;
 }
 
 .badge {
-  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
   font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 12px;
+  padding: 2px 8px;
+  border-radius: var(--r-full);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: .05em;
 }
+.badge.pending       { background: var(--red-muted);  color: var(--red); }
+.badge.resolved-badge { background: rgba(139,148,158,.1); color: var(--text-muted); }
 
-.badge.pending {
-  background: #fdecea;
-  color: #e74c3c;
-}
-
-.badge.resolved-badge {
-  background: #eaecee;
-  color: #7f8c8d;
-}
-
-.date {
-  font-size: 12px;
-  color: #999;
-}
+.date { font-size: 12px; color: var(--text-muted); }
 
 .report-body {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   margin-bottom: 14px;
 }
 
@@ -243,78 +237,74 @@ export default {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  font-size: 14px;
+  font-size: 13px;
+  color: var(--text-primary);
 }
 
 .label {
   font-weight: 600;
-  color: #555;
+  color: var(--text-secondary);
   min-width: 72px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
 }
 
-.reason-row {
-  align-items: flex-start;
-}
-
-.reason-text {
-  color: #2c3e50;
-  line-height: 1.5;
-}
+.reason-row { align-items: flex-start; }
+.reason-text { color: var(--text-primary); line-height: 1.5; }
 
 .banned-tag {
-  background: #e74c3c;
-  color: white;
+  background: var(--red);
+  color: #fff;
   font-size: 10px;
   font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 10px;
+  padding: 1px 7px;
+  border-radius: var(--r-full);
   margin-left: 4px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
 }
 
-.report-actions {
-  display: flex;
-  gap: 8px;
-}
+.report-actions { display: flex; gap: 8px; }
 
 .ban-btn {
-  background: #e74c3c;
-  color: white;
+  background: var(--red);
+  color: #fff;
   border: none;
-  padding: 6px 14px;
-  border-radius: 6px;
+  padding: 5px 12px;
+  border-radius: var(--r);
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font);
+  transition: filter var(--transition);
 }
-
-.ban-btn:hover {
-  background: #c0392b;
-}
+.ban-btn:hover { filter: brightness(1.1); }
 
 .unban-btn {
-  background: #f39c12;
-  color: white;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 6px;
+  background: var(--yellow-muted);
+  color: var(--yellow);
+  border: 1px solid rgba(210,153,34,.3);
+  padding: 5px 12px;
+  border-radius: var(--r);
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font);
+  transition: background var(--transition);
 }
-
-.unban-btn:hover {
-  background: #d68910;
-}
+.unban-btn:hover { background: rgba(210,153,34,.2); }
 
 .resolve-btn {
-  background: #ecf0f1;
-  color: #555;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 6px;
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  padding: 5px 12px;
+  border-radius: var(--r);
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
+  font-family: var(--font);
+  transition: background var(--transition);
 }
-
-.resolve-btn:hover {
-  background: #dde1e2;
-}
+.resolve-btn:hover { background: var(--bg-overlay); }
 </style>

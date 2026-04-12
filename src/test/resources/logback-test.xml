@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOG_PATTERN_CONSOLE" value="%d{HH:mm:ss} %highlight(%-5level) %logger{36} - %msg%n"/>
+
+    <!-- CONSOLE Appender: For test output only -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoder>
+            <pattern>${LOG_PATTERN_CONSOLE}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- Test profile: DEBUG level for better visibility during testing -->
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!-- Reduce noise from verbose libraries during tests -->
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.springframework.web" level="DEBUG"/>
+    <logger name="org.hibernate" level="INFO"/>
+    <logger name="org.testcontainers" level="INFO"/>
+
+</configuration>
+

@@ -112,4 +112,41 @@ class FriendServiceTest extends BaseIntegrationTest {
         friendService.sendRequest(alice, "bob_f");
         assertTrue(friendService.getPendingRequests(alice).isEmpty());
     }
+
+    @Test
+    void unfriend_removesAcceptedFriendship() {
+        Friendship f = friendService.sendRequest(alice, "bob_f");
+        friendService.acceptRequest(bob, f.getId());
+        assertEquals(1, friendService.getFriends(alice).size());
+
+        friendService.unfriend(alice, bob);
+
+        assertTrue(friendService.getFriends(alice).isEmpty());
+        assertTrue(friendService.getFriends(bob).isEmpty());
+    }
+
+    @Test
+    void unfriend_noExistingFriendship_doesNotThrow() {
+        assertDoesNotThrow(() -> friendService.unfriend(alice, bob));
+    }
+
+    @Test
+    void getFriendshipStatus_noRelationship_returnsNone() {
+        assertEquals("NONE", friendService.getFriendshipStatus(alice, bob));
+    }
+
+    @Test
+    void getFriendshipStatus_pendingRequest_returnsPending() {
+        friendService.sendRequest(alice, "bob_f");
+        assertEquals("PENDING", friendService.getFriendshipStatus(alice, bob));
+        assertEquals("PENDING", friendService.getFriendshipStatus(bob, alice));
+    }
+
+    @Test
+    void getFriendshipStatus_acceptedFriendship_returnsAccepted() {
+        Friendship f = friendService.sendRequest(alice, "bob_f");
+        friendService.acceptRequest(bob, f.getId());
+        assertEquals("ACCEPTED", friendService.getFriendshipStatus(alice, bob));
+        assertEquals("ACCEPTED", friendService.getFriendshipStatus(bob, alice));
+    }
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/src/test/resources/logback-test.xml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/src/test/resources/logback-test.xml" />
+              <option name="updatedContent" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&lt;configuration&gt;&#10;    &lt;property name=&quot;LOG_PATTERN_CONSOLE&quot; value=&quot;%d{HH:mm:ss} %highlight(%-5level) %logger{36} - %msg%n&quot;/&gt;&#10;&#10;    &lt;!-- CONSOLE Appender: For test output only --&gt;&#10;    &lt;appender name=&quot;CONSOLE&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;&#10;        &lt;target&gt;System.out&lt;/target&gt;&#10;        &lt;encoder&gt;&#10;            &lt;pattern&gt;${LOG_PATTERN_CONSOLE}&lt;/pattern&gt;&#10;            &lt;charset&gt;UTF-8&lt;/charset&gt;&#10;        &lt;/encoder&gt;&#10;    &lt;/appender&gt;&#10;&#10;    &lt;!-- Test profile: DEBUG level for better visibility during testing --&gt;&#10;    &lt;root level=&quot;DEBUG&quot;&gt;&#10;        &lt;appender-ref ref=&quot;CONSOLE&quot;/&gt;&#10;    &lt;/root&gt;&#10;&#10;    &lt;!-- Reduce noise from verbose libraries during tests --&gt;&#10;    &lt;logger name=&quot;org.springframework&quot; level=&quot;INFO&quot;/&gt;&#10;    &lt;logger name=&quot;org.springframework.web&quot; level=&quot;DEBUG&quot;/&gt;&#10;    &lt;logger name=&quot;org.hibernate&quot; level=&quot;INFO&quot;/&gt;&#10;    &lt;logger name=&quot;org.testcontainers&quot; level=&quot;INFO&quot;/&gt;&#10;&#10;&lt;/configuration&gt;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

@@ -20,10 +20,17 @@ public class ChatWebSocketController {
 
     @MessageMapping("/chat.send")
     public void sendMessage(@Payload ChatMessage message, Principal principal) {
-        if (principal == null) return;
-        message.setSenderUsername(principal.getName());
+        // Resolve sender: prefer the authenticated Principal, fall back to the
+        // senderUsername field that the client includes in the payload.
+        String sender = (principal != null) ? principal.getName() : message.getSenderUsername();
+        if (sender == null || sender.isBlank()) return;
+
+        message.setSenderUsername(sender);
         message.setSentAt(LocalDateTime.now());
-        chatService.saveMessage(message.getSenderUsername(), message.getReceiverUsername(), message.getContent());
-        messagingTemplate.convertAndSendToUser(message.getReceiverUsername(), "/queue/messages", message);
+        chatService.saveMessage(sender, message.getReceiverUsername(), message.getContent());
+
+        // Deliver to the receiver's personal topic.
+        // The client subscribes to /topic/chat/{ownUsername} on connect.
+        messagingTemplate.convertAndSend("/topic/chat/" + message.getReceiverUsername(), message);
     }
 }

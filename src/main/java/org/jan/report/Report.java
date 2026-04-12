@@ -1,12 +1,18 @@
 package org.jan.report;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.jan.user.User;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "reports")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Report {
 
     @Id
@@ -27,8 +33,6 @@ public class Report {
     @Enumerated(EnumType.STRING)
     private ReportStatus status;
 
-    public Report() {}
-
     public Report(User reporter, User reported, String reason) {
         this.reporter = reporter;
         this.reported = reported;
@@ -36,17 +40,4 @@ public class Report {
         this.createdAt = LocalDateTime.now();
         this.status = ReportStatus.PENDING;
     }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public User getReporter() { return reporter; }
-    public void setReporter(User reporter) { this.reporter = reporter; }
-    public User getReported() { return reported; }
-    public void setReported(User reported) { this.reported = reported; }
-    public String getReason() { return reason; }
-    public void setReason(String reason) { this.reason = reason; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    public ReportStatus getStatus() { return status; }
-    public void setStatus(ReportStatus status) { this.status = status; }
 }

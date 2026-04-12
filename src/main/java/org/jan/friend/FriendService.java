@@ -19,8 +19,12 @@ public class FriendService {
 
     public Friendship sendRequest(User requester, String addresseeUsername) {
         User addressee = userRepository.findByUsername(addresseeUsername);
-        if (addressee == null) throw new IllegalArgumentException("User not found");
-        if (addressee.getId().equals(requester.getId())) throw new IllegalArgumentException("Cannot add yourself");
+        if (addressee == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+        if (addressee.getId().equals(requester.getId())) {
+            throw new IllegalArgumentException("Cannot add yourself");
+        }
         friendshipRepository.findBetweenUsers(requester, addressee).ifPresent(f -> {
             throw new IllegalArgumentException("Friendship already exists");
         });
@@ -30,10 +34,16 @@ public class FriendService {
     public Friendship acceptRequest(User addressee, Long friendshipId) {
         Friendship friendship = friendshipRepository.findById(friendshipId)
                 .orElseThrow(() -> new IllegalArgumentException("Request not found"));
-        if (!friendship.getAddressee().getId().equals(addressee.getId()))
+        if (!friendship.getAddressee().getId().equals(addressee.getId())) {
             throw new IllegalArgumentException("Not authorized");
+        }
         friendship.setStatus(FriendshipStatus.ACCEPTED);
         return friendshipRepository.save(friendship);
+    }
+
+    public void unfriend(User user, User friend) {
+        friendshipRepository.findBetweenUsers(user, friend)
+                .ifPresent(friendshipRepository::delete);
     }
 
     public List<User> getFriends(User user) {
@@ -44,5 +54,12 @@ public class FriendService {
 
     public List<Friendship> getPendingRequests(User user) {
         return friendshipRepository.findPendingRequests(user);
+    }
+
+    /** Returns "NONE", "PENDING", or "ACCEPTED" for the relationship between two users. */
+    public String getFriendshipStatus(User user, User other) {
+        return friendshipRepository.findBetweenUsers(user, other)
+                .map(f -> f.getStatus().name())
+                .orElse("NONE");
     }
 }
