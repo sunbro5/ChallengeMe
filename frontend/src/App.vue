@@ -38,6 +38,15 @@
       <router-view />
       <ChatPopup @notification="addToast" />
 
+      <!-- Mobile bottom navigation -->
+      <nav class="bottom-nav">
+        <router-link to="/map"         class="bnav-link"><span class="bnav-icon">🗺️</span><span class="bnav-label">{{ $t('nav.mapShort') }}</span></router-link>
+        <router-link to="/leaderboard" class="bnav-link"><span class="bnav-icon">🏆</span><span class="bnav-label">{{ $t('nav.leaderboardShort') }}</span></router-link>
+        <router-link to="/friends"     class="bnav-link"><span class="bnav-icon">👥</span><span class="bnav-label">{{ $t('nav.friendsShort') }}</span></router-link>
+        <router-link to="/games"       class="bnav-link"><span class="bnav-icon">🎮</span><span class="bnav-label">{{ $t('nav.gamesShort') }}</span></router-link>
+        <router-link v-if="isAdmin" to="/admin" class="bnav-link bnav-admin"><span class="bnav-icon">⚙️</span><span class="bnav-label">{{ $t('nav.adminShort') }}</span></router-link>
+      </nav>
+
       <!-- Toast notifications -->
       <div class="toast-container">
         <transition-group name="toast-slide">
@@ -379,6 +388,53 @@ h1::before {
 .toast-slide-leave-active { transition: opacity .2s ease, transform .2s ease; }
 .toast-slide-enter-from,
 .toast-slide-leave-to     { opacity: 0; transform: translateX(16px); }
+
+/* ── Bottom navigation (mobile only) ────────────────────────────────────── */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 56px;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border);
+  z-index: 1010;
+}
+
+.bnav-link {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--text-muted);
+  text-decoration: none;
+  min-height: 44px;
+  transition: color var(--transition);
+}
+.bnav-link.router-link-active { color: var(--brand); }
+.bnav-link.bnav-admin { color: var(--red); }
+.bnav-link.bnav-admin.router-link-active { color: var(--red); }
+.bnav-icon  { font-size: 20px; line-height: 1; }
+.bnav-label { font-size: 10px; font-weight: 500; }
+
+/* ── Mobile breakpoint ───────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .nav-links  { display: none; }
+  .bottom-nav { display: flex; }
+
+  /* push lang-bar and toasts above the bottom nav */
+  .lang-bar        { bottom: 64px; }
+  .toast-container { bottom: 124px; right: 12px; }
+  .toast           { max-width: calc(100vw - 24px); font-size: 12px; }
+
+  /* add bottom breathing room on all scrollable pages */
+  body { padding-bottom: 56px; }
+
+  /* tighten header padding on narrow screens */
+  .header { padding: 0 12px; }
+  .header-left { gap: 10px; }
+}
 
 /* ── Language switcher ───────────────────────────────────────────────────── */
 .lang-bar {

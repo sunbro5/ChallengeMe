@@ -4,7 +4,12 @@
     "leaderboard": "🏆 Leaderboard",
     "friends": "👥 Friends",
     "games": "🎮 Games",
-    "admin": "⚙️ Admin"
+    "admin": "⚙️ Admin",
+    "mapShort": "Map",
+    "leaderboardShort": "Top",
+    "friendsShort": "Friends",
+    "gamesShort": "Games",
+    "adminShort": "Admin"
   },
   "user": {
     "profile": "👤 Profile",

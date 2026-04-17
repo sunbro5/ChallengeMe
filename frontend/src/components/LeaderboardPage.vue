@@ -141,4 +141,19 @@ td {
 
 .podium td { color: var(--yellow); }
 .podium td.username { font-weight: 700; }
+
+@media (max-width: 640px) {
+  .lb-page { padding: 20px 14px 76px; }
+  /* wrap table so it can scroll horizontally if needed */
+  .lb-page { overflow-x: hidden; }
+  table    { font-size: 12px; }
+  th, td   { padding: 9px 10px; }
+  .rank    { width: 36px; }
+}
+
+@media (max-width: 420px) {
+  /* hide Draws and Games columns on very narrow screens */
+  th:nth-child(5), td:nth-child(5),
+  th:nth-child(6), td:nth-child(6) { display: none; }
+}
 </style>

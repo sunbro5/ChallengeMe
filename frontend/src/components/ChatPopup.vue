@@ -379,4 +379,20 @@ export default {
   flex-shrink: 0;
 }
 .send-btn:hover { background: var(--brand-hover); }
+
+@media (max-width: 640px) {
+  .chat-popup { bottom: 68px; right: 16px; }
+
+  .chat-panel {
+    position: fixed;
+    bottom: 116px;   /* above toggle btn (48px) + gap + bottom nav (56px) */
+    left: 8px;
+    right: 8px;
+    width: auto;
+    height: 60vh;
+    border-radius: var(--r-lg);
+  }
+
+  .bubble { max-width: 75vw; }
+}
 </style>

@@ -322,4 +322,9 @@ export default {
 }
 .state-badge.finished { background: var(--brand-muted); color: var(--brand); }
 .state-badge.disputed { background: var(--orange-muted); color: var(--orange); }
+
+@media (max-width: 640px) {
+  .rules-page  { padding: 20px 14px 76px; }
+  .states-grid { grid-template-columns: 1fr; }
+}
 </style>

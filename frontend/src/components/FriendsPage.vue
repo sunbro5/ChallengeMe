@@ -435,4 +435,9 @@ export default {
   transition: filter var(--transition);
 }
 .submit-report-btn:hover { filter: brightness(1.1); }
+
+@media (max-width: 640px) {
+  .friends-page { padding: 20px 14px 76px; }
+  .modal        { width: calc(100vw - 32px); }
+}
 </style>

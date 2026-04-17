@@ -507,4 +507,12 @@ export default {
 
 .msg-error { color:var(--red);   font-size:12px; margin-top:8px; }
 .msg-ok    { color:var(--brand); font-size:12px; margin-top:8px; }
+
+@media (max-width: 640px) {
+  .player-page { padding: 20px 14px 76px; }
+  .stats-grid  { grid-template-columns: repeat(2, 1fr); }
+  .profile-header { gap: 12px; }
+  .avatar { width: 52px; height: 52px; font-size: 1.3rem; }
+  .header-info h2 { font-size: 17px; }
+}
 </style>

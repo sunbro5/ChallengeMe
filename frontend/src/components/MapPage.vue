@@ -520,8 +520,37 @@ export default {
 </script>
 
 <style scoped>
-.map-wrapper { position: relative; width: 100%; height: 100vh; }
+.map-wrapper { position: relative; width: 100%; height: calc(100vh - 52px); }
 #map         { width: 100%; height: 100%; }
+
+/* ── Mobile responsive ───────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* shrink map to leave room for the 56px bottom nav */
+  .map-wrapper { height: calc(100vh - 52px - 56px); }
+
+  /* side panel becomes a full-width bottom sheet */
+  .side-panel {
+    position: fixed;
+    top: auto;
+    bottom: 56px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: 65vh;
+    border-radius: 16px 16px 0 0;
+    border-bottom: none;
+    overflow-y: auto;
+    padding: 16px 18px;
+    z-index: 1005;
+  }
+
+  /* filter bar: bigger tap target, slightly closer to edge */
+  .filter-bar { top: 8px; left: 48px; }
+  .filter-toggle-btn { min-height: 38px; padding: 6px 12px; font-size: 12px; }
+
+  /* map hint bar */
+  .map-hint { bottom: 68px; font-size: 12px; padding: 7px 16px; }
+}
 
 .side-panel {
   position: absolute; top: 16px; right: 16px; z-index: 1000;

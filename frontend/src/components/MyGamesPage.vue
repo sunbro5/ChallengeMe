@@ -348,4 +348,9 @@ export default {
 .btn-detail:hover { text-decoration: underline; }
 
 .card-error { color: var(--red); font-size: 12px; margin-top: 6px; }
+
+@media (max-width: 640px) {
+  .my-games-page { padding: 20px 14px 76px; }
+  .event-card    { padding: 14px; }
+}
 </style>

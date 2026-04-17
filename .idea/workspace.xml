@@ -4,54 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a1264b58-954b-4fbe-acfc-b845e9233026" name="Changes" comment="2">
-      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilotDiffState.xml" beforeDir="false" />
+    <list default="true" id="a1264b58-954b-4fbe-acfc-b845e9233026" name="Changes" comment="final">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.debug.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.debug.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nginx.conf" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/AdminPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/AdminPage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/ChatPopup.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/ChatPopup.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/EventDetailPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/EventDetailPage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/FriendsPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/FriendsPage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/GameRulesPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/GameRulesPage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/LeaderboardPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/LeaderboardPage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/LoginPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/LoginPage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/MapPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/MapPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/MyGamesPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/MyGamesPage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/PlayerPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/PlayerPage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/RegisterPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/RegisterPage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/ChallengeMeApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/ChallengeMeApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/chat/ChatController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/chat/ChatController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/chat/ChatWebSocketController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/chat/ChatWebSocketController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/friend/FriendController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/friend/FriendController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/game/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/game/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/game/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/game/GameDataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/game/GameDataInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/game/GameEventController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/game/GameEventController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/game/GameType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/game/GameType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/report/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/report/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/report/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/report/ReportController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/user/AdminInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/user/AdminInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/user/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/user/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/user/PlayerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/user/PlayerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/jan/BaseIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/jan/BaseIntegrationTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/jan/chat/ChatServiceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/jan/friend/FriendControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/jan/friend/FriendControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/jan/friend/FriendServiceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/jan/game/GameEventControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/jan/game/GameEventControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/jan/game/GameEventServiceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/jan/report/AdminControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/jan/report/AdminControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/jan/report/ReportServiceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/jan/user/AuthControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/jan/user/AuthControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/jan/user/PlayerControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/jan/user/PlayerControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/jan/user/UserServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/locales/cs.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/locales/cs.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/locales/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/locales/en.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -245,7 +212,7 @@
       <workItem from="1776020412396" duration="11605000" />
       <workItem from="1776075921557" duration="1033000" />
       <workItem from="1776195455169" duration="5593000" />
-      <workItem from="1776425655541" duration="7129000" />
+      <workItem from="1776425655541" duration="8701000" />
     </task>
     <task id="LOCAL-00001" summary="2">
       <option name="closed" value="true" />
@@ -255,7 +222,15 @@
       <option name="project" value="LOCAL" />
       <updated>1776026947129</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="final">
+      <option name="closed" value="true" />
+      <created>1776436701505</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1776436701505</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -274,7 +249,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="2" />
-    <option name="LAST_COMMIT_MESSAGE" value="2" />
+    <MESSAGE value="final" />
+    <option name="LAST_COMMIT_MESSAGE" value="final" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

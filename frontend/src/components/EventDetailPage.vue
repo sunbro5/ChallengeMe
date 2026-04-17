@@ -586,4 +586,11 @@ label { display: block; font-size: 12px; color: var(--text-secondary); margin-bo
   transition: background var(--transition);
 }
 .btn-ghost:hover { background: var(--bg-overlay); }
+
+@media (max-width: 640px) {
+  .event-detail-page { padding: 16px 14px 76px; }
+  .event-card        { padding: 14px 16px; }
+  .chat-box          { height: 50vh; }
+  .modal             { width: calc(100vw - 32px); }
+}
 </style>

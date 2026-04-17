@@ -4,7 +4,12 @@
     "leaderboard": "🏆 Žebříček",
     "friends": "👥 Přátelé",
     "games": "🎮 Hry",
-    "admin": "⚙️ Admin"
+    "admin": "⚙️ Admin",
+    "mapShort": "Mapa",
+    "leaderboardShort": "Top",
+    "friendsShort": "Přátelé",
+    "gamesShort": "Hry",
+    "adminShort": "Admin"
   },
   "user": {
     "profile": "👤 Profil",

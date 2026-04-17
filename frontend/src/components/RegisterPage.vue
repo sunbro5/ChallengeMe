@@ -280,4 +280,8 @@ button[type="submit"]:disabled { opacity: .4; cursor: default; }
 }
 .link { color: var(--brand); text-decoration: none; font-weight: 600; }
 .link:hover { text-decoration: underline; }
+
+@media (max-width: 420px) {
+  .auth-form { padding: 24px 18px; border-radius: var(--r-lg); }
+}
 </style>
