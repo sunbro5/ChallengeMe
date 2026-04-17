@@ -55,7 +55,7 @@ public class SecurityConfig {
                 // Admin-only section
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 // Everything else requires a valid session
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
             )
             .formLogin(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)
