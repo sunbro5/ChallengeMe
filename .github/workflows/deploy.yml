@@ -1,0 +1,44 @@
+name: Deploy to VPS
+
+on:
+  push:
+    tags:
+      - 'release/**'   # release/1.0.0, release/hotfix/1.0.1 …
+
+jobs:
+  deploy:
+    name: Deploy ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: deploy
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script_stop: true        # přeruší při první chybě (set -e)
+          envs: GITHUB_REF_NAME
+          script: |
+            set -euo pipefail
+            cd /home/deploy/ChallengeMe
+
+            echo "==> Fetching tag $GITHUB_REF_NAME"
+            git fetch --tags --quiet
+            git checkout "$GITHUB_REF_NAME"
+
+            echo "==> Building images & starting services"
+            docker compose up -d --build --remove-orphans
+
+            echo "==> Waiting for backend health (max 2 min)"
+            timeout 120 sh -c '
+              until docker compose exec -T backend \
+                wget -qO- http://localhost:8080/actuator/health 2>/dev/null \
+                | grep -q "\"status\":\"UP\""; do
+                echo "  still starting..."; sleep 5
+              done'
+
+            echo "==> Pruning dangling images"
+            docker image prune -f
+
+            echo "==> Deployed $GITHUB_REF_NAME successfully"
