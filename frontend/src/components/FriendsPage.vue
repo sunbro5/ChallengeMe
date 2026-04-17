@@ -109,7 +109,7 @@ export default {
   methods: {
     async loadFriends() {
       try {
-        const res = await axios.get('http://localhost:8080/friends', { withCredentials: true })
+        const res = await axios.get('/api/friends', { withCredentials: true })
         this.friends = res.data
       } catch (e) {
         console.error('Failed to load friends', e)
@@ -117,7 +117,7 @@ export default {
     },
     async loadRequests() {
       try {
-        const res = await axios.get('http://localhost:8080/friends/requests', { withCredentials: true })
+        const res = await axios.get('/api/friends/requests', { withCredentials: true })
         this.requests = res.data
       } catch (e) {
         console.error('Failed to load requests', e)
@@ -134,7 +134,7 @@ export default {
     async runSearch() {
       try {
         const res = await axios.get(
-          `http://localhost:8080/friends/search?q=${encodeURIComponent(this.searchQuery)}`,
+          `/api/friends/search?q=${encodeURIComponent(this.searchQuery)}`,
           { withCredentials: true }
         )
         this.searchResults = res.data
@@ -149,7 +149,7 @@ export default {
     async unfriend(friend) {
       if (!confirm(this.$t('friends.unfriendConfirm', { username: friend.username }))) return
       try {
-        await axios.delete(`http://localhost:8080/friends/with/${friend.id}`, { withCredentials: true })
+        await axios.delete(`/api/friends/with/${friend.id}`, { withCredentials: true })
         this.friends = this.friends.filter(f => f.id !== friend.id)
       } catch (e) {
         console.error('Failed to unfriend', e)
@@ -159,7 +159,7 @@ export default {
     // Accept request
     async acceptRequest(friendshipId) {
       try {
-        await axios.post(`http://localhost:8080/friends/accept/${friendshipId}`, {}, { withCredentials: true })
+        await axios.post(`/api/friends/accept/${friendshipId}`, {}, { withCredentials: true })
         await this.loadRequests()
         await this.loadFriends()
       } catch (e) {
@@ -181,7 +181,7 @@ export default {
         return
       }
       try {
-        await axios.post('http://localhost:8080/reports', {
+        await axios.post('/api/reports', {
           reportedUsername: this.reportModal.username,
           reason: this.reportModal.reason
         }, { withCredentials: true })

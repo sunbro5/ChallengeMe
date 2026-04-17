@@ -1,9 +1,45 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  ChallengeMe — production docker-compose
+#
+#  Architektura:
+#    internet → nginx (:80 / :443)
+#                 ├── /api/*  →  backend:8080  (izolovaná síť)
+#                 └── static  →  dist/ (Vue SPA)
+#    backend  ←→  db  (db-net, internal=true)
+#
+#  První nasazení na VPS:
+#    1.  cp .env.example .env && nano .env        # doplň hesla + DOMAIN
+#    2.  docker compose up -d --build             # spustí na HTTP
+#    3.  ./get-ssl.sh                             # získá Let's Encrypt certifikát
+#    4.  docker compose restart nginx             # přepne na HTTPS
+#
+#  Aktualizace aplikace:
+#    git pull && docker compose up -d --build
+# ─────────────────────────────────────────────────────────────────────────────
+
+networks:
+
+  # nginx ↔ backend
+  app-net:
+    driver: bridge
+
+  # backend ↔ db   (internal: nikdo zvenku se nedostane, ani z jiných kontejnerů)
+  db-net:
+    driver: bridge
+    internal: true
+
+volumes:
+  postgres_data:
+  certbot_conf:   # Let's Encrypt certifikáty (persistentní)
+  certbot_www:    # ACME webroot challenge
+
 services:
 
-  # ── PostgreSQL ───────────────────────────────────────────────────────────────
+  # ── PostgreSQL ──────────────────────────────────────────────────────────────
   db:
     image: postgres:16-alpine
     restart: unless-stopped
+    networks: [db-net]
     environment:
       POSTGRES_DB:       ${DB_NAME:-challengeme}
       POSTGRES_USER:     ${DB_USER}
@@ -15,35 +51,68 @@ services:
       interval: 5s
       timeout: 5s
       retries: 20
+      start_period: 10s
 
-  # ── Spring Boot backend ──────────────────────────────────────────────────────
+  # ── Spring Boot (žádné veřejné porty) ──────────────────────────────────────
   backend:
     build: .
     restart: unless-stopped
-    ports:
-      - "8080:8080"
+    networks: [db-net, app-net]
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      DB_HOST:          db
-      DB_PORT:          5432
-      DB_NAME:          ${DB_NAME:-challengeme}
-      DB_USER:          ${DB_USER}
-      DB_PASS:          ${DB_PASS}
-      ADMIN_USERNAME:   ${ADMIN_USERNAME:-admin}
-      ADMIN_PASSWORD:   ${ADMIN_PASSWORD}
+      DB_HOST:         db
+      DB_PORT:         5432
+      DB_NAME:         ${DB_NAME:-challengeme}
+      DB_USER:         ${DB_USER}
+      DB_PASS:         ${DB_PASS}
+      ADMIN_USERNAME:  ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD:  ${ADMIN_PASSWORD}
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health 2>/dev/null | grep -q '\"status\":\"UP\"' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 45s
 
-  # ── Nginx + Vue frontend ─────────────────────────────────────────────────────
-  frontend:
+  # ── Nginx — jediný kontejner vystavený do internetu ────────────────────────
+  nginx:
     build: ./frontend
     restart: unless-stopped
+    networks: [app-net]
     ports:
       - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+    volumes:
+      - certbot_conf:/etc/letsencrypt:ro   # certbot sem zapisuje certifikáty
+      - certbot_www:/var/www/certbot       # ACME webroot
     depends_on:
       - backend
 
-volumes:
-  postgres_data:
-    driver: local
+  # ── Certbot — automatická obnova Let's Encrypt certifikátů ─────────────────
+  #
+  # Získání prvního certifikátu (spusť po prvním `docker compose up`):
+  #   docker compose run --rm certbot certonly --webroot \
+  #     --webroot-path=/var/www/certbot \
+  #     --email vas@email.cz --agree-tos --no-eff-email \
+  #     -d vas-domen.cz
+  #
+  # Pak: docker compose restart nginx   (přepne na HTTPS)
+  #
+  certbot:
+    image: certbot/certbot:latest
+    restart: unless-stopped
+    volumes:
+      - certbot_conf:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+    # Každých 12 hodin zkusí obnovit expirující certifikáty
+    entrypoint: >
+      /bin/sh -c "trap exit TERM;
+      while :; do
+        certbot renew --webroot --webroot-path=/var/www/certbot --quiet;
+        sleep 12h & wait $${!};
+      done"

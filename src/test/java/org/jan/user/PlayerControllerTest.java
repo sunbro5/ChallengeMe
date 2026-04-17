@@ -1,14 +1,12 @@
 package org.jan.user;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jan.BaseIntegrationTest;
-import org.jan.game.*;
+import org.jan.game.GameType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDateTime;
@@ -23,10 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class PlayerControllerTest extends BaseIntegrationTest {
 
-    @Autowired private MockMvc          mockMvc;
-    @Autowired private ObjectMapper     objectMapper;
-    @Autowired private UserRepository   userRepository;
-    @Autowired private GameEventService gameEventService;
+    @Autowired private UserRepository userRepository;
 
     private String aliceUsername;
     private String bobUsername;
@@ -37,12 +32,21 @@ class PlayerControllerTest extends BaseIntegrationTest {
         return "t" + UUID.randomUUID().toString().replace("-", "").substring(0, 8);
     }
 
-    private MockHttpSession loginAs(String username, String password) throws Exception {
-        MvcResult r = mockMvc.perform(post("/auth/login")
+    private String scheduledAt() {
+        return LocalDateTime.now().plusDays(1)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+    }
+
+    private Map<?, ?> createEvent(MockHttpSession session, String gameType) throws Exception {
+        MvcResult r = mockMvc.perform(post("/events")
+                .session(session)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new LoginRequest(username, password))))
-                .andExpect(status().isOk()).andReturn();
-        return (MockHttpSession) r.getRequest().getSession(false);
+                .content(objectMapper.writeValueAsString(Map.of(
+                        "latitude", 51.5, "longitude", -0.1,
+                        "gameType", gameType, "scheduledAt", scheduledAt()))))
+                .andExpect(status().isOk())
+                .andReturn();
+        return objectMapper.readValue(r.getResponse().getContentAsString(), Map.class);
     }
 
     @BeforeEach
@@ -50,15 +54,8 @@ class PlayerControllerTest extends BaseIntegrationTest {
         aliceUsername = "alice_pc_" + uid();
         bobUsername   = "bob_pc_"   + uid();
 
-        mockMvc.perform(post("/auth/register").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(
-                        new RegisterRequest(aliceUsername, "pass123", aliceUsername + "@t.com"))))
-                .andExpect(status().isOk());
-
-        mockMvc.perform(post("/auth/register").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(
-                        new RegisterRequest(bobUsername, "pass123", bobUsername + "@t.com"))))
-                .andExpect(status().isOk());
+        registerUser(aliceUsername, "pass123", aliceUsername + "@t.com");
+        registerUser(bobUsername,   "pass123", bobUsername   + "@t.com");
 
         aliceSession = loginAs(aliceUsername, "pass123");
         bobSession   = loginAs(bobUsername,   "pass123");
@@ -130,9 +127,8 @@ class PlayerControllerTest extends BaseIntegrationTest {
 
     @Test
     void getProfile_friendStatusAcceptedAfterBothConfirm() throws Exception {
-        // Alice sends request
         mockMvc.perform(post("/friends/request?username=" + bobUsername).session(aliceSession));
-        // Bob accepts
+
         MvcResult requestsResult = mockMvc.perform(get("/friends/requests").session(bobSession))
                 .andReturn();
         List<?> requests = objectMapper.readValue(
@@ -157,30 +153,33 @@ class PlayerControllerTest extends BaseIntegrationTest {
     // ── Game history in profile ───────────────────────────────────────────────
 
     private void runFullGame(String winnerUsername) throws Exception {
-        // Alice creates, Bob accepts, Alice approves, both submit same result
-        User alice = userRepository.findByUsername(aliceUsername);
-        User bob   = userRepository.findByUsername(bobUsername);
+        Map<?, ?> event = createEvent(aliceSession, GameType.TIC_TAC_TOE.name());
+        Number id = (Number) event.get("id");
 
-        GameEvent e = gameEventService.createEvent(
-                alice, 51.5, -0.1, GameType.TIC_TAC_TOE,
-                LocalDateTime.now().plusDays(1));
-        gameEventService.acceptChallenge(bob, e.getId());
-        gameEventService.approveChallenger(alice, e.getId());
-        gameEventService.reportResult(alice, e.getId(), winnerUsername, null);
-        gameEventService.reportResult(bob,   e.getId(), winnerUsername, null);
+        mockMvc.perform(post("/events/" + id + "/accept").session(bobSession));
+        mockMvc.perform(post("/events/" + id + "/approve").session(aliceSession));
+
+        String winBody = objectMapper.writeValueAsString(
+                Map.of("winnerUsername", winnerUsername == null ? "" : winnerUsername));
+        mockMvc.perform(post("/events/" + id + "/result")
+                .session(aliceSession).contentType(MediaType.APPLICATION_JSON).content(winBody));
+        mockMvc.perform(post("/events/" + id + "/result")
+                .session(bobSession).contentType(MediaType.APPLICATION_JSON).content(winBody));
     }
 
     private void runDisputedGame() throws Exception {
-        User alice = userRepository.findByUsername(aliceUsername);
-        User bob   = userRepository.findByUsername(bobUsername);
+        Map<?, ?> event = createEvent(aliceSession, GameType.ROCK_PAPER_SCISSORS.name());
+        Number id = (Number) event.get("id");
 
-        GameEvent e = gameEventService.createEvent(
-                alice, 52.0, -0.2, GameType.ROCK_PAPER_SCISSORS,
-                LocalDateTime.now().plusDays(1));
-        gameEventService.acceptChallenge(bob, e.getId());
-        gameEventService.approveChallenger(alice, e.getId());
-        gameEventService.reportResult(alice, e.getId(), aliceUsername, null); // alice says she won
-        gameEventService.reportResult(bob,   e.getId(), bobUsername,   null); // bob says he won
+        mockMvc.perform(post("/events/" + id + "/accept").session(bobSession));
+        mockMvc.perform(post("/events/" + id + "/approve").session(aliceSession));
+
+        mockMvc.perform(post("/events/" + id + "/result")
+                .session(aliceSession).contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(Map.of("winnerUsername", aliceUsername))));
+        mockMvc.perform(post("/events/" + id + "/result")
+                .session(bobSession).contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(Map.of("winnerUsername", bobUsername))));
     }
 
     @Test
@@ -215,7 +214,7 @@ class PlayerControllerTest extends BaseIntegrationTest {
 
     @Test
     void getProfile_showsDrawInHistory() throws Exception {
-        runFullGame(null); // draw (null winner)
+        runFullGame(null); // draw
 
         MvcResult r = mockMvc.perform(get("/players/" + aliceUsername).session(aliceSession))
                 .andExpect(status().isOk()).andReturn();
@@ -238,7 +237,6 @@ class PlayerControllerTest extends BaseIntegrationTest {
         Map<?, ?> game = (Map<?, ?>) games.get(0);
         assertEquals("disputed", game.get("result"));
         assertEquals("DISPUTED", game.get("status"));
-        // Both claimed results exposed
         assertNotNull(game.get("creatorResult"));
         assertNotNull(game.get("challengerResult"));
     }

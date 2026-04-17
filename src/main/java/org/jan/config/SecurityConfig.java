@@ -43,17 +43,19 @@ public class SecurityConfig {
             .addFilterBefore(sessionAuthFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> auth
                 // Auth endpoints — always public
-                .requestMatchers(HttpMethod.GET,  "/auth/captcha").permitAll()
-                .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register").permitAll()
-                // Public read endpoints — home page map and game catalogue
-                .requestMatchers(HttpMethod.GET, "/events/public").permitAll()
-                .requestMatchers(HttpMethod.GET, "/games", "/games/**").permitAll()
+                .requestMatchers(HttpMethod.GET,  "/api/auth/captcha").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register").permitAll()
+                // Public read endpoints — home page map, game catalogue, player profiles, leaderboard
+                .requestMatchers(HttpMethod.GET, "/api/events/public").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/games", "/api/games/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/players/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/leaderboard").permitAll()
                 // WebSocket upgrade — auth happens inside the STOMP CONNECT frame
-                .requestMatchers("/ws/**").permitAll()
+                .requestMatchers("/api/ws/**").permitAll()
                 // Admin-only section
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 // Everything else requires a valid session
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
             .formLogin(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)

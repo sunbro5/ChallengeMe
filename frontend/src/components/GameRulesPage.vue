@@ -20,7 +20,7 @@
 
     <section v-else class="game-cards">
       <div
-        v-for="game in games"
+        v-for="game in localizedGames"
         :key="game.key"
         class="game-card"
         :class="{ active: activeKey === game.key }"
@@ -99,11 +99,23 @@ export default {
   computed: {
     steps() {
       return this.$tm('gameRules.steps')
-    }
+    },
+    localizedGames() {
+      const isCs = this.$i18n.locale === 'cs'
+      return this.games.map(g => ({
+        ...g,
+        name:        isCs ? (g.nameCs || g.nameEn) : (g.nameEn || g.nameCs),
+        tagline:     isCs ? (g.taglineCs || g.taglineEn) : (g.taglineEn || g.taglineCs),
+        description: isCs ? (g.descriptionCs || g.descriptionEn) : (g.descriptionEn || g.descriptionCs),
+        howToWin:    isCs ? (g.howToWinCs || g.howToWinEn) : (g.howToWinEn || g.howToWinCs),
+        rules:       isCs ? (g.rulesCs || g.rulesEn || []) : (g.rulesEn || g.rulesCs || []),
+        tips:        isCs ? (g.tipsCs || g.tipsEn || []) : (g.tipsEn || g.tipsCs || []),
+      }))
+    },
   },
   async mounted() {
     try {
-      const { data } = await axios.get('http://localhost:8080/games', { withCredentials: true })
+      const { data } = await axios.get('/api/games', { withCredentials: true })
       this.games = data
     } catch (e) {
       this.error = this.$t('gameRules.couldNotLoad')

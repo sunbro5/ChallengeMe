@@ -93,7 +93,7 @@ export default {
     },
     async loadFriends() {
       try {
-        const res = await axios.get('http://localhost:8080/friends', { withCredentials: true })
+        const res = await axios.get('/api/friends', { withCredentials: true })
         this.friends = res.data
       } catch (e) {
         console.error('Failed to load friends', e)
@@ -103,7 +103,7 @@ export default {
       this.activeFriend = friend
       this.messages = []
       try {
-        const res = await axios.get(`http://localhost:8080/chat/history?friendUsername=${friend.username}`, { withCredentials: true })
+        const res = await axios.get(`/api/chat/history?friendUsername=${friend.username}`, { withCredentials: true })
         this.messages = res.data
         this.$nextTick(() => this.scrollToBottom())
       } catch (e) {

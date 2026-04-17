@@ -16,4 +16,9 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
+
+# Health check — volá /actuator/health (exponováno v application-prod.properties)
+HEALTHCHECK --interval=10s --timeout=5s --start-period=45s --retries=5 \
+  CMD wget -qO- http://localhost:8080/actuator/health 2>/dev/null | grep -q '"status":"UP"' || exit 1
+
 ENTRYPOINT ["java", "-jar", "app.jar"]

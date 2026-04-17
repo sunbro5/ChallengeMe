@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/players")
+@RequestMapping("/api/players")
 public class PlayerController {
 
     @Autowired private UserRepository      userRepository;
@@ -31,10 +31,10 @@ public class PlayerController {
             return ResponseEntity.notFound().build();
         }
 
-        User viewer = userRepository.findByUsername(auth.getName());
+        User viewer = (auth != null) ? userRepository.findByUsername(auth.getName()) : null;
 
         String friendStatus = "NONE";
-        if (!viewer.getId().equals(player.getId())) {
+        if (viewer != null && !viewer.getId().equals(player.getId())) {
             friendStatus = friendService.getFriendshipStatus(viewer, player);
         }
 
@@ -85,7 +85,7 @@ public class PlayerController {
                 .draws(player.getDraws())
                 .disputes(player.getDisputes())
                 .friendStatus(friendStatus)
-                .isMe(viewer.getId().equals(player.getId()))
+                .isMe(viewer != null && viewer.getId().equals(player.getId()))
                 .games(games)
                 .build();
 

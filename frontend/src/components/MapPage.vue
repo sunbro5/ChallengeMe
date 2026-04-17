@@ -2,6 +2,36 @@
   <div class="map-wrapper">
     <div id="map" ref="mapEl"></div>
 
+    <!-- ── Filter bar (přihlášení uživatelé) ─────────────────────────────── -->
+    <div v-if="isLoggedIn" class="filter-bar">
+      <button
+        :class="['filter-toggle-btn', { active: activeFilters.length > 0 }]"
+        @click="filterPanel.visible = !filterPanel.visible"
+      >
+        🎮 {{ $t('map.filterGames') }}
+        <span v-if="activeFilters.length > 0" class="filter-badge">{{ activeFilters.length }}</span>
+        <span class="filter-chevron">{{ filterPanel.visible ? '▲' : '▼' }}</span>
+      </button>
+
+      <transition name="filter-drop">
+        <div v-if="filterPanel.visible" class="filter-dropdown">
+          <div class="filter-top">
+            <span class="filter-hint">{{ $t('map.filterHint') }}</span>
+            <button v-if="activeFilters.length > 0" class="filter-clear-btn" @click="clearFilter">
+              {{ $t('map.filterClear') }}
+            </button>
+          </div>
+          <div class="filter-pills">
+            <button
+              v-for="g in games" :key="g.key"
+              :class="['filter-pill', { active: activeFilters.includes(g.key) }]"
+              @click="toggleFilter(g.key)"
+            >{{ g.icon }} {{ gameName(g) }}</button>
+          </div>
+        </div>
+      </transition>
+    </div>
+
     <!-- ── Create-challenge panel ──────────────────────────────────────── -->
     <transition name="panel-slide">
       <div v-if="createPanel.visible" class="side-panel">
@@ -14,7 +44,7 @@
         </label>
         <select v-model="createPanel.gameType">
           <option v-for="g in games" :key="g.key" :value="g.key">
-            {{ g.icon }} {{ g.name }}
+            {{ g.icon }} {{ gameName(g) }}
           </option>
         </select>
 
@@ -274,6 +304,9 @@ export default {
       isLoggedIn: !!localStorage.getItem('isLoggedIn'),
 
       games: [],
+      allEvents: [],
+      activeFilters: [],
+      filterPanel: { visible: false },
       createPanel: { visible: false, lat: 0, lng: 0, gameType: '', scheduledAt: '', description: '', busy: false, error: '' },
       detailPanel: { visible: false, event: null, busy: false, error: '' },
       resultModal:  { visible: false, winner: '', note: '', busy: false, error: '' },
@@ -297,11 +330,11 @@ export default {
   methods: {
     async loadGames() {
       try {
-        const { data } = await axios.get('http://localhost:8080/games', { withCredentials: true })
+        const { data } = await axios.get('/api/games', { withCredentials: true })
         this.games = data
         const colours = ['#4f8ef7', '#f7864f', '#a6e3a1', '#cba6f7', '#f9e2af', '#89dceb']
         data.forEach((g, i) => {
-          GAME_META_CACHE[g.key] = { icon: g.icon, label: `${g.icon} ${g.name}`, color: colours[i % colours.length] }
+          GAME_META_CACHE[g.key] = { icon: g.icon, color: colours[i % colours.length] }
         })
         if (data.length && !this.createPanel.gameType) {
           this.createPanel.gameType = data[0].key
@@ -312,10 +345,12 @@ export default {
     },
 
     async loadEvents() {
-      const { data } = await axios.get('http://localhost:8080/events', { withCredentials: true })
+      const { data } = await axios.get('/api/events', { withCredentials: true })
+      this.allEvents = data
       Object.values(this.markers).forEach(m => m.remove())
       this.markers = {}
       data.forEach(e => this.addMarker(e))
+      this.applyFilter()
     },
 
     addMarker(event) {
@@ -359,12 +394,14 @@ export default {
       if (!this.createPanel.scheduledAt) { this.createPanel.error = this.$t('map.pickDateTime'); return }
       this.createPanel.busy = true; this.createPanel.error = ''
       try {
-        const { data } = await axios.post('http://localhost:8080/events', {
+        const { data } = await axios.post('/api/events', {
           latitude: this.createPanel.lat, longitude: this.createPanel.lng,
           gameType: this.createPanel.gameType, scheduledAt: this.createPanel.scheduledAt,
           description: this.createPanel.description || null,
         }, { withCredentials: true })
+        this.allEvents.push(data)
         this.addMarker(data)
+        this.applyFilter()
         this.cancelCreate()
       } catch (err) {
         this.createPanel.error = err.response?.data || 'Failed to create event.'
@@ -375,7 +412,7 @@ export default {
       this.detailPanel.busy = true; this.detailPanel.error = ''
       try {
         const { data } = await axios.post(
-          `http://localhost:8080/events/${this.detailPanel.event.id}/accept`, {}, { withCredentials: true })
+          `/api/events/${this.detailPanel.event.id}/accept`, {}, { withCredentials: true })
         this.detailPanel.event = data
         this.refreshMarker(data)
       } catch (err) {
@@ -387,7 +424,7 @@ export default {
       this.detailPanel.busy = true; this.detailPanel.error = ''
       try {
         const { data } = await axios.post(
-          `http://localhost:8080/events/${this.detailPanel.event.id}/approve`, {}, { withCredentials: true })
+          `/api/events/${this.detailPanel.event.id}/approve`, {}, { withCredentials: true })
         this.detailPanel.event = data
         this.refreshMarker(data)
       } catch (err) {
@@ -399,7 +436,7 @@ export default {
       this.detailPanel.busy = true; this.detailPanel.error = ''
       try {
         const { data } = await axios.post(
-          `http://localhost:8080/events/${this.detailPanel.event.id}/reject`, {}, { withCredentials: true })
+          `/api/events/${this.detailPanel.event.id}/reject`, {}, { withCredentials: true })
         this.detailPanel.event = data
         this.refreshMarker(data)
       } catch (err) {
@@ -410,11 +447,10 @@ export default {
     async cancelEvent() {
       if (!confirm(this.$t('map.cancelConfirm'))) return
       try {
-        await axios.delete(`http://localhost:8080/events/${this.detailPanel.event.id}`, { withCredentials: true })
-        if (this.markers[this.detailPanel.event.id]) {
-          this.markers[this.detailPanel.event.id].remove()
-          delete this.markers[this.detailPanel.event.id]
-        }
+        const id = this.detailPanel.event.id
+        await axios.delete(`/api/events/${id}`, { withCredentials: true })
+        this.allEvents = this.allEvents.filter(e => e.id !== id)
+        if (this.markers[id]) { this.markers[id].remove(); delete this.markers[id] }
         this.detailPanel.visible = false
       } catch (err) {
         this.detailPanel.error = err.response?.data || this.$t('map.couldNotCancel')
@@ -432,7 +468,7 @@ export default {
       this.resultModal.busy = true; this.resultModal.error = ''
       try {
         const { data } = await axios.post(
-          `http://localhost:8080/events/${this.detailPanel.event.id}/result`,
+          `/api/events/${this.detailPanel.event.id}/result`,
           { winnerUsername: this.resultModal.winner || null, resultNote: this.resultModal.note },
           { withCredentials: true }
         )
@@ -446,7 +482,36 @@ export default {
       } finally { this.resultModal.busy = false }
     },
 
-    gameLabel(type) { return GAME_META_CACHE[type]?.label || type },
+    gameName(g) {
+      return this.$i18n.locale === 'cs'
+        ? (g.nameCs || g.nameEn || g.key)
+        : (g.nameEn || g.nameCs || g.key)
+    },
+    gameLabel(type) {
+      const g = this.games.find(g => g.key === type)
+      const icon = GAME_META_CACHE[type]?.icon || '🎮'
+      return g ? `${icon} ${this.gameName(g)}` : type
+    },
+
+    toggleFilter(key) {
+      const idx = this.activeFilters.indexOf(key)
+      if (idx > -1) { this.activeFilters.splice(idx, 1) }
+      else           { this.activeFilters.push(key) }
+      this.applyFilter()
+    },
+    clearFilter() {
+      this.activeFilters = []
+      this.applyFilter()
+    },
+    applyFilter() {
+      Object.entries(this.markers).forEach(([id, marker]) => {
+        const event = this.allEvents.find(e => String(e.id) === String(id))
+        if (!event) return
+        const show = this.activeFilters.length === 0 || this.activeFilters.includes(event.gameType)
+        if (show && !this.map.hasLayer(marker))  { marker.addTo(this.map) }
+        if (!show && this.map.hasLayer(marker))  { marker.remove() }
+      })
+    },
     statusLabel(s)  { return this.$t('status.' + s.toLowerCase()) },
     formatDate(iso) { return iso ? new Date(iso).toLocaleString() : '—' },
     mapsLink(e)     { return `https://www.google.com/maps?q=${e.latitude},${e.longitude}` },
@@ -603,4 +668,103 @@ textarea { resize: vertical; line-height: 1.4; }
 
 .panel-slide-enter-active,.panel-slide-leave-active { transition:transform .2s ease,opacity .2s ease; }
 .panel-slide-enter-from,.panel-slide-leave-to       { transform:translateX(30px); opacity:0; }
+
+/* ── Filter bar ──────────────────────────────────────────────────────────── */
+.filter-bar {
+  position: absolute;
+  top: 16px;
+  left: 52px;   /* za zoom tlačítky Leafletu */
+  z-index: 1000;
+}
+
+.filter-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font);
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: background var(--transition), border-color var(--transition);
+  white-space: nowrap;
+}
+.filter-toggle-btn:hover           { background: var(--bg-elevated); }
+.filter-toggle-btn.active          { border-color: var(--brand); color: var(--brand); }
+.filter-toggle-btn.active:hover    { background: var(--brand-muted); }
+
+.filter-badge {
+  background: var(--brand);
+  color: #fff;
+  border-radius: var(--r-full);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 7px;
+  line-height: 1.5;
+}
+.filter-chevron { font-size: 9px; color: var(--text-muted); }
+
+.filter-dropdown {
+  margin-top: 6px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 12px 14px;
+  box-shadow: var(--shadow-lg);
+  width: 340px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.filter-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  gap: 8px;
+}
+.filter-hint { font-size: 11px; color: var(--text-muted); }
+.filter-clear-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-family: var(--font);
+  padding: 2px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--transition), color var(--transition);
+}
+.filter-clear-btn:hover { background: var(--bg-elevated); color: var(--red); border-color: var(--red); }
+
+.filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.filter-pill {
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  padding: 5px 12px;
+  font-size: 12px;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+  white-space: nowrap;
+}
+.filter-pill:hover  { background: var(--bg-overlay); color: var(--text-primary); }
+.filter-pill.active { background: var(--brand-muted); color: var(--brand); border-color: rgba(66,184,131,.4); font-weight: 600; }
+
+.filter-drop-enter-active { transition: opacity .15s ease, transform .15s ease; }
+.filter-drop-leave-active { transition: opacity .1s  ease, transform .1s  ease; }
+.filter-drop-enter-from,
+.filter-drop-leave-to     { opacity: 0; transform: translateY(-6px); }
 </style>

@@ -1,16 +1,12 @@
 package org.jan.game;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jan.BaseIntegrationTest;
-import org.jan.user.LoginRequest;
-import org.jan.user.RegisterRequest;
 import org.jan.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDateTime;
@@ -25,9 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class GameEventControllerTest extends BaseIntegrationTest {
 
-    @Autowired private MockMvc       mockMvc;
-    @Autowired private ObjectMapper  objectMapper;
-    @Autowired private UserRepository userRepository;
+    @Autowired private UserRepository      userRepository;
     @Autowired private GameEventRepository gameEventRepository;
 
     private MockHttpSession aliceSession;
@@ -37,15 +31,6 @@ class GameEventControllerTest extends BaseIntegrationTest {
 
     private String uid() {
         return "t" + UUID.randomUUID().toString().replace("-", "").substring(0, 8);
-    }
-
-    private MockHttpSession loginAs(String username, String password) throws Exception {
-        MvcResult r = mockMvc.perform(post("/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new LoginRequest(username, password))))
-                .andExpect(status().isOk())
-                .andReturn();
-        return (MockHttpSession) r.getRequest().getSession(false);
     }
 
     private String scheduledAt() {
@@ -71,13 +56,8 @@ class GameEventControllerTest extends BaseIntegrationTest {
         aliceUsername = "alice_ec_" + uid();
         bobUsername   = "bob_ec_"   + uid();
 
-        mockMvc.perform(post("/auth/register").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new RegisterRequest(aliceUsername, "pass123", aliceUsername + "@t.com"))))
-                .andExpect(status().isOk());
-
-        mockMvc.perform(post("/auth/register").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new RegisterRequest(bobUsername, "pass123", bobUsername + "@t.com"))))
-                .andExpect(status().isOk());
+        registerUser(aliceUsername, "pass123", aliceUsername + "@t.com");
+        registerUser(bobUsername,   "pass123", bobUsername   + "@t.com");
 
         aliceSession = loginAs(aliceUsername, "pass123");
         bobSession   = loginAs(bobUsername,   "pass123");
@@ -87,7 +67,7 @@ class GameEventControllerTest extends BaseIntegrationTest {
 
     @Test
     void getActiveEvents_returnsOk() throws Exception {
-        mockMvc.perform(get("/events")).andExpect(status().isOk());
+        mockMvc.perform(get("/events").session(aliceSession)).andExpect(status().isOk());
     }
 
     @Test
@@ -117,8 +97,8 @@ class GameEventControllerTest extends BaseIntegrationTest {
     @Test
     void createEvent_success_statusOpen_creatorJoined() throws Exception {
         Map<?, ?> body = createEvent(aliceSession, "ROCK_PAPER_SCISSORS");
-        assertEquals("OPEN",               body.get("status"));
-        assertEquals(aliceUsername,        body.get("creatorUsername"));
+        assertEquals("OPEN",                body.get("status"));
+        assertEquals(aliceUsername,         body.get("creatorUsername"));
         assertEquals("ROCK_PAPER_SCISSORS", body.get("gameType"));
         assertTrue((Boolean) body.get("joined"));
         assertTrue((Boolean) body.get("isCreator"));
@@ -135,7 +115,6 @@ class GameEventControllerTest extends BaseIntegrationTest {
                             "gameType", "TIC_TAC_TOE", "scheduledAt", scheduledAt()))))
                     .andExpect(status().isOk());
         }
-        // 6th attempt must be rejected
         mockMvc.perform(post("/events")
                 .session(aliceSession)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -297,7 +276,6 @@ class GameEventControllerTest extends BaseIntegrationTest {
         assertEquals("FINISHED", body.get("status"));
         assertEquals(aliceUsername, body.get("winnerUsername"));
 
-        // Scores updated
         assertEquals(1, userRepository.findByUsername(aliceUsername).getWins());
         assertEquals(1, userRepository.findByUsername(bobUsername).getLosses());
     }
@@ -335,13 +313,10 @@ class GameEventControllerTest extends BaseIntegrationTest {
 
         Map<?, ?> body = objectMapper.readValue(r.getResponse().getContentAsString(), Map.class);
         assertEquals("DISPUTED", body.get("status"));
-        // Scores must NOT change
         assertEquals(0, userRepository.findByUsername(aliceUsername).getWins());
         assertEquals(0, userRepository.findByUsername(bobUsername).getWins());
-        // Disputes incremented
         assertEquals(1, userRepository.findByUsername(aliceUsername).getDisputes());
         assertEquals(1, userRepository.findByUsername(bobUsername).getDisputes());
-        // Both claims exposed in the response
         assertNotNull(body.get("creatorResult"));
         assertNotNull(body.get("challengerResult"));
     }

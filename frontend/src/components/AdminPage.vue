@@ -87,7 +87,7 @@ export default {
     async loadReports() {
       this.loading = true
       try {
-        const res = await axios.get('http://localhost:8080/admin/reports', { withCredentials: true })
+        const res = await axios.get('/api/admin/reports', { withCredentials: true })
         this.reports = res.data
       } catch (e) {
         console.error('Failed to load reports', e)
@@ -97,7 +97,7 @@ export default {
     },
     async banUser(report) {
       try {
-        await axios.post(`http://localhost:8080/admin/ban/${report.reportedId}`, {}, { withCredentials: true })
+        await axios.post(`/api/admin/ban/${report.reportedId}`, {}, { withCredentials: true })
         report.reportedBanned = true
       } catch (e) {
         alert(e.response?.data || this.$t('admin.failedBan'))
@@ -105,7 +105,7 @@ export default {
     },
     async unbanUser(report) {
       try {
-        await axios.post(`http://localhost:8080/admin/unban/${report.reportedId}`, {}, { withCredentials: true })
+        await axios.post(`/api/admin/unban/${report.reportedId}`, {}, { withCredentials: true })
         report.reportedBanned = false
       } catch (e) {
         alert(e.response?.data || this.$t('admin.failedUnban'))
@@ -113,7 +113,7 @@ export default {
     },
     async resolveReport(report) {
       try {
-        await axios.post(`http://localhost:8080/admin/resolve/${report.id}`, {}, { withCredentials: true })
+        await axios.post(`/api/admin/resolve/${report.id}`, {}, { withCredentials: true })
         report.status = 'RESOLVED'
       } catch (e) {
         alert(e.response?.data || this.$t('admin.failedResolve'))

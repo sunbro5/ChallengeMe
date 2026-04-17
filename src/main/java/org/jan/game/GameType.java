@@ -28,5 +28,6 @@ public enum GameType {
     FOOTBALL,
     VOLLEYBALL,
     BASKETBALL,
-    TENNIS
+    TENNIS,
+    FARKLE
 }

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * No manual role check needed here.
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class AdminController {
 
     @Autowired private ReportService reportService;

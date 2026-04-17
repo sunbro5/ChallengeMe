@@ -32,7 +32,7 @@ export default {
   methods: {
     async handleLogin() {
       try {
-        const response = await axios.post('http://localhost:8080/auth/login', this.form, { withCredentials: true })
+        const response = await axios.post('/api/auth/login', this.form, { withCredentials: true })
         this.message = this.$t('login.success')
         this.isSuccess = true
         localStorage.setItem('isLoggedIn', 'true')

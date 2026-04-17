@@ -52,8 +52,8 @@
         </transition-group>
       </div>
     </div>
-    <div v-else class="auth-container">
-      <h1>ChallengeMe</h1>
+    <div v-else :class="['auth-container', { 'auth-full': isHomePage }]">
+      <h1 v-if="!isHomePage">ChallengeMe</h1>
       <router-view />
     </div>
 
@@ -95,7 +95,10 @@ export default {
   computed: {
     currentLocale() {
       return this.locale
-    }
+    },
+    isHomePage() {
+      return this.$route.path === '/'
+    },
   },
   mounted() {
     this.syncAuth()
@@ -154,7 +157,7 @@ export default {
       this.isAdmin    = false
       this.username   = ''
       this.$router.push('/login')
-      axios.post('http://localhost:8080/auth/logout', {}, { withCredentials: true })
+      axios.post('/api/auth/logout', {}, { withCredentials: true })
         .catch(err => console.error('Logout error:', err))
     },
   }
@@ -176,6 +179,15 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
+}
+
+/* Full-screen variant — used by HomePage so the map can fill the viewport */
+.auth-container.auth-full {
+  padding: 0;
+  align-items: stretch;
+  justify-content: flex-start;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .auth-container h1 {
@@ -205,7 +217,7 @@ export default {
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1010;
 }
 
 .header-left {

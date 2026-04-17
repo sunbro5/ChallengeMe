@@ -201,7 +201,7 @@ export default {
       this.loading = true; this.error = ''
       try {
         const { data } = await axios.get(
-          `http://localhost:8080/players/${this.$route.params.username}`,
+          `/api/players/${this.$route.params.username}`,
           { withCredentials: true })
         this.profile = data
       } catch {
@@ -215,7 +215,7 @@ export default {
       this.actionBusy = true; this.actionError = ''
       try {
         await axios.post(
-          `http://localhost:8080/friends/request?username=${this.profile.username}`,
+          `/api/friends/request?username=${this.profile.username}`,
           {}, { withCredentials: true })
         this.profile.friendStatus = 'PENDING'
       } catch (err) {
@@ -228,7 +228,7 @@ export default {
       this.actionBusy = true; this.actionError = ''
       try {
         await axios.delete(
-          `http://localhost:8080/friends/with/${this.profile.id}`,
+          `/api/friends/with/${this.profile.id}`,
           { withCredentials: true })
         this.profile.friendStatus = 'NONE'
       } catch (err) {
@@ -244,7 +244,7 @@ export default {
       }
       this.reportModal.busy = true
       try {
-        await axios.post('http://localhost:8080/reports', {
+        await axios.post('/api/reports', {
           reportedUsername: this.profile.username,
           reason: this.reportModal.reason,
         }, { withCredentials: true })
@@ -261,7 +261,7 @@ export default {
     async deleteAccount() {
       this.deleteAccountBusy = true; this.deleteAccountError = ''
       try {
-        await axios.delete('http://localhost:8080/auth/account', { withCredentials: true })
+        await axios.delete('/api/auth/account', { withCredentials: true })
         localStorage.removeItem('isLoggedIn')
         localStorage.removeItem('username')
         localStorage.removeItem('role')

@@ -1,0 +1,62 @@
+# Profanity word list — one word per line, lowercase.
+# Lines starting with # are comments and are ignored.
+# Add words freely; the filter normalises input before comparing
+# (lowercase, replaces common leet-speak substitutions).
+
+# English
+fuck
+shit
+ass
+asshole
+bitch
+cunt
+dick
+piss
+cock
+pussy
+nigger
+nigga
+faggot
+fag
+bastard
+whore
+slut
+wanker
+twat
+bollocks
+motherfucker
+fucker
+
+# Czech
+kurva
+pica
+píca
+kokot
+sráč
+srač
+hovno
+debil
+idiot
+blbec
+blbečku
+zasraný
+posraný
+hajzl
+kretén
+kretен
+mrdat
+mrdka
+šlapka
+děvka
+svině
+prase
+piča
+picka
+píčka
+jebat
+ojebat
+vyjebat
+zkurvený
+zkurvenej
+zkurvit
+kurwа

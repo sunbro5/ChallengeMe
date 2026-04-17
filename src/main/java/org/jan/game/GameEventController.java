@@ -68,21 +68,21 @@ public class GameEventController {
 
     // ── Endpoints ─────────────────────────────────────────────────────────────
 
-    @GetMapping("/events")
+    @GetMapping("/api/events")
     public ResponseEntity<List<GameEventDto>> getActiveEvents(Authentication auth) {
         User viewer = resolve(auth);
         return ResponseEntity.ok(gameEventService.getActiveEvents().stream()
                 .map(e -> toDto(e, viewer)).collect(Collectors.toList()));
     }
 
-    @GetMapping("/events/mine")
+    @GetMapping("/api/events/mine")
     public ResponseEntity<List<GameEventDto>> getMyEvents(Authentication auth) {
         User user = resolve(auth);
         return ResponseEntity.ok(gameEventService.getMyEvents(user).stream()
                 .map(e -> toDto(e, user)).collect(Collectors.toList()));
     }
 
-    @GetMapping("/events/{id}")
+    @GetMapping("/api/events/{id}")
     public ResponseEntity<GameEventDto> getEvent(@PathVariable Long id, Authentication auth) {
         try {
             return ResponseEntity.ok(toDto(gameEventService.getEvent(id), resolve(auth)));
@@ -91,7 +91,7 @@ public class GameEventController {
         }
     }
 
-    @PostMapping("/events")
+    @PostMapping("/api/events")
     public ResponseEntity<?> createEvent(@RequestBody GameEventCreateRequest req, Authentication auth) {
         try {
             User user = resolve(auth);
@@ -105,7 +105,7 @@ public class GameEventController {
     }
 
     /** Challenger applies — moves to PENDING_APPROVAL and notifies creator. */
-    @PostMapping("/events/{id}/accept")
+    @PostMapping("/api/events/{id}/accept")
     public ResponseEntity<?> acceptChallenge(@PathVariable Long id, Authentication auth) {
         try {
             User user  = resolve(auth);
@@ -123,7 +123,7 @@ public class GameEventController {
         }
     }
 
-    @PostMapping("/events/{id}/approve")
+    @PostMapping("/api/events/{id}/approve")
     public ResponseEntity<?> approveChallenger(@PathVariable Long id, Authentication auth) {
         try {
             User user = resolve(auth);
@@ -133,7 +133,7 @@ public class GameEventController {
         }
     }
 
-    @PostMapping("/events/{id}/reject")
+    @PostMapping("/api/events/{id}/reject")
     public ResponseEntity<?> rejectChallenger(@PathVariable Long id, Authentication auth) {
         try {
             User user = resolve(auth);
@@ -143,7 +143,7 @@ public class GameEventController {
         }
     }
 
-    @DeleteMapping("/events/{id}")
+    @DeleteMapping("/api/events/{id}")
     public ResponseEntity<String> cancelEvent(@PathVariable Long id, Authentication auth) {
         try {
             gameEventService.cancelEvent(resolve(auth), id);
@@ -153,7 +153,7 @@ public class GameEventController {
         }
     }
 
-    @PostMapping("/events/{id}/result")
+    @PostMapping("/api/events/{id}/result")
     public ResponseEntity<?> reportResult(@PathVariable Long id,
                                           @RequestBody GameResultRequest req,
                                           Authentication auth) {
@@ -169,14 +169,14 @@ public class GameEventController {
 
     // ── Public map (no auth) ──────────────────────────────────────────────────
 
-    @GetMapping("/events/public")
+    @GetMapping("/api/events/public")
     public ResponseEntity<List<PublicEventDto>> getPublicEvents() {
         return ResponseEntity.ok(gameEventService.getPublicEvents());
     }
 
     // ── Leaderboard ───────────────────────────────────────────────────────────
 
-    @GetMapping("/leaderboard")
+    @GetMapping("/api/leaderboard")
     public ResponseEntity<List<LeaderboardEntryDto>> getLeaderboard() {
         return ResponseEntity.ok(userRepository.findLeaderboard().stream()
                 .limit(50)

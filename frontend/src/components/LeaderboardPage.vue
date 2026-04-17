@@ -58,7 +58,7 @@ export default {
   },
   async mounted() {
     try {
-      const { data } = await axios.get('http://localhost:8080/leaderboard', { withCredentials: true })
+      const { data } = await axios.get('/api/leaderboard', { withCredentials: true })
       this.rows = data
     } catch {
       this.error = this.$t('leaderboard.couldNotLoad')

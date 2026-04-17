@@ -20,16 +20,12 @@ services:
     ports:
       - "5005:5005"
     environment:
-      # JDWP — suspend=n = nečeká na debugger, hned startuje
       JAVA_TOOL_OPTIONS: >-
         -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
-      # SQL logy
       SPRING_JPA_SHOW_SQL: "true"
       LOGGING_LEVEL_ORG_HIBERNATE_SQL: DEBUG
       LOGGING_LEVEL_ORG_HIBERNATE_TYPE_DESCRIPTOR_SQL: TRACE
-      # Aplikační logy
       LOGGING_LEVEL_ORG_JAN: DEBUG
-      # Actuator — všechny endpointy
       MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "*"
       MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
 

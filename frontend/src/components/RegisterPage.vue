@@ -82,7 +82,7 @@ export default {
       this.form.captchaAnswer = ''
       this.captchaQuestion    = '…'
       try {
-        const { data } = await axios.get('http://localhost:8080/auth/captcha')
+        const { data } = await axios.get('/api/auth/captcha')
         this.form.captchaId  = data.id
         this.captchaQuestion = data.question
       } catch {
@@ -116,7 +116,7 @@ export default {
 
       this.submitting = true
       try {
-        await axios.post('http://localhost:8080/auth/register', {
+        await axios.post('/api/auth/register', {
           username:      this.form.username,
           email:         this.form.email,
           password:      this.form.password,

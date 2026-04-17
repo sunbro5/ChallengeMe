@@ -1,0 +1,1337 @@
+00:10:02 INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[1 current WS(1)-HttpStream(0)-HttpPoll(0), 29 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(29)-CONNECTED(29)-DISCONNECT(11)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 336], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 73], sockJsScheduler[pool size = 7, active threads = 1, queued tasks = 0, completed tasks = 6]
+00:24:27 DEBUG o.s.w.s.h.LoggingWebSocketHandlerDecorator - StandardWebSocketSession[id=a554e488-50fc-dff0-1af2-b6ac4366831d, uri=ws://localhost:8080/ws] closed with CloseStatus[code=1001, reason=null]
+00:24:27 DEBUG o.s.w.s.m.SubProtocolWebSocketHandler - Clearing session a554e488-50fc-dff0-1af2-b6ac4366831d
+00:24:27 DEBUG org.springframework.web.SimpLogging - Processing DISCONNECT session=a554e488-50fc-dff0-1af2-b6ac4366831d
+00:24:27 DEBUG o.s.w.s.m.SubProtocolWebSocketHandler - No session for GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT_ACK, simpDisconnectMessage=GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT, stompCommand=DISCONNECT, simpSessionAttributes={org.springframework.messaging.simp.SimpAttributes.COMPLETED=true}, simpUser=org.jan.config.WebSocketConfig$2$$Lambda/0x0000024ec8c2ec78@62e21618, simpSessionId=a554e488-50fc-dff0-1af2-b6ac4366831d}], simpUser=org.jan.config.WebSocketConfig$2$$Lambda/0x0000024ec8c2ec78@62e21618, simpSessionId=a554e488-50fc-dff0-1af2-b6ac4366831d}]
+00:40:02 INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 29 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(29)-CONNECTED(29)-DISCONNECT(11)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 339], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 74], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 0, completed tasks = 7]
+01:10:02 INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 29 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(29)-CONNECTED(29)-DISCONNECT(11)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 339], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 74], sockJsScheduler[pool size = 9, active threads = 1, queued tasks = 0, completed tasks = 8]
+01:40:02 INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 29 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(29)-CONNECTED(29)-DISCONNECT(11)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 339], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 74], sockJsScheduler[pool size = 10, active threads = 1, queued tasks = 0, completed tasks = 9]
+02:07:42 DEBUG org.springframework.web.SimpLogging - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+02:07:42 DEBUG org.springframework.web.SimpLogging - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+02:07:42 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+02:07:42 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5e4c74ec]]
+02:07:42 DEBUG org.springframework.web.SimpLogging - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5e4c74ec]
+02:07:42 DEBUG org.springframework.web.SimpLogging - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5e4c74ec]
+02:07:42 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+02:07:42 DEBUG org.springframework.web.SimpLogging - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+02:07:42 DEBUG org.springframework.web.SimpLogging - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+02:07:42 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+02:07:42 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+02:07:42 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+02:07:48 INFO  org.jan.ChallengeMeApplication - Starting ChallengeMeApplication using Java 21.0.3 with PID 19316 (C:\Users\mares\IdeaProjects\ChallengeMe\target\classes started by mares in C:\Users\mares\IdeaProjects\ChallengeMe)
+02:07:48 INFO  org.jan.ChallengeMeApplication - No active profile set, falling back to 1 default profile: "default"
+02:07:49 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+02:07:49 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 44 ms. Found 6 JPA repository interfaces.
+02:07:50 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+02:07:50 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+02:07:50 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+02:07:50 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.16]
+02:07:50 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+02:07:50 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1439 ms
+02:07:50 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+02:07:50 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+02:07:50 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+02:07:50 INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+02:07:50 DEBUG o.s.w.f.ServerHttpObservationFilter - Filter 'webMvcObservationFilter' configured for use
+02:07:50 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+02:07:50 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+02:07:50 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+02:07:50 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+02:07:51 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+02:07:51 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+02:07:51 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+02:07:52 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+02:07:52 WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: e44ac954-04e2-4d69-8bc6-702f34b82d3a
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+02:07:52 DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Patterns [/ws] in 'stompWebSocketHandlerMapping'
+02:07:52 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - 33 mappings in 'requestMappingHandlerMapping'
+02:07:52 DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+02:07:52 INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+02:07:52 INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@416c28e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2cf5cc43, org.springframework.security.web.context.SecurityContextHolderFilter@31e8949d, org.springframework.security.web.header.HeaderWriterFilter@6984d41a, org.springframework.web.filter.CorsFilter@52a3a9ef, org.springframework.security.web.authentication.logout.LogoutFilter@76425cc2, org.jan.config.SessionAuthFilter@59313495, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6e1ece3d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2a60cd41, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@25d77b18, org.springframework.security.web.access.ExceptionTranslationFilter@1e0630cc, org.springframework.security.web.access.intercept.AuthorizationFilter@31d07dd9]
+02:07:53 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.c.ChatController:
+	
+02:07:53 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.c.ChatWebSocketController:
+	{[MESSAGE],[/chat.send]}: sendMessage(ChatMessage,Principal)
+02:07:53 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.f.FriendController:
+	
+02:07:53 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.g.GameController:
+	
+02:07:53 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.g.GameEventController:
+	
+02:07:53 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.r.AdminController:
+	
+02:07:53 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.r.ReportController:
+	
+02:07:53 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.u.AuthController:
+	
+02:07:53 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.u.PlayerController:
+	
+02:07:53 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+02:07:53 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+02:07:53 DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+02:07:53 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+02:07:53 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+02:07:53 DEBUG org.springframework.web.SimpLogging - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+02:07:53 DEBUG org.springframework.web.SimpLogging - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+02:07:53 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+02:07:53 DEBUG org.springframework.web.SimpLogging - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@12e75177]
+02:07:53 DEBUG org.springframework.web.SimpLogging - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@12e75177]
+02:07:53 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@12e75177]]
+02:07:53 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+02:07:53 DEBUG org.springframework.web.SimpLogging - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+02:07:53 DEBUG org.springframework.web.SimpLogging - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+02:07:53 INFO  org.jan.ChallengeMeApplication - Started ChallengeMeApplication in 5.012 seconds (process running for 5.526)
+02:07:53 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+02:07:53 INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+02:07:53 DEBUG o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
+02:07:53 DEBUG o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
+02:07:53 DEBUG o.s.web.servlet.DispatcherServlet - Detected FixedThemeResolver
+02:07:53 DEBUG o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@1ea786bd
+02:07:53 DEBUG o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@f4915c7
+02:07:53 DEBUG o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+02:07:53 INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+02:08:13 WARN  o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/games' (previous null). Performing MatchableHandlerMapping lookup. This is logged once only at WARN level, and every time at TRACE.
+02:08:13 DEBUG o.s.web.servlet.DispatcherServlet - GET "/ws", parameters={}
+02:08:13 DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Mapped to org.springframework.web.socket.server.support.WebSocketHttpRequestHandler@681c7f46
+02:08:13 DEBUG o.s.w.s.s.s.WebSocketHttpRequestHandler - GET /ws
+02:08:13 DEBUG o.s.web.servlet.DispatcherServlet - Completed 101 SWITCHING_PROTOCOLS
+02:08:13 DEBUG o.s.w.s.h.LoggingWebSocketHandlerDecorator - New StandardWebSocketSession[id=5df70269-b3dd-38e6-bae3-4296ae656f9d, uri=ws://localhost:8080/ws]
+02:08:13 DEBUG o.s.w.s.h.LoggingWebSocketHandlerDecorator - StandardWebSocketSession[id=5df70269-b3dd-38e6-bae3-4296ae656f9d, uri=ws://localhost:8080/ws] closed with CloseStatus[code=1001, reason=null]
+02:08:13 DEBUG o.s.w.s.m.SubProtocolWebSocketHandler - Clearing session 5df70269-b3dd-38e6-bae3-4296ae656f9d
+02:08:13 DEBUG org.springframework.web.SimpLogging - Processing DISCONNECT session=5df70269-b3dd-38e6-bae3-4296ae656f9d
+02:08:13 DEBUG o.s.w.s.m.SubProtocolWebSocketHandler - No session for GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT_ACK, simpDisconnectMessage=GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT, stompCommand=DISCONNECT, simpSessionAttributes={org.springframework.messaging.simp.SimpAttributes.COMPLETED=true}, simpSessionId=5df70269-b3dd-38e6-bae3-4296ae656f9d}], simpSessionId=5df70269-b3dd-38e6-bae3-4296ae656f9d}]
+02:08:14 DEBUG o.s.web.servlet.DispatcherServlet - GET "/auth/captcha", parameters={}
+02:08:14 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#getCaptcha()
+02:08:14 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:08:14 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [CaptchaChallenge[id=f408af7b-998e-40b5-82a2-91a3c5d44a51, question=2 × 7 = ?]]
+02:08:14 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:08:31 DEBUG o.s.web.servlet.DispatcherServlet - GET "/auth/captcha", parameters={}
+02:08:31 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#getCaptcha()
+02:08:31 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:08:31 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [CaptchaChallenge[id=0776a123-d773-4e0e-be7d-b7881ea0153e, question=8 × 9 = ?]]
+02:08:31 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:08:36 DEBUG o.s.web.servlet.DispatcherServlet - GET "/auth/captcha", parameters={}
+02:08:36 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#getCaptcha()
+02:08:36 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:08:36 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [CaptchaChallenge[id=68c494ce-218d-486d-b748-bddb805ea441, question=19 + 9 = ?]]
+02:08:36 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:08:53 INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 1 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 3, active threads = 0, queued tasks = 0, completed tasks = 3], outboundChannel[pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+02:08:54 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/register", parameters={}
+02:08:54 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#register(RegisterRequest)
+02:08:54 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [RegisterRequest(username=jan2, password=jan2jan2, email=jan2@test.cz, captchaId=68c494ce-218d-486d-b (truncated)...]
+02:08:54 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [text/plain, */*, application/json, application/*+json]
+02:08:54 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing ["User registered successfully"]
+02:08:54 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:08:58 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/login", parameters={}
+02:08:58 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#login(LoginRequest, HttpSession)
+02:08:58 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [org.jan.user.LoginRequest@38b1b0e6]
+02:08:58 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:08:58 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [LoginResponse(username=jan2, role=USER)]
+02:08:58 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:08:59 DEBUG o.s.web.servlet.DispatcherServlet - GET "/ws", parameters={}
+02:08:59 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+02:08:59 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends", parameters={}
+02:08:59 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+02:08:59 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getFriends(Authentication)
+02:08:59 DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Mapped to org.springframework.web.socket.server.support.WebSocketHttpRequestHandler@681c7f46
+02:08:59 DEBUG o.s.w.s.s.s.WebSocketHttpRequestHandler - GET /ws
+02:08:59 DEBUG o.s.web.servlet.DispatcherServlet - Completed 101 SWITCHING_PROTOCOLS
+02:08:59 DEBUG o.s.w.s.h.LoggingWebSocketHandlerDecorator - New StandardWebSocketSession[id=e961e6be-1344-39da-3199-ca3187d05ae0, uri=ws://localhost:8080/ws]
+02:08:59 DEBUG org.springframework.web.SimpLogging - Processing CONNECT user=jan2 session=e961e6be-1344-39da-3199-ca3187d05ae0
+02:08:59 DEBUG org.springframework.web.SimpLogging - Processing SUBSCRIBE /topic/chat/jan2 id=sub-0 session=e961e6be-1344-39da-3199-ca3187d05ae0
+02:08:59 DEBUG org.springframework.web.SimpLogging - Processing SUBSCRIBE /topic/notifications/jan2 id=sub-1 session=e961e6be-1344-39da-3199-ca3187d05ae0
+02:08:59 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:08:59 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+02:08:59 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:08:59 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:08:59 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+02:08:59 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events", parameters={}
+02:08:59 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getActiveEvents(Authentication)
+02:08:59 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:08:59 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:08:59 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+02:08:59 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:09:03 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+02:09:03 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+02:09:03 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:09:03 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+02:09:03 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:09:15 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends/requests", parameters={}
+02:09:15 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends", parameters={}
+02:09:15 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getFriends(Authentication)
+02:09:15 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getPendingRequests(Authentication)
+02:09:15 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:09:15 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+02:09:15 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:09:15 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+02:09:15 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:09:15 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:09:17 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends/requests", parameters={}
+02:09:17 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getPendingRequests(Authentication)
+02:09:17 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:09:17 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+02:09:17 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:09:18 DEBUG o.s.web.servlet.DispatcherServlet - GET "/leaderboard", parameters={}
+02:09:18 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getLeaderboard()
+02:09:18 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:09:18 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[LeaderboardEntryDto[username=jan2, wins=0, losses=0, draws=0, disputes=0]]]
+02:09:18 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:09:23 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+02:09:23 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+02:09:23 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:09:23 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+02:09:23 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:09:23 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events", parameters={}
+02:09:23 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getActiveEvents(Authentication)
+02:09:23 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:09:23 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+02:09:23 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:09:33 DEBUG o.s.web.servlet.DispatcherServlet - POST "/events", parameters={}
+02:09:33 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#createEvent(GameEventCreateRequest, Authentication)
+02:09:33 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [org.jan.game.GameEventCreateRequest@1b472498]
+02:09:33 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:09:33 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GameEventDto(id=1, creatorUsername=jan2, latitude=51.49989369662324, longitude=-0.08840560913085938, (truncated)...]
+02:09:33 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:10:19 DEBUG o.s.web.servlet.DispatcherServlet - GET "/auth/captcha", parameters={}
+02:10:19 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#getCaptcha()
+02:10:19 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:10:19 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [CaptchaChallenge[id=2515c861-ac76-4f66-941d-a913be0d88af, question=9 − 4 = ?]]
+02:10:19 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:10:38 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/register", parameters={}
+02:10:38 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#register(RegisterRequest)
+02:10:38 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [RegisterRequest(username=jan3, password=jan3jan3, email=jan3@seznam.cz, captchaId=2515c861-ac76-4f66 (truncated)...]
+02:10:38 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [text/plain, */*, application/json, application/*+json]
+02:10:38 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing ["User registered successfully"]
+02:10:38 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:10:42 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/login", parameters={}
+02:10:42 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#login(LoginRequest, HttpSession)
+02:10:42 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [org.jan.user.LoginRequest@2cbb6cc0]
+02:10:42 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:10:42 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [LoginResponse(username=jan3, role=USER)]
+02:10:42 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:10:43 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends", parameters={}
+02:10:43 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+02:10:43 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getFriends(Authentication)
+02:10:43 DEBUG o.s.web.servlet.DispatcherServlet - GET "/ws", parameters={}
+02:10:43 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+02:10:43 DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Mapped to org.springframework.web.socket.server.support.WebSocketHttpRequestHandler@681c7f46
+02:10:43 DEBUG o.s.w.s.s.s.WebSocketHttpRequestHandler - GET /ws
+02:10:43 DEBUG o.s.web.servlet.DispatcherServlet - Completed 101 SWITCHING_PROTOCOLS
+02:10:43 DEBUG o.s.w.s.h.LoggingWebSocketHandlerDecorator - New StandardWebSocketSession[id=e20d98b2-6164-5529-a15c-3a0c1965e225, uri=ws://localhost:8080/ws]
+02:10:43 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:10:43 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+02:10:43 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:10:43 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:10:43 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+02:10:43 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:10:43 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events", parameters={}
+02:10:43 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getActiveEvents(Authentication)
+02:10:43 DEBUG org.springframework.web.SimpLogging - Processing CONNECT user=jan3 session=e20d98b2-6164-5529-a15c-3a0c1965e225
+02:10:43 DEBUG org.springframework.web.SimpLogging - Processing SUBSCRIBE /topic/chat/jan3 id=sub-0 session=e20d98b2-6164-5529-a15c-3a0c1965e225
+02:10:43 DEBUG org.springframework.web.SimpLogging - Processing SUBSCRIBE /topic/notifications/jan3 id=sub-1 session=e20d98b2-6164-5529-a15c-3a0c1965e225
+02:10:43 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:10:43 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameEventDto(id=1, creatorUsername=jan2, latitude=51.49989369662324, longitude=-0.08840560913085938 (truncated)...]
+02:10:43 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:10:48 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+02:10:48 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+02:10:48 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:10:48 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+02:10:48 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:10:48 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events/1", parameters={}
+02:10:48 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getEvent(Long, Authentication)
+02:10:48 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:10:48 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GameEventDto(id=1, creatorUsername=jan2, latitude=51.49989369662324, longitude=-0.08840560913085938, (truncated)...]
+02:10:48 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:10:50 DEBUG o.s.web.servlet.DispatcherServlet - POST "/events/1/accept", parameters={}
+02:10:50 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#acceptChallenge(Long, Authentication)
+02:10:50 DEBUG org.springframework.web.SimpLogging - Processing MESSAGE destination=/topic/notifications/jan2 session=null payload={"type":"CHALLENGE_ACCEPTED","eventId":1,"challengerUsername":"jan3","gameType":...(truncated)
+02:10:50 DEBUG org.springframework.web.SimpLogging - Broadcasting to 1 sessions.
+02:10:50 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:10:50 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GameEventDto(id=1, creatorUsername=jan2, latitude=51.49989369662324, longitude=-0.08840560913085938, (truncated)...]
+02:10:50 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:10:54 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends", parameters={}
+02:10:54 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getFriends(Authentication)
+02:10:54 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:10:54 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+02:10:54 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:01 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+02:11:01 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+02:11:01 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:01 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+02:11:01 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:01 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events", parameters={}
+02:11:01 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getActiveEvents(Authentication)
+02:11:01 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:01 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameEventDto(id=1, creatorUsername=jan2, latitude=51.49989369662324, longitude=-0.08840560913085938 (truncated)...]
+02:11:01 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:02 DEBUG o.s.web.servlet.DispatcherServlet - POST "/chat/send", parameters={}
+02:11:02 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#sendMessage(SendMessageRequest, Authentication)
+02:11:02 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [SendMessageRequest(receiverUsername=jan2, content=ahoj)]
+02:11:02 DEBUG org.springframework.web.SimpLogging - Processing MESSAGE destination=/topic/chat/jan2 session=null payload={"senderUsername":"jan3","receiverUsername":"jan2","content":"ahoj","sentAt":"20...(truncated)
+02:11:02 DEBUG org.springframework.web.SimpLogging - Broadcasting to 1 sessions.
+02:11:02 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:02 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02. (truncated)...]
+02:11:02 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:07 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+02:11:07 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+02:11:07 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:07 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+02:11:07 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:07 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events/mine", parameters={}
+02:11:07 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getMyEvents(Authentication)
+02:11:07 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:07 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameEventDto(id=1, creatorUsername=jan2, latitude=51.49989369662324, longitude=-0.08840560913085938 (truncated)...]
+02:11:07 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:22 DEBUG o.s.web.servlet.DispatcherServlet - GET "/players/jan3", parameters={}
+02:11:22 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.PlayerController#getProfile(String, Authentication)
+02:11:22 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:22 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [PlayerProfileDto(id=3, username=jan3, wins=0, losses=0, draws=0, disputes=0, friendStatus=NONE, isMe (truncated)...]
+02:11:22 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:31 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+02:11:31 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+02:11:31 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:31 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+02:11:31 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:31 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events", parameters={}
+02:11:31 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getActiveEvents(Authentication)
+02:11:31 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:31 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameEventDto(id=1, creatorUsername=jan2, latitude=51.49989369662324, longitude=-0.08840560913085938 (truncated)...]
+02:11:31 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:37 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+02:11:37 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+02:11:37 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:37 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+02:11:37 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:37 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events/1", parameters={}
+02:11:37 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getEvent(Long, Authentication)
+02:11:37 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:37 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GameEventDto(id=1, creatorUsername=jan2, latitude=51.49989369662324, longitude=-0.08840560913085938, (truncated)...]
+02:11:37 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:37 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:11:37 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:11:37 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:37 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:11:37 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:41 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:11:41 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:11:41 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:41 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:11:41 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:44 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends", parameters={}
+02:11:44 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getFriends(Authentication)
+02:11:44 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:44 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+02:11:44 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:45 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:11:45 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:11:45 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:45 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:11:45 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:49 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:11:49 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:11:49 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:49 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:11:49 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:53 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:11:53 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:11:53 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:53 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:11:53 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:11:58 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:11:58 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:11:58 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:11:58 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:11:58 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:12:02 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:12:02 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:12:02 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:12:02 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:12:02 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:12:06 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:12:06 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:12:06 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:12:06 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:12:06 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:12:10 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:12:10 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:12:10 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:12:10 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:12:10 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:12:14 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:12:14 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:12:14 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:12:14 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:12:14 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:12:18 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:12:18 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:12:18 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:12:18 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:12:18 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:12:22 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:12:22 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:12:22 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:12:22 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:12:22 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:12:26 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:12:26 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:12:26 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:12:26 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:12:26 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:12:29 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:12:29 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:12:29 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:12:29 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:12:29 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:12:30 DEBUG o.s.w.s.h.LoggingWebSocketHandlerDecorator - StandardWebSocketSession[id=e20d98b2-6164-5529-a15c-3a0c1965e225, uri=ws://localhost:8080/ws] closed with CloseStatus[code=1001, reason=null]
+02:12:30 DEBUG o.s.w.s.m.SubProtocolWebSocketHandler - Clearing session e20d98b2-6164-5529-a15c-3a0c1965e225
+02:12:30 DEBUG org.springframework.web.SimpLogging - Processing DISCONNECT session=e20d98b2-6164-5529-a15c-3a0c1965e225
+02:12:30 DEBUG o.s.w.s.m.SubProtocolWebSocketHandler - No session for GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT_ACK, simpDisconnectMessage=GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT, stompCommand=DISCONNECT, simpSessionAttributes={sessionUsername=jan3, org.springframework.messaging.simp.SimpAttributes.COMPLETED=true}, simpUser=org.jan.config.WebSocketConfig$1$$Lambda/0x0000029de7c98738@43b898d, simpSessionId=e20d98b2-6164-5529-a15c-3a0c1965e225}], simpUser=org.jan.config.WebSocketConfig$1$$Lambda/0x0000029de7c98738@43b898d, simpSessionId=e20d98b2-6164-5529-a15c-3a0c1965e225}]
+02:12:34 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:12:34 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:12:34 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:12:34 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:12:34 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:12:38 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:12:38 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:12:38 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:12:38 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:12:38 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:12:42 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:12:42 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:12:42 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:12:42 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:12:42 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:12:46 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:12:46 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:12:46 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:12:46 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:12:46 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:12:50 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:12:50 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:12:50 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:12:50 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:12:50 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:12:54 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:12:54 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:12:54 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:12:54 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:12:54 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:12:58 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:12:58 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:12:58 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:12:58 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:12:58 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:13:02 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:13:02 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:13:02 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:13:02 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:13:02 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:13:06 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:13:06 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:13:06 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:13:06 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:13:06 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:13:10 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:13:10 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:13:10 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:13:10 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:13:10 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:13:14 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:13:14 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:13:14 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:13:14 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:13:14 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:13:18 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:13:18 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:13:18 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:13:18 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:13:18 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:13:22 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:13:22 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:13:22 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:13:22 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:13:22 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:13:26 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:13:26 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:13:26 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:13:26 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:13:26 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:13:30 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:13:30 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:13:30 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:13:30 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:13:30 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:13:34 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:13:34 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:13:34 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:13:34 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:13:34 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:13:38 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:13:38 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:13:38 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:13:38 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:13:38 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:13:42 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:13:42 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:13:42 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:13:42 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:13:42 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:13:46 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:13:46 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:13:46 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:13:46 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:13:46 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:13:50 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:13:50 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:13:50 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:13:50 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:13:50 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:14:05 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:14:05 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:14:05 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:14:05 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:14:05 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:14:35 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:14:35 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:14:35 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:14:35 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:14:35 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:14:37 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:14:37 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:14:37 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:14:37 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:14:37 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:14:42 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:14:42 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:14:42 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:14:42 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:14:42 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:14:46 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:14:46 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:14:46 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:14:46 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:14:46 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:14:50 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:14:50 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:14:50 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:14:50 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:14:50 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:14:54 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:14:54 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:14:54 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:14:54 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:14:54 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:14:58 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:14:58 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:14:58 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:14:58 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:14:58 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:15:02 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:15:02 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:15:02 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:15:02 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:15:02 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:15:06 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:15:06 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:15:06 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:15:06 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:15:06 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:15:10 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:15:10 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:15:10 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:15:10 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:15:10 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:15:14 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:15:14 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:15:14 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:15:14 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:15:14 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:15:18 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:15:18 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:15:18 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:15:18 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:15:18 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:15:22 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:15:22 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:15:22 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:15:22 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:15:22 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:15:26 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:15:26 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:15:26 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:15:26 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:15:26 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:15:30 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:15:30 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:15:30 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:15:30 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:15:30 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:15:34 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:15:34 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:15:34 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:15:34 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:15:34 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:15:38 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:15:38 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:15:38 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:15:38 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:15:38 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:16:05 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:16:05 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:16:05 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:16:05 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:16:05 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:16:15 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:16:15 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:16:15 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:16:15 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:16:15 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:16:17 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:16:17 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:16:17 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:16:17 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:16:17 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:16:21 DEBUG o.s.web.servlet.DispatcherServlet - GET "/chat/history?friendUsername=jan3", parameters={masked}
+02:16:21 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.chat.ChatController#getHistory(String, Authentication)
+02:16:21 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:16:21 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ChatMessageDto(senderUsername=jan3, receiverUsername=jan2, content=ahoj, sentAt=2026-04-12T02:11:02 (truncated)...]
+02:16:21 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:16:23 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+02:16:23 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+02:16:23 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:16:23 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+02:16:23 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+02:16:23 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events", parameters={}
+02:16:23 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getActiveEvents(Authentication)
+02:16:23 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+02:16:23 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameEventDto(id=1, creatorUsername=jan2, latitude=51.49989369662324, longitude=-0.08840560913085938 (truncated)...]
+02:16:23 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+12:40:37 INFO  org.jan.ChallengeMeApplication - Starting ChallengeMeApplication using Java 21.0.3 with PID 16368 (C:\Users\mares\IdeaProjects\ChallengeMe\target\classes started by mares in C:\Users\mares\IdeaProjects\ChallengeMe)
+12:40:37 INFO  org.jan.ChallengeMeApplication - No active profile set, falling back to 1 default profile: "default"
+12:40:38 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+12:40:38 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 51 ms. Found 6 JPA repository interfaces.
+12:40:38 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+12:40:38 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+12:40:38 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+12:40:38 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.16]
+12:40:38 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+12:40:38 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1639 ms
+12:40:38 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+12:40:39 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+12:40:39 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+12:40:39 INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+12:40:39 DEBUG o.s.w.f.ServerHttpObservationFilter - Filter 'webMvcObservationFilter' configured for use
+12:40:39 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+12:40:39 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+12:40:39 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+12:40:39 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+12:40:40 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+12:40:40 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+12:40:40 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+12:40:41 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+12:40:41 WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 360052e2-1151-4ed0-ad27-651b6a27cf27
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+12:40:41 DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Patterns [/ws] in 'stompWebSocketHandlerMapping'
+12:40:41 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - 33 mappings in 'requestMappingHandlerMapping'
+12:40:41 DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+12:40:41 INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+12:40:41 INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6d618003, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3030a20, org.springframework.security.web.context.SecurityContextHolderFilter@71ef979e, org.springframework.security.web.header.HeaderWriterFilter@3c802d25, org.springframework.web.filter.CorsFilter@331d7260, org.springframework.security.web.authentication.logout.LogoutFilter@c7ba58d, org.jan.config.SessionAuthFilter@6fd7aba8, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4236d55, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6c49db66, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6086ba82, org.springframework.security.web.access.ExceptionTranslationFilter@44640a84, org.springframework.security.web.access.intercept.AuthorizationFilter@1c510181]
+12:40:42 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.c.ChatController:
+	
+12:40:42 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.c.ChatWebSocketController:
+	{[MESSAGE],[/chat.send]}: sendMessage(ChatMessage,Principal)
+12:40:42 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.f.FriendController:
+	
+12:40:42 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.g.GameController:
+	
+12:40:42 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.g.GameEventController:
+	
+12:40:42 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.r.AdminController:
+	
+12:40:42 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.r.ReportController:
+	
+12:40:42 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.u.AuthController:
+	
+12:40:42 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.u.PlayerController:
+	
+12:40:42 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+12:40:42 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+12:40:42 DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+12:40:42 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+12:40:42 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+12:40:42 DEBUG org.springframework.web.SimpLogging - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+12:40:42 DEBUG org.springframework.web.SimpLogging - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+12:40:42 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+12:40:42 DEBUG org.springframework.web.SimpLogging - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@d9e0ed2]
+12:40:42 DEBUG org.springframework.web.SimpLogging - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@d9e0ed2]
+12:40:42 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@d9e0ed2]]
+12:40:42 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+12:40:42 DEBUG org.springframework.web.SimpLogging - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+12:40:42 DEBUG org.springframework.web.SimpLogging - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+12:40:42 INFO  org.jan.ChallengeMeApplication - Started ChallengeMeApplication in 5.804 seconds (process running for 6.44)
+12:40:43 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+12:40:43 INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+12:40:43 DEBUG o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
+12:40:43 DEBUG o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
+12:40:43 DEBUG o.s.web.servlet.DispatcherServlet - Detected FixedThemeResolver
+12:40:43 DEBUG o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@31b9a628
+12:40:43 DEBUG o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@20eee47c
+12:40:43 DEBUG o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+12:40:43 INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+12:41:42 INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+13:11:42 INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 0, completed tasks = 1]
+21:05:32 INFO  org.jan.ChallengeMeApplication - Starting ChallengeMeApplication using Java 21.0.3 with PID 20136 (C:\Users\mares\IdeaProjects\ChallengeMe\target\classes started by mares in C:\Users\mares\IdeaProjects\ChallengeMe)
+21:05:32 INFO  org.jan.ChallengeMeApplication - No active profile set, falling back to 1 default profile: "default"
+21:05:33 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+21:05:33 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 46 ms. Found 6 JPA repository interfaces.
+21:05:33 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+21:05:33 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+21:05:33 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+21:05:33 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.16]
+21:05:33 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+21:05:33 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1615 ms
+21:05:34 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+21:05:34 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+21:05:34 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+21:05:34 INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+21:05:34 DEBUG o.s.w.f.ServerHttpObservationFilter - Filter 'webMvcObservationFilter' configured for use
+21:05:34 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+21:05:34 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+21:05:34 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+21:05:34 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+21:05:35 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+21:05:35 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+21:05:35 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+21:05:36 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+21:05:36 WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 0db4808a-7017-4725-a62f-07a0f34e956d
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+21:05:36 DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Patterns [/ws] in 'stompWebSocketHandlerMapping'
+21:05:36 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - 34 mappings in 'requestMappingHandlerMapping'
+21:05:36 DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+21:05:37 INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+21:05:37 INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@571010af, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@12917a56, org.springframework.security.web.context.SecurityContextHolderFilter@5d5cd0cf, org.springframework.security.web.header.HeaderWriterFilter@12cea099, org.springframework.web.filter.CorsFilter@1bec2008, org.springframework.security.web.authentication.logout.LogoutFilter@1c83c000, org.jan.config.SessionAuthFilter@3eee08f5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4193b8a5, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@296a6a10, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6d043931, org.springframework.security.web.access.ExceptionTranslationFilter@40b415bb, org.springframework.security.web.access.intercept.AuthorizationFilter@2089ea49]
+21:05:37 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.c.ChatController:
+	
+21:05:37 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.c.ChatWebSocketController:
+	{[MESSAGE],[/chat.send]}: sendMessage(ChatMessage,Principal)
+21:05:37 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.f.FriendController:
+	
+21:05:37 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.g.GameController:
+	
+21:05:37 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.g.GameEventController:
+	
+21:05:37 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.r.AdminController:
+	
+21:05:37 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.r.ReportController:
+	
+21:05:37 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.u.AuthController:
+	
+21:05:37 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.u.PlayerController:
+	
+21:05:37 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+21:05:37 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+21:05:37 DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+21:05:37 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+21:05:37 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+21:05:37 DEBUG org.springframework.web.SimpLogging - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+21:05:37 DEBUG org.springframework.web.SimpLogging - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+21:05:37 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+21:05:37 DEBUG org.springframework.web.SimpLogging - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2ff89271]
+21:05:37 DEBUG org.springframework.web.SimpLogging - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2ff89271]
+21:05:37 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2ff89271]]
+21:05:37 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+21:05:37 DEBUG org.springframework.web.SimpLogging - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+21:05:37 DEBUG org.springframework.web.SimpLogging - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+21:05:37 INFO  org.jan.ChallengeMeApplication - Started ChallengeMeApplication in 5.826 seconds (process running for 6.348)
+21:05:38 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+21:05:38 INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+21:05:38 DEBUG o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
+21:05:38 DEBUG o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
+21:05:38 DEBUG o.s.web.servlet.DispatcherServlet - Detected FixedThemeResolver
+21:05:38 DEBUG o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@3ce3b176
+21:05:38 DEBUG o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@56e2f315
+21:05:38 DEBUG o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+21:05:38 INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+21:06:37 INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+21:31:05 DEBUG org.springframework.web.SimpLogging - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+21:31:05 DEBUG org.springframework.web.SimpLogging - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+21:31:05 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+21:31:05 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2ff89271]]
+21:31:05 DEBUG org.springframework.web.SimpLogging - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2ff89271]
+21:31:05 DEBUG org.springframework.web.SimpLogging - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2ff89271]
+21:31:05 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+21:31:05 DEBUG org.springframework.web.SimpLogging - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+21:31:05 DEBUG org.springframework.web.SimpLogging - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+21:31:05 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+21:31:05 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+21:31:05 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+21:43:42 INFO  org.jan.ChallengeMeApplication - Starting ChallengeMeApplication using Java 21.0.3 with PID 28720 (C:\Users\mares\IdeaProjects\ChallengeMe\target\classes started by mares in C:\Users\mares\IdeaProjects\ChallengeMe)
+21:43:42 INFO  org.jan.ChallengeMeApplication - No active profile set, falling back to 1 default profile: "default"
+21:43:43 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+21:43:43 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 45 ms. Found 6 JPA repository interfaces.
+21:43:44 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+21:43:44 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+21:43:44 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+21:43:44 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.16]
+21:43:44 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+21:43:44 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1419 ms
+21:43:44 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+21:43:44 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+21:43:44 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+21:43:44 INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+21:43:44 DEBUG o.s.w.f.ServerHttpObservationFilter - Filter 'webMvcObservationFilter' configured for use
+21:43:44 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+21:43:44 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+21:43:44 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+21:43:44 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+21:43:45 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+21:43:45 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+21:43:45 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+21:43:46 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+21:43:46 WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 4090753a-7564-4788-bba0-4bb9ea7f6454
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+21:43:46 DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Patterns [/ws] in 'stompWebSocketHandlerMapping'
+21:43:46 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - 34 mappings in 'requestMappingHandlerMapping'
+21:43:46 DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+21:43:47 INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+21:43:47 INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@20f1cf40, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@52997ccc, org.springframework.security.web.context.SecurityContextHolderFilter@6277551c, org.springframework.security.web.header.HeaderWriterFilter@76eabed6, org.springframework.web.filter.CorsFilter@30114f16, org.springframework.security.web.authentication.logout.LogoutFilter@146eda1b, org.jan.config.SessionAuthFilter@4fa91d5b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@155c2a47, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4337cf96, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@188f6f98, org.springframework.security.web.access.ExceptionTranslationFilter@7b601e55, org.springframework.security.web.access.intercept.AuthorizationFilter@57bfaa41]
+21:43:47 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.c.ChatController:
+	
+21:43:47 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.c.ChatWebSocketController:
+	{[MESSAGE],[/chat.send]}: sendMessage(ChatMessage,Principal)
+21:43:47 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.f.FriendController:
+	
+21:43:47 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.g.GameController:
+	
+21:43:47 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.g.GameEventController:
+	
+21:43:47 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.r.AdminController:
+	
+21:43:47 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.r.ReportController:
+	
+21:43:47 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.u.AuthController:
+	
+21:43:47 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.j.u.PlayerController:
+	
+21:43:47 DEBUG o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+21:43:47 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+21:43:47 DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+21:43:47 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+21:43:47 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+21:43:47 DEBUG org.springframework.web.SimpLogging - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+21:43:47 DEBUG org.springframework.web.SimpLogging - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+21:43:47 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+21:43:47 DEBUG org.springframework.web.SimpLogging - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@70787658]
+21:43:47 DEBUG org.springframework.web.SimpLogging - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@70787658]
+21:43:47 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@70787658]]
+21:43:47 INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+21:43:47 DEBUG org.springframework.web.SimpLogging - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+21:43:47 DEBUG org.springframework.web.SimpLogging - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+21:43:47 INFO  org.jan.ChallengeMeApplication - Started ChallengeMeApplication in 4.997 seconds (process running for 5.436)
+21:43:48 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+21:43:48 INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+21:43:48 DEBUG o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
+21:43:48 DEBUG o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
+21:43:48 DEBUG o.s.web.servlet.DispatcherServlet - Detected FixedThemeResolver
+21:43:48 DEBUG o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@516c8f5a
+21:43:48 DEBUG o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@2908fc20
+21:43:48 DEBUG o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+21:43:48 INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+21:44:47 INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+21:50:13 WARN  o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/ws' (previous null). Performing MatchableHandlerMapping lookup. This is logged once only at WARN level, and every time at TRACE.
+21:50:13 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+21:50:13 DEBUG o.s.web.servlet.DispatcherServlet - GET "/ws", parameters={}
+21:50:13 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+21:50:13 DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Mapped to org.springframework.web.socket.server.support.WebSocketHttpRequestHandler@49443539
+21:50:13 DEBUG o.s.w.s.s.s.WebSocketHttpRequestHandler - GET /ws
+21:50:13 DEBUG o.s.web.servlet.DispatcherServlet - Completed 101 SWITCHING_PROTOCOLS
+21:50:13 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:50:13 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+21:50:13 DEBUG o.s.w.s.h.LoggingWebSocketHandlerDecorator - New StandardWebSocketSession[id=c2c81360-5188-446a-c67c-384249166b6e, uri=ws://localhost:8080/ws]
+21:50:13 DEBUG o.s.w.s.h.LoggingWebSocketHandlerDecorator - StandardWebSocketSession[id=c2c81360-5188-446a-c67c-384249166b6e, uri=ws://localhost:8080/ws] closed with CloseStatus[code=1001, reason=null]
+21:50:13 DEBUG o.s.w.s.m.SubProtocolWebSocketHandler - Clearing session c2c81360-5188-446a-c67c-384249166b6e
+21:50:13 DEBUG o.s.web.servlet.DispatcherServlet - Failed to complete request: org.apache.catalina.connector.ClientAbortException: java.io.IOException: Software v hostitelském počítači ukončil vytvořené připojení
+21:50:13 DEBUG org.springframework.web.SimpLogging - Processing DISCONNECT session=c2c81360-5188-446a-c67c-384249166b6e
+21:50:13 DEBUG o.s.w.s.m.SubProtocolWebSocketHandler - No session for GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT_ACK, simpDisconnectMessage=GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT, stompCommand=DISCONNECT, simpSessionAttributes={org.springframework.messaging.simp.SimpAttributes.COMPLETED=true}, simpSessionId=c2c81360-5188-446a-c67c-384249166b6e}], simpSessionId=c2c81360-5188-446a-c67c-384249166b6e}]
+21:50:25 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+21:50:25 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+21:50:25 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:50:25 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+21:50:25 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:50:25 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events/public", parameters={}
+21:50:25 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getPublicEvents()
+21:50:25 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:50:25 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:50:25 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:50:32 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/login", parameters={}
+21:50:32 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#login(LoginRequest, HttpSession)
+21:50:33 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [LoginRequest(username=jan2, password=jan2jan2)]
+21:50:33 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [text/plain, */*, application/json, application/*+json]
+21:50:33 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing ["Invalid credentials"]
+21:50:33 DEBUG o.s.web.servlet.DispatcherServlet - Completed 400 BAD_REQUEST
+21:50:35 DEBUG o.s.web.servlet.DispatcherServlet - GET "/auth/captcha", parameters={}
+21:50:35 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#getCaptcha()
+21:50:35 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:50:35 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [CaptchaChallenge[id=1928ee72-5d42-4a3b-aee9-fca8cd6f37dc, question=10 − 5 = ?]]
+21:50:35 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:52:58 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/register", parameters={}
+21:52:58 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#register(RegisterRequest)
+21:52:58 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [RegisterRequest(username=jan2, password=jsn2jsn2, email=maresjan694@gmail.com, captchaId=1928ee72-5d (truncated)...]
+21:52:58 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [text/plain, */*, application/json, application/*+json]
+21:52:58 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing ["User registered successfully"]
+21:52:58 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:53:01 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/login", parameters={}
+21:53:01 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#login(LoginRequest, HttpSession)
+21:53:01 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [LoginRequest(username=jan2, password=jan2jan2)]
+21:53:01 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [text/plain, */*, application/json, application/*+json]
+21:53:01 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing ["Invalid credentials"]
+21:53:01 DEBUG o.s.web.servlet.DispatcherServlet - Completed 400 BAD_REQUEST
+21:53:09 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/login", parameters={}
+21:53:09 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#login(LoginRequest, HttpSession)
+21:53:09 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [LoginRequest(username=jan2, password=jan2jan2)]
+21:53:09 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [text/plain, */*, application/json, application/*+json]
+21:53:09 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing ["Invalid credentials"]
+21:53:09 DEBUG o.s.web.servlet.DispatcherServlet - Completed 400 BAD_REQUEST
+21:53:20 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/login", parameters={}
+21:53:20 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#login(LoginRequest, HttpSession)
+21:53:20 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [LoginRequest(username=jan1, password=jan1jan1)]
+21:53:20 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [text/plain, */*, application/json, application/*+json]
+21:53:20 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing ["Invalid credentials"]
+21:53:20 DEBUG o.s.web.servlet.DispatcherServlet - Completed 400 BAD_REQUEST
+21:53:22 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/login", parameters={}
+21:53:22 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#login(LoginRequest, HttpSession)
+21:53:22 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [LoginRequest(username=jan1, password=jan1jan1)]
+21:53:22 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [text/plain, */*, application/json, application/*+json]
+21:53:22 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing ["Invalid credentials"]
+21:53:22 DEBUG o.s.web.servlet.DispatcherServlet - Completed 400 BAD_REQUEST
+21:53:43 DEBUG o.s.web.servlet.DispatcherServlet - GET "/auth/captcha", parameters={}
+21:53:43 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#getCaptcha()
+21:53:43 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:53:43 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [CaptchaChallenge[id=f3f534f7-da97-4c43-b5d4-ee5b0936ee19, question=2 × 2 = ?]]
+21:53:43 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:53:52 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/login", parameters={}
+21:53:52 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#login(LoginRequest, HttpSession)
+21:53:52 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [LoginRequest(username=jan2, password=jan2jan2)]
+21:53:52 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [text/plain, */*, application/json, application/*+json]
+21:53:52 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing ["Invalid credentials"]
+21:53:52 DEBUG o.s.web.servlet.DispatcherServlet - Completed 400 BAD_REQUEST
+21:53:56 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/login", parameters={}
+21:53:56 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#login(LoginRequest, HttpSession)
+21:53:56 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [LoginRequest(username=jan2, password=jan1jan1)]
+21:53:56 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [text/plain, */*, application/json, application/*+json]
+21:53:56 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing ["Invalid credentials"]
+21:53:56 DEBUG o.s.web.servlet.DispatcherServlet - Completed 400 BAD_REQUEST
+21:53:58 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/login", parameters={}
+21:53:58 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#login(LoginRequest, HttpSession)
+21:53:58 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [LoginRequest(username=jan2, password=jan1jan1)]
+21:53:58 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [text/plain, */*, application/json, application/*+json]
+21:53:58 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing ["Invalid credentials"]
+21:53:58 DEBUG o.s.web.servlet.DispatcherServlet - Completed 400 BAD_REQUEST
+21:53:58 DEBUG o.s.web.servlet.DispatcherServlet - GET "/auth/captcha", parameters={}
+21:53:58 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#getCaptcha()
+21:53:58 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:53:58 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [CaptchaChallenge[id=94b0209b-aeee-4269-ad0e-f080933fcede, question=14 + 11 = ?]]
+21:53:58 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:54:18 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/register", parameters={}
+21:54:18 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#register(RegisterRequest)
+21:54:18 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [RegisterRequest(username=jan3, password=jan3jan3, email=maresjan69fds4@gmail.com, captchaId=94b0209b (truncated)...]
+21:54:18 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [text/plain, */*, application/json, application/*+json]
+21:54:18 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing ["User registered successfully"]
+21:54:18 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:54:26 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/login", parameters={}
+21:54:26 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#login(LoginRequest, HttpSession)
+21:54:26 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [LoginRequest(username=jan3, password=jan3jan3)]
+21:54:26 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:54:26 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [LoginResponse(username=jan3, role=USER)]
+21:54:26 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:54:27 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+21:54:27 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+21:54:27 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends", parameters={}
+21:54:27 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getFriends(Authentication)
+21:54:27 DEBUG o.s.web.servlet.DispatcherServlet - GET "/ws", parameters={}
+21:54:27 DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Mapped to org.springframework.web.socket.server.support.WebSocketHttpRequestHandler@49443539
+21:54:27 DEBUG o.s.w.s.s.s.WebSocketHttpRequestHandler - GET /ws
+21:54:27 DEBUG o.s.web.servlet.DispatcherServlet - Completed 101 SWITCHING_PROTOCOLS
+21:54:27 DEBUG o.s.w.s.h.LoggingWebSocketHandlerDecorator - New StandardWebSocketSession[id=878efe2d-c610-b19a-d626-d622a63cc171, uri=ws://localhost:8080/ws]
+21:54:27 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:54:27 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+21:54:27 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:54:27 DEBUG org.springframework.web.SimpLogging - Processing CONNECT user=jan3 session=878efe2d-c610-b19a-d626-d622a63cc171
+21:54:27 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:54:27 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:54:27 DEBUG org.springframework.web.SimpLogging - Processing SUBSCRIBE /topic/chat/jan3 id=sub-0 session=878efe2d-c610-b19a-d626-d622a63cc171
+21:54:27 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:54:27 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events", parameters={}
+21:54:27 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getActiveEvents(Authentication)
+21:54:27 DEBUG org.springframework.web.SimpLogging - Processing SUBSCRIBE /topic/notifications/jan3 id=sub-1 session=878efe2d-c610-b19a-d626-d622a63cc171
+21:54:27 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:54:27 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:54:27 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:54:33 DEBUG o.s.web.servlet.DispatcherServlet - GET "/leaderboard", parameters={}
+21:54:33 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getLeaderboard()
+21:54:33 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:54:33 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[LeaderboardEntryDto[username=jan2, wins=0, losses=0, draws=0, disputes=0], LeaderboardEntryDto[user (truncated)...]
+21:54:33 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:54:37 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends/requests", parameters={}
+21:54:37 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends", parameters={}
+21:54:37 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getPendingRequests(Authentication)
+21:54:37 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getFriends(Authentication)
+21:54:37 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:54:37 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:54:37 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:54:37 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:54:37 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:54:37 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:54:38 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends/requests", parameters={}
+21:54:38 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getPendingRequests(Authentication)
+21:54:38 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:54:38 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:54:38 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:54:39 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+21:54:39 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+21:54:39 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:54:39 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+21:54:39 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:55:29 DEBUG o.s.web.servlet.DispatcherServlet - GET "/leaderboard", parameters={}
+21:55:29 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getLeaderboard()
+21:55:29 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:55:29 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[LeaderboardEntryDto[username=jan2, wins=0, losses=0, draws=0, disputes=0], LeaderboardEntryDto[user (truncated)...]
+21:55:29 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:55:33 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+21:55:33 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+21:55:33 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:55:33 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+21:55:33 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:55:33 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events", parameters={}
+21:55:33 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getActiveEvents(Authentication)
+21:55:33 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:55:33 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:55:33 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:55:50 DEBUG o.s.web.servlet.DispatcherServlet - POST "/events", parameters={}
+21:55:50 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#createEvent(GameEventCreateRequest, Authentication)
+21:55:50 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [GameEventCreateRequest(latitude=51.5048070321779, longitude=-0.10125380423966715, gameType=ARM_WREST (truncated)...]
+21:55:50 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:55:50 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GameEventDto(id=1, creatorUsername=jan3, latitude=51.5048070321779, longitude=-0.10125380423966715,  (truncated)...]
+21:55:50 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:55:56 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends", parameters={}
+21:55:56 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends/requests", parameters={}
+21:55:56 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getFriends(Authentication)
+21:55:56 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getPendingRequests(Authentication)
+21:55:56 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:55:56 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:55:56 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:55:56 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:55:56 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:55:56 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:55:59 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends/search?q=jan", parameters={masked}
+21:55:59 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#searchUsers(String, Authentication)
+21:55:59 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:55:59 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[UserSearchDto(id=2, username=jan2, friendStatus=NONE)]]
+21:55:59 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:56:00 DEBUG o.s.web.servlet.DispatcherServlet - GET "/players/jan2", parameters={}
+21:56:00 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.PlayerController#getProfile(String, Authentication)
+21:56:00 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:56:00 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [PlayerProfileDto(id=2, username=jan2, wins=0, losses=0, draws=0, disputes=0, friendStatus=NONE, isMe (truncated)...]
+21:56:00 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:56:12 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends", parameters={}
+21:56:12 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getFriends(Authentication)
+21:56:12 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:56:12 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:56:12 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:56:16 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+21:56:16 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+21:56:16 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:56:16 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+21:56:16 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:56:16 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events", parameters={}
+21:56:16 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getActiveEvents(Authentication)
+21:56:16 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:56:16 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameEventDto(id=1, creatorUsername=jan3, latitude=51.5048070321779, longitude=-0.10125380423966715, (truncated)...]
+21:56:16 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:56:34 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends", parameters={}
+21:56:34 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getFriends(Authentication)
+21:56:34 DEBUG o.s.web.servlet.DispatcherServlet - GET "/ws", parameters={}
+21:56:34 DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Mapped to org.springframework.web.socket.server.support.WebSocketHttpRequestHandler@49443539
+21:56:34 DEBUG o.s.w.s.s.s.WebSocketHttpRequestHandler - GET /ws
+21:56:34 DEBUG o.s.web.servlet.DispatcherServlet - Completed 101 SWITCHING_PROTOCOLS
+21:56:34 DEBUG o.s.w.s.h.LoggingWebSocketHandlerDecorator - New StandardWebSocketSession[id=44287e15-732f-1e53-a788-0ae69a61c1b1, uri=ws://localhost:8080/ws]
+21:56:34 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:56:34 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:56:34 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:56:34 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+21:56:34 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+21:56:34 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:56:34 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+21:56:34 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:56:34 DEBUG org.springframework.web.SimpLogging - Processing CONNECT user=jan3 session=44287e15-732f-1e53-a788-0ae69a61c1b1
+21:56:34 DEBUG org.springframework.web.SimpLogging - Processing SUBSCRIBE /topic/chat/jan3 id=sub-0 session=44287e15-732f-1e53-a788-0ae69a61c1b1
+21:56:34 DEBUG org.springframework.web.SimpLogging - Processing SUBSCRIBE /topic/notifications/jan3 id=sub-1 session=44287e15-732f-1e53-a788-0ae69a61c1b1
+21:56:39 DEBUG o.s.w.s.h.LoggingWebSocketHandlerDecorator - StandardWebSocketSession[id=44287e15-732f-1e53-a788-0ae69a61c1b1, uri=ws://localhost:8080/ws] closed with CloseStatus[code=1001, reason=null]
+21:56:39 DEBUG o.s.w.s.m.SubProtocolWebSocketHandler - Clearing session 44287e15-732f-1e53-a788-0ae69a61c1b1
+21:56:39 DEBUG org.springframework.web.SimpLogging - Processing DISCONNECT session=44287e15-732f-1e53-a788-0ae69a61c1b1
+21:56:39 DEBUG o.s.w.s.m.SubProtocolWebSocketHandler - No session for GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT_ACK, simpDisconnectMessage=GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT, stompCommand=DISCONNECT, simpSessionAttributes={sessionUsername=jan3, org.springframework.messaging.simp.SimpAttributes.COMPLETED=true}, simpUser=org.jan.config.WebSocketConfig$1$$Lambda/0x00000143d5ca2398@2e428e35, simpSessionId=44287e15-732f-1e53-a788-0ae69a61c1b1}], simpUser=org.jan.config.WebSocketConfig$1$$Lambda/0x00000143d5ca2398@2e428e35, simpSessionId=44287e15-732f-1e53-a788-0ae69a61c1b1}]
+21:57:03 DEBUG o.s.web.servlet.DispatcherServlet - GET "/leaderboard", parameters={}
+21:57:03 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getLeaderboard()
+21:57:03 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:03 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[LeaderboardEntryDto[username=jan2, wins=0, losses=0, draws=0, disputes=0], LeaderboardEntryDto[user (truncated)...]
+21:57:03 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:07 DEBUG o.s.web.servlet.DispatcherServlet - GET "/players/jan3", parameters={}
+21:57:07 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.PlayerController#getProfile(String, Authentication)
+21:57:07 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:07 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [PlayerProfileDto(id=3, username=jan3, wins=0, losses=0, draws=0, disputes=0, friendStatus=NONE, isMe (truncated)...]
+21:57:07 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:12 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+21:57:12 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+21:57:12 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:12 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+21:57:12 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:12 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events/mine", parameters={}
+21:57:12 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getMyEvents(Authentication)
+21:57:12 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:12 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameEventDto(id=1, creatorUsername=jan3, latitude=51.5048070321779, longitude=-0.10125380423966715, (truncated)...]
+21:57:12 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:15 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+21:57:15 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+21:57:15 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:15 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+21:57:15 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:15 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events/1", parameters={}
+21:57:15 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getEvent(Long, Authentication)
+21:57:15 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:15 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GameEventDto(id=1, creatorUsername=jan3, latitude=51.5048070321779, longitude=-0.10125380423966715,  (truncated)...]
+21:57:15 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:22 DEBUG org.springframework.web.SimpLogging - Processing DISCONNECT receipt=close-2 session=878efe2d-c610-b19a-d626-d622a63cc171
+21:57:22 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/logout", parameters={}
+21:57:22 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#logout(HttpSession)
+21:57:22 DEBUG o.s.w.s.h.LoggingWebSocketHandlerDecorator - StandardWebSocketSession[id=878efe2d-c610-b19a-d626-d622a63cc171, uri=ws://localhost:8080/ws] closed with CloseStatus[code=1008, reason=This connection was established under an authenticated HTTP session that has ended.]
+21:57:22 DEBUG o.s.w.s.m.SubProtocolWebSocketHandler - Clearing session 878efe2d-c610-b19a-d626-d622a63cc171
+21:57:22 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+21:57:22 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+21:57:22 DEBUG org.springframework.web.SimpLogging - Processing DISCONNECT session=878efe2d-c610-b19a-d626-d622a63cc171
+21:57:22 DEBUG o.s.w.s.m.SubProtocolWebSocketHandler - No session for GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT_ACK, simpDisconnectMessage=GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT, stompCommand=DISCONNECT, simpSessionAttributes={sessionUsername=jan3, org.springframework.messaging.simp.SimpAttributes.COMPLETED=true}, simpUser=org.jan.config.WebSocketConfig$1$$Lambda/0x00000143d5ca2398@2e800ffb, simpSessionId=878efe2d-c610-b19a-d626-d622a63cc171}], simpUser=org.jan.config.WebSocketConfig$1$$Lambda/0x00000143d5ca2398@2e800ffb, simpSessionId=878efe2d-c610-b19a-d626-d622a63cc171}]
+21:57:22 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [text/plain, */*, application/json, application/*+json]
+21:57:22 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing ["Logged out"]
+21:57:22 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:22 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:22 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+21:57:22 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:26 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/login", parameters={}
+21:57:26 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#login(LoginRequest, HttpSession)
+21:57:26 DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [LoginRequest(username=admin, password=admin123)]
+21:57:26 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:26 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [LoginResponse(username=admin, role=ADMIN)]
+21:57:26 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:27 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+21:57:27 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+21:57:27 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:27 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+21:57:27 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:27 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends", parameters={}
+21:57:27 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getFriends(Authentication)
+21:57:27 DEBUG o.s.web.servlet.DispatcherServlet - GET "/ws", parameters={}
+21:57:27 DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Mapped to org.springframework.web.socket.server.support.WebSocketHttpRequestHandler@49443539
+21:57:27 DEBUG o.s.w.s.s.s.WebSocketHttpRequestHandler - GET /ws
+21:57:27 DEBUG o.s.web.servlet.DispatcherServlet - Completed 101 SWITCHING_PROTOCOLS
+21:57:27 DEBUG o.s.w.s.h.LoggingWebSocketHandlerDecorator - New StandardWebSocketSession[id=a77fda48-a1a4-bb77-5bc9-9ea36dd12ff3, uri=ws://localhost:8080/ws]
+21:57:27 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:27 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:57:27 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:27 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events", parameters={}
+21:57:27 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getActiveEvents(Authentication)
+21:57:27 DEBUG org.springframework.web.SimpLogging - Processing CONNECT user=admin session=a77fda48-a1a4-bb77-5bc9-9ea36dd12ff3
+21:57:27 DEBUG org.springframework.web.SimpLogging - Processing SUBSCRIBE /topic/chat/admin id=sub-0 session=a77fda48-a1a4-bb77-5bc9-9ea36dd12ff3
+21:57:27 DEBUG org.springframework.web.SimpLogging - Processing SUBSCRIBE /topic/notifications/admin id=sub-1 session=a77fda48-a1a4-bb77-5bc9-9ea36dd12ff3
+21:57:27 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:27 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameEventDto(id=1, creatorUsername=jan3, latitude=51.5048070321779, longitude=-0.10125380423966715, (truncated)...]
+21:57:27 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:30 DEBUG o.s.web.servlet.DispatcherServlet - GET "/admin/reports", parameters={}
+21:57:30 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.report.AdminController#getReports()
+21:57:30 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:30 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:57:30 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:32 DEBUG o.s.web.servlet.DispatcherServlet - GET "/admin/reports", parameters={}
+21:57:32 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.report.AdminController#getReports()
+21:57:32 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:32 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:57:32 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:32 DEBUG o.s.web.servlet.DispatcherServlet - GET "/admin/reports", parameters={}
+21:57:32 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.report.AdminController#getReports()
+21:57:32 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:32 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:57:32 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:32 DEBUG o.s.web.servlet.DispatcherServlet - GET "/admin/reports", parameters={}
+21:57:32 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.report.AdminController#getReports()
+21:57:32 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:32 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:57:32 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:33 DEBUG o.s.web.servlet.DispatcherServlet - GET "/admin/reports", parameters={}
+21:57:33 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.report.AdminController#getReports()
+21:57:33 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:33 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+21:57:33 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:37 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+21:57:37 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+21:57:37 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:37 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+21:57:37 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:37 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events", parameters={}
+21:57:37 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getActiveEvents(Authentication)
+21:57:37 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:37 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameEventDto(id=1, creatorUsername=jan3, latitude=51.5048070321779, longitude=-0.10125380423966715, (truncated)...]
+21:57:37 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:40 DEBUG o.s.web.servlet.DispatcherServlet - POST "/events/1/accept", parameters={}
+21:57:40 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#acceptChallenge(Long, Authentication)
+21:57:40 DEBUG org.springframework.web.SimpLogging - Processing MESSAGE destination=/topic/notifications/jan3 session=null payload={"type":"CHALLENGE_ACCEPTED","eventId":1,"challengerUsername":"admin","gameType"...(truncated)
+21:57:40 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+21:57:40 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GameEventDto(id=1, creatorUsername=jan3, latitude=51.5048070321779, longitude=-0.10125380423966715,  (truncated)...]
+21:57:40 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+21:57:46 DEBUG o.s.w.s.h.LoggingWebSocketHandlerDecorator - StandardWebSocketSession[id=a77fda48-a1a4-bb77-5bc9-9ea36dd12ff3, uri=ws://localhost:8080/ws] closed with CloseStatus[code=1001, reason=null]
+21:57:46 DEBUG o.s.w.s.m.SubProtocolWebSocketHandler - Clearing session a77fda48-a1a4-bb77-5bc9-9ea36dd12ff3
+21:57:46 DEBUG org.springframework.web.SimpLogging - Processing DISCONNECT session=a77fda48-a1a4-bb77-5bc9-9ea36dd12ff3
+21:57:46 DEBUG o.s.w.s.m.SubProtocolWebSocketHandler - No session for GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT_ACK, simpDisconnectMessage=GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT, stompCommand=DISCONNECT, simpSessionAttributes={sessionUsername=admin, org.springframework.messaging.simp.SimpAttributes.COMPLETED=true}, simpUser=org.jan.config.WebSocketConfig$1$$Lambda/0x00000143d5ca2398@663c1278, simpSessionId=a77fda48-a1a4-bb77-5bc9-9ea36dd12ff3}], simpUser=org.jan.config.WebSocketConfig$1$$Lambda/0x00000143d5ca2398@663c1278, simpSessionId=a77fda48-a1a4-bb77-5bc9-9ea36dd12ff3}]
+22:14:47 INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 4 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(3)-CONNECTED(3)-DISCONNECT(1)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 42], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 8], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 0, completed tasks = 1]
+22:21:43 DEBUG o.s.web.servlet.DispatcherServlet - GET "/friends", parameters={}
+22:21:43 DEBUG o.s.web.servlet.DispatcherServlet - GET "/ws", parameters={}
+22:21:43 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.friend.FriendController#getFriends(Authentication)
+22:21:43 DEBUG o.s.w.s.s.s.WebSocketHandlerMapping - Mapped to org.springframework.web.socket.server.support.WebSocketHttpRequestHandler@49443539
+22:21:43 DEBUG o.s.w.s.s.s.WebSocketHttpRequestHandler - GET /ws
+22:21:43 DEBUG o.s.web.servlet.DispatcherServlet - Completed 101 SWITCHING_PROTOCOLS
+22:21:43 DEBUG o.s.w.s.h.LoggingWebSocketHandlerDecorator - New StandardWebSocketSession[id=7f742166-d9f5-5ec8-ce45-435c310ebb2a, uri=ws://localhost:8080/ws]
+22:21:43 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+22:21:43 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+22:21:43 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+22:21:43 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+22:21:43 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+22:21:43 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+22:21:43 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+22:21:43 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+22:21:43 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events", parameters={}
+22:21:43 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getActiveEvents(Authentication)
+22:21:43 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+22:21:43 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameEventDto(id=1, creatorUsername=jan3, latitude=51.5048070321779, longitude=-0.10125380423966715, (truncated)...]
+22:21:43 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+22:21:43 DEBUG org.springframework.web.SimpLogging - Processing CONNECT user=admin session=7f742166-d9f5-5ec8-ce45-435c310ebb2a
+22:21:43 DEBUG org.springframework.web.SimpLogging - Processing SUBSCRIBE /topic/chat/admin id=sub-0 session=7f742166-d9f5-5ec8-ce45-435c310ebb2a
+22:21:43 DEBUG org.springframework.web.SimpLogging - Processing SUBSCRIBE /topic/notifications/admin id=sub-1 session=7f742166-d9f5-5ec8-ce45-435c310ebb2a
+22:21:45 DEBUG o.s.web.servlet.DispatcherServlet - GET "/admin/reports", parameters={}
+22:21:45 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.report.AdminController#getReports()
+22:21:45 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+22:21:45 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+22:21:45 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+22:21:45 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+22:21:45 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+22:21:45 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+22:21:45 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+22:21:45 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+22:21:46 DEBUG o.s.web.servlet.DispatcherServlet - GET "/admin/reports", parameters={}
+22:21:46 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.report.AdminController#getReports()
+22:21:46 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+22:21:46 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+22:21:46 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+22:21:48 DEBUG o.s.web.servlet.DispatcherServlet - GET "/admin/reports", parameters={}
+22:21:48 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.report.AdminController#getReports()
+22:21:48 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+22:21:48 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+22:21:48 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+22:21:48 DEBUG o.s.web.servlet.DispatcherServlet - GET "/admin/reports", parameters={}
+22:21:48 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.report.AdminController#getReports()
+22:21:48 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+22:21:48 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
+22:21:48 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+22:21:49 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+22:21:49 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+22:21:49 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+22:21:49 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+22:21:49 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+22:21:59 DEBUG o.s.web.servlet.DispatcherServlet - GET "/games", parameters={}
+22:21:59 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameController#getAll()
+22:21:59 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+22:21:59 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameDto(id=1, key=TIC_TAC_TOE, name=Tic-Tac-Toe, icon=❌⭕, tagline=Classic 3-in-a-row strategy, desc (truncated)...]
+22:21:59 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+22:21:59 DEBUG o.s.web.servlet.DispatcherServlet - GET "/events", parameters={}
+22:21:59 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getActiveEvents(Authentication)
+22:21:59 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+22:21:59 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[GameEventDto(id=1, creatorUsername=jan3, latitude=51.5048070321779, longitude=-0.10125380423966715, (truncated)...]
+22:21:59 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+22:22:01 DEBUG o.s.web.servlet.DispatcherServlet - GET "/leaderboard", parameters={}
+22:22:01 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.game.GameEventController#getLeaderboard()
+22:22:01 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+22:22:01 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[LeaderboardEntryDto[username=jan2, wins=0, losses=0, draws=0, disputes=0], LeaderboardEntryDto[user (truncated)...]
+22:22:01 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+22:22:09 DEBUG org.springframework.web.SimpLogging - Processing DISCONNECT receipt=close-2 session=7f742166-d9f5-5ec8-ce45-435c310ebb2a
+22:22:09 DEBUG o.s.web.servlet.DispatcherServlet - POST "/auth/logout", parameters={}
+22:22:09 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#logout(HttpSession)
+22:22:09 DEBUG o.s.w.s.h.LoggingWebSocketHandlerDecorator - StandardWebSocketSession[id=7f742166-d9f5-5ec8-ce45-435c310ebb2a, uri=ws://localhost:8080/ws] closed with CloseStatus[code=1008, reason=This connection was established under an authenticated HTTP session that has ended.]
+22:22:09 DEBUG o.s.w.s.m.SubProtocolWebSocketHandler - Clearing session 7f742166-d9f5-5ec8-ce45-435c310ebb2a
+22:22:09 DEBUG org.springframework.web.SimpLogging - Processing DISCONNECT session=7f742166-d9f5-5ec8-ce45-435c310ebb2a
+22:22:09 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [text/plain, */*, application/json, application/*+json]
+22:22:09 DEBUG o.s.w.s.m.SubProtocolWebSocketHandler - No session for GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT_ACK, simpDisconnectMessage=GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT, stompCommand=DISCONNECT, simpSessionAttributes={sessionUsername=admin, org.springframework.messaging.simp.SimpAttributes.COMPLETED=true}, simpUser=org.jan.config.WebSocketConfig$1$$Lambda/0x00000143d5ca2398@64e749d8, simpSessionId=7f742166-d9f5-5ec8-ce45-435c310ebb2a}], simpUser=org.jan.config.WebSocketConfig$1$$Lambda/0x00000143d5ca2398@64e749d8, simpSessionId=7f742166-d9f5-5ec8-ce45-435c310ebb2a}]
+22:22:09 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing ["Logged out"]
+22:22:09 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+22:22:10 DEBUG o.s.web.servlet.DispatcherServlet - GET "/auth/captcha", parameters={}
+22:22:10 DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to org.jan.user.AuthController#getCaptcha()
+22:22:10 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+22:22:10 DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [CaptchaChallenge[id=f1f8caa3-b948-4e76-b5a3-0bc4cbd49f1f, question=1 − 1 = ?]]
+22:22:10 DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK
+22:44:47 INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 5 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(4)-CONNECTED(4)-DISCONNECT(2)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 57], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 11], sockJsScheduler[pool size = 3, active threads = 1, queued tasks = 0, completed tasks = 2]
+23:14:47 INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 5 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(4)-CONNECTED(4)-DISCONNECT(2)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 57], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 11], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 0, completed tasks = 3]

@@ -1,15 +1,9 @@
 package org.jan.friend;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jan.BaseIntegrationTest;
-import org.jan.user.LoginRequest;
-import org.jan.user.RegisterRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
@@ -22,12 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class FriendControllerTest extends BaseIntegrationTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
     private MockHttpSession aliceSession;
     private MockHttpSession bobSession;
     private String aliceUsername;
@@ -37,31 +25,13 @@ class FriendControllerTest extends BaseIntegrationTest {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 10);
     }
 
-    private MockHttpSession loginAs(String username, String password) throws Exception {
-        MvcResult result = mockMvc.perform(post("/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new LoginRequest(username, password))))
-                .andExpect(status().isOk())
-                .andReturn();
-        return (MockHttpSession) result.getRequest().getSession(false);
-    }
-
     @BeforeEach
     void setUp() throws Exception {
         aliceUsername = "alice_" + uid();
         bobUsername   = "bob_"   + uid();
 
-        mockMvc.perform(post("/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(
-                        new RegisterRequest(aliceUsername, "pass123", aliceUsername + "@test.com"))))
-                .andExpect(status().isOk());
-
-        mockMvc.perform(post("/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(
-                        new RegisterRequest(bobUsername, "pass123", bobUsername + "@test.com"))))
-                .andExpect(status().isOk());
+        registerUser(aliceUsername, "pass123", aliceUsername + "@test.com");
+        registerUser(bobUsername,   "pass123", bobUsername   + "@test.com");
 
         aliceSession = loginAs(aliceUsername, "pass123");
         bobSession   = loginAs(bobUsername,   "pass123");
@@ -105,13 +75,11 @@ class FriendControllerTest extends BaseIntegrationTest {
 
     @Test
     void acceptRequest_success_returns200() throws Exception {
-        MvcResult sendResult = mockMvc.perform(post("/friends/request")
+        mockMvc.perform(post("/friends/request")
                 .param("username", bobUsername)
                 .session(aliceSession))
-                .andExpect(status().isOk())
-                .andReturn();
+                .andExpect(status().isOk());
 
-        // Retrieve the pending request id via Bob's pending list
         MvcResult pendingResult = mockMvc.perform(get("/friends/requests")
                 .session(bobSession))
                 .andExpect(status().isOk())
@@ -185,7 +153,6 @@ class FriendControllerTest extends BaseIntegrationTest {
                 .param("username", bobUsername)
                 .session(aliceSession));
 
-        // Bob sees the request
         MvcResult bobResult = mockMvc.perform(get("/friends/requests").session(bobSession))
                 .andExpect(status().isOk()).andReturn();
         List<?> bobPending = objectMapper.readValue(
@@ -193,7 +160,6 @@ class FriendControllerTest extends BaseIntegrationTest {
         assertEquals(1, bobPending.size());
         assertEquals(aliceUsername, ((Map<?, ?>) bobPending.get(0)).get("requesterUsername"));
 
-        // Alice sees nothing (she is the requester)
         MvcResult aliceResult = mockMvc.perform(get("/friends/requests").session(aliceSession))
                 .andExpect(status().isOk()).andReturn();
         List<?> alicePending = objectMapper.readValue(
@@ -205,7 +171,6 @@ class FriendControllerTest extends BaseIntegrationTest {
 
     @Test
     void unfriend_afterAccept_removesFriendship() throws Exception {
-        // Send and accept request
         mockMvc.perform(post("/friends/request")
                 .param("username", bobUsername)
                 .session(aliceSession));
@@ -217,20 +182,17 @@ class FriendControllerTest extends BaseIntegrationTest {
         Number id = (Number) ((Map<?, ?>) pending.get(0)).get("id");
         mockMvc.perform(post("/friends/accept/" + id.longValue()).session(bobSession));
 
-        // Get Bob's id from Alice's friends list
         MvcResult friendsResult = mockMvc.perform(get("/friends").session(aliceSession))
                 .andReturn();
         List<?> friends = objectMapper.readValue(
                 friendsResult.getResponse().getContentAsString(), List.class);
         Number bobId = (Number) ((Map<?, ?>) friends.get(0)).get("id");
 
-        // Alice unfriends Bob
         mockMvc.perform(delete("/friends/with/" + bobId.longValue())
                 .session(aliceSession))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Unfriended"));
 
-        // Friends list should now be empty for both
         MvcResult aliceAfter = mockMvc.perform(get("/friends").session(aliceSession)).andReturn();
         assertTrue(objectMapper.readValue(
                 aliceAfter.getResponse().getContentAsString(), List.class).isEmpty());
@@ -257,8 +219,7 @@ class FriendControllerTest extends BaseIntegrationTest {
 
     @Test
     void search_matchingUsername_returnsResult() throws Exception {
-        // bobUsername starts with "bob_"; search for the unique suffix portion
-        String query = bobUsername.substring(4); // strip "bob_" prefix → unique uid part
+        String query = bobUsername.substring(4); // strip "bob_" prefix
         MvcResult result = mockMvc.perform(get("/friends/search")
                 .param("q", query)
                 .session(aliceSession))
@@ -293,7 +254,6 @@ class FriendControllerTest extends BaseIntegrationTest {
 
     @Test
     void search_excludesSelf() throws Exception {
-        // Search alice's own unique suffix — should not appear in results
         String query = aliceUsername.substring(6); // strip "alice_" prefix
         MvcResult result = mockMvc.perform(get("/friends/search")
                 .param("q", query)
@@ -354,7 +314,6 @@ class FriendControllerTest extends BaseIntegrationTest {
 
     @Test
     void search_excludesAdminUsers() throws Exception {
-        // Admin is seeded by AdminInitializer; searching "admin" should return nothing
         MvcResult result = mockMvc.perform(get("/friends/search")
                 .param("q", "admin")
                 .session(aliceSession))

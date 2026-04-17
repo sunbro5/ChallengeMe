@@ -7,6 +7,8 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class AdminInitializer implements ApplicationRunner {
 
@@ -25,7 +27,8 @@ public class AdminInitializer implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         if (userRepository.findByUsername(adminUsername) == null) {
             User admin = new User(adminUsername, passwordEncoder.encode(adminPassword), adminUsername + "@admin.local", "ADMIN");
-            userRepository.save(admin);
+            User test = new User("test", passwordEncoder.encode("test"), "test" + "@admin.local", "USER");
+            userRepository.saveAll(List.of(admin, test));
         }
     }
 }

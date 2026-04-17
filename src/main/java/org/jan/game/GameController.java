@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/games")
+@RequestMapping("/api/games")
 public class GameController {
 
     @Autowired private GameRepository gameRepository;
@@ -28,8 +28,13 @@ public class GameController {
     }
 
     private GameDto toDto(Game g) {
-        return new GameDto(g.getId(), g.getKey(), g.getName(), g.getIcon(),
-                g.getTagline(), g.getDescription(), g.getHowToWin(),
-                g.getRules(), g.getTips());
+        return new GameDto(
+                g.getId(), g.getKey(), g.getIcon(),
+                g.getNameCs(),        g.getNameEn(),
+                g.getTaglineCs(),     g.getTaglineEn(),
+                g.getDescriptionCs(), g.getDescriptionEn(),
+                g.getHowToWinCs(),    g.getHowToWinEn(),
+                g.getRulesCs(),       g.getRulesEn(),
+                g.getTipsCs(),        g.getTipsEn());
     }
 }

@@ -1,19 +1,15 @@
 package org.jan.report;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jan.BaseIntegrationTest;
-import org.jan.user.LoginRequest;
-import org.jan.user.RegisterRequest;
 import org.jan.user.UserRepository;
-import org.jan.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -23,46 +19,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AdminControllerTest extends BaseIntegrationTest {
 
     @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private ReportService reportService;
+    private MockHttpSession adminSession;
+    private String regularUser;
 
     private String uid() {
         return "t" + UUID.randomUUID().toString().replace("-", "").substring(0, 9);
     }
 
-    /** Login and return the MockHttpSession for subsequent requests. */
-    private MockHttpSession login(String username, String password) throws Exception {
-        MvcResult r = mockMvc.perform(post("/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new LoginRequest(username, password))))
-                .andExpect(status().isOk())
-                .andReturn();
-        return (MockHttpSession) r.getRequest().getSession(false);
-    }
-
-    private MockHttpSession adminSession;
-    private String regularUser;
-
     @BeforeEach
     void setUp() throws Exception {
-        adminSession = login("admin", "admin123");
+        adminSession = loginAs("admin", "admin123");
         regularUser = uid();
-        mockMvc.perform(post("/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(
-                        new RegisterRequest(regularUser, "pass123", regularUser + "@t.com"))))
-                .andExpect(status().isOk());
+        registerUser(regularUser, "pass123", regularUser + "@t.com");
     }
 
     @Test
@@ -72,14 +42,14 @@ class AdminControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    void getReports_withoutSession_returns403() throws Exception {
+    void getReports_withoutSession_returns401() throws Exception {
         mockMvc.perform(get("/admin/reports"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
     void getReports_asRegularUser_returns403() throws Exception {
-        MockHttpSession userSession = login(regularUser, "pass123");
+        MockHttpSession userSession = loginAs(regularUser, "pass123");
         mockMvc.perform(get("/admin/reports").session(userSession))
                 .andExpect(status().isForbidden());
     }
@@ -107,25 +77,41 @@ class AdminControllerTest extends BaseIntegrationTest {
 
     @Test
     void resolveReport_asAdmin_works() throws Exception {
-        // Submit a report first
-        var reporter = userRepository.findByUsername("admin");
-        var reported = userRepository.findByUsername(regularUser);
-        Report r = reportService.submitReport(reporter, regularUser, "test reason");
+        // Create a second user to be the target of the report
+        String target = "target_" + uid();
+        registerUser(target, "pass123", target + "@t.com");
 
-        mockMvc.perform(post("/admin/resolve/" + r.getId()).session(adminSession))
+        // regularUser submits a report against target
+        MockHttpSession userSession = loginAs(regularUser, "pass123");
+        mockMvc.perform(post("/reports")
+                .session(userSession)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(
+                        Map.of("reportedUsername", target, "reason", "test reason"))))
+                .andExpect(status().isOk());
+
+        // Fetch the report id from admin reports list
+        MvcResult reportsResult = mockMvc.perform(get("/admin/reports").session(adminSession))
+                .andExpect(status().isOk())
+                .andReturn();
+        List<?> reports = objectMapper.readValue(
+                reportsResult.getResponse().getContentAsString(), List.class);
+        Number reportId = (Number) reports.stream()
+                .filter(r -> target.equals(((Map<?, ?>) r).get("reportedUsername")))
+                .map(r -> ((Map<?, ?>) r).get("id"))
+                .findFirst()
+                .orElseThrow();
+
+        mockMvc.perform(post("/admin/resolve/" + reportId).session(adminSession))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Report resolved"));
     }
 
     @Test
     void submitReport_asRegularUser_works() throws Exception {
-        MockHttpSession userSession = login(regularUser, "pass123");
-        String target = uid();
-        mockMvc.perform(post("/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(
-                        new RegisterRequest(target, "pass123", target + "@t.com"))))
-                .andExpect(status().isOk());
+        MockHttpSession userSession = loginAs(regularUser, "pass123");
+        String target = "t2_" + uid();
+        registerUser(target, "pass123", target + "@t.com");
 
         mockMvc.perform(post("/reports")
                 .session(userSession)
