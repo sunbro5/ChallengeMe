@@ -75,7 +75,9 @@
           </div>
         </div>
       </div>
-      <router-view />
+      <div class="page-content">
+        <router-view />
+      </div>
       <ChatPopup @notification="addToast" />
 
       <!-- Mobile bottom navigation -->
@@ -331,6 +333,15 @@ export default {
   flex-direction: column;
 }
 
+/* Wrapper that sits between the header and the bottom-nav.
+   On mobile it gets padding-top so content starts below the fixed header. */
+.page-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 /* ── Header ──────────────────────────────────────────────────────────────── */
 .header {
   display: flex;
@@ -539,16 +550,34 @@ h1::before {
   .nav-links  { display: none; }
   .bottom-nav { display: flex; }
 
-  /* push toasts above the bottom nav */
-  .toast-container { bottom: 124px; right: 12px; }
-  .toast           { max-width: calc(100vw - 24px); font-size: 12px; }
-
-  /* add bottom breathing room on all scrollable pages */
-  body { padding-bottom: 56px; }
-
-  /* tighten header padding on narrow screens */
-  .header { padding: 0 12px; }
+  /* ── Fixed header: always visible, cannot scroll away ────────────────── */
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0 12px;
+    /* iPhone notch / Dynamic Island — extend header into the safe area */
+    padding-top: env(safe-area-inset-top, 0px);
+    height: var(--shell-top);
+  }
   .header-left { gap: 10px; }
+
+  /* Push page content below the now-fixed header */
+  .page-content { padding-top: var(--shell-top); }
+
+  /* ── Fixed bottom nav: extend into iPhone home-indicator safe area ────── */
+  .bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    height: var(--shell-bot);
+  }
+
+  /* Body bottom clearance = nav + home indicator */
+  body { padding-bottom: var(--shell-bot); }
+
+  /* Push toasts above the bottom nav + safe area */
+  .toast-container { bottom: calc(var(--shell-bot) + 68px); right: 12px; }
+  .toast { max-width: calc(100vw - 24px); font-size: 12px; }
 }
 
 /* ── Notification bell ───────────────────────────────────────────────────── */
@@ -611,6 +640,7 @@ h1::before {
 .notif-time { font-size: 11px; color: var(--text-muted); }
 
 @media (max-width: 640px) {
+  /* Dropdown starts at right edge of bell, extends leftward across full viewport */
   .notif-dropdown { width: calc(100vw - 24px); right: -60px; }
   .bell-wrap { margin-right: 4px; }
 }

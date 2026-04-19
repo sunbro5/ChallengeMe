@@ -320,6 +320,9 @@
     "couldNotSaveResult": "Výsledek se nepodařilo uložit.",
     "copyLink": "📋 Kopírovat odkaz",
     "copyLinkDone": "✅ Zkopírováno!",
+    "share": "Sdílet",
+    "shareTitle": "{game} na ChallengeMe",
+    "shareText": "Podívej se na tuto výzvu {game}! Pojď hrát.",
     "rematch": "⚔️ Odvetný zápas",
     "privateInvite": "🔒 Soukromá výzva — pouze pro {username}"
   },

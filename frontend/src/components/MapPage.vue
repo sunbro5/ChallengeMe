@@ -580,23 +580,30 @@ export default {
 </script>
 
 <style scoped>
-.map-wrapper { position: relative; width: 100%; height: calc(100vh - 52px); }
+.map-wrapper { position: relative; width: 100%; height: calc(100vh - var(--header-h)); }
 #map         { width: 100%; height: 100%; }
 
 /* ── Mobile responsive ───────────────────────────────────────────────────── */
 @media (max-width: 640px) {
-  /* shrink map to leave room for the 56px bottom nav */
-  .map-wrapper { height: calc(100vh - 52px - 56px); }
+  /* Map fills exactly the space between fixed header and fixed bottom nav.
+     dvh = dynamic viewport height — fixes iOS Safari "100vh includes browser chrome" bug.
+     Falls back to 100vh on older browsers. */
+  /* Map fills exactly the space between fixed header and fixed bottom nav.
+     dvh fixes iOS Safari "100vh includes browser chrome" bug; 100vh is the fallback. */
+  .map-wrapper {
+    height: calc(100vh  - var(--shell-top) - var(--shell-bot));
+    height: calc(100dvh - var(--shell-top) - var(--shell-bot));
+  }
 
-  /* side panel becomes a full-width bottom sheet */
+  /* Side panel: bottom sheet above the fixed nav + home indicator */
   .side-panel {
     position: fixed;
     top: auto;
-    bottom: 56px;
+    bottom: var(--shell-bot);
     left: 0;
     right: 0;
     width: 100%;
-    max-height: 65vh;
+    max-height: 65dvh;
     border-radius: 16px 16px 0 0;
     border-bottom: none;
     overflow-y: auto;
@@ -604,12 +611,12 @@ export default {
     z-index: 1005;
   }
 
-  /* filter bar: bigger tap target, slightly closer to edge */
+  /* Filter bar: bigger tap target */
   .filter-bar { top: 8px; left: 48px; }
   .filter-toggle-btn { min-height: 38px; padding: 6px 12px; font-size: 12px; }
 
-  /* map hint bar */
-  .map-hint { bottom: 68px; font-size: 12px; padding: 7px 16px; }
+  /* Map hint: above nav + home indicator */
+  .map-hint { bottom: calc(var(--shell-bot) + 12px); font-size: 12px; padding: 7px 16px; }
 }
 
 .side-panel {

@@ -18,7 +18,41 @@
         <div class="card-meta">
           <span>📅 {{ formatDate(event.scheduledAt) }}</span>
           <a :href="mapsLink(event)" target="_blank" class="link">{{ $t('eventDetail.openInMaps') }}</a>
-          <button class="copy-link-btn" @click="copyLink">{{ copyLinkLabel }}</button>
+
+          <!-- Share button — native sheet on mobile, dropdown on desktop -->
+          <div class="share-wrap" ref="shareWrap">
+            <button class="share-btn" @click="doShare">
+              <svg class="share-icon-svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="3"  r="1.5"/>
+                <circle cx="12" cy="13" r="1.5"/>
+                <circle cx="3"  cy="8"  r="1.5"/>
+                <line x1="10.55" y1="4.05"  x2="4.45" y2="6.95"/>
+                <line x1="10.55" y1="11.95" x2="4.45" y2="9.05"/>
+              </svg>
+              {{ $t('eventDetail.share') }}
+            </button>
+
+            <transition name="share-drop">
+              <div v-if="shareMenu" class="share-dropdown">
+                <a class="share-option" :href="whatsappUrl" target="_blank" rel="noopener" @click="shareMenu = false">
+                  <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/whatsapp.svg" class="si-icon" alt="WhatsApp" /> WhatsApp
+                </a>
+                <a class="share-option" :href="telegramUrl" target="_blank" rel="noopener" @click="shareMenu = false">
+                  <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/telegram.svg" class="si-icon" alt="Telegram" /> Telegram
+                </a>
+                <a class="share-option" :href="twitterUrl" target="_blank" rel="noopener" @click="shareMenu = false">
+                  <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" class="si-icon" alt="X" /> X / Twitter
+                </a>
+                <a class="share-option" :href="facebookUrl" target="_blank" rel="noopener" @click="shareMenu = false">
+                  <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" class="si-icon" alt="Facebook" /> Facebook
+                </a>
+                <hr class="share-divider" />
+                <button class="share-option" @click="copyLink">
+                  {{ shareCopied ? $t('eventDetail.copyLinkDone') : $t('eventDetail.copyLink') }}
+                </button>
+              </div>
+            </transition>
+          </div>
         </div>
 
         <p v-if="event.description" class="event-description">{{ event.description }}</p>
@@ -207,7 +241,8 @@ export default {
       isLoggedIn:  localStorage.getItem('isLoggedIn') === 'true',
 
       resultModal: { visible: false, winner: '', note: '', busy: false, error: '' },
-      copyLinkLabel: '',
+      shareMenu:   false,
+      shareCopied: false,
     }
   },
   computed: {
@@ -218,18 +253,36 @@ export default {
         ? this.event.challengerUsername
         : this.event.creatorUsername
     },
-  },
-  created() {
-    this.copyLinkLabel = this.$t('eventDetail.copyLink')
+    shareUrl() {
+      return window.location.href
+    },
+    shareText() {
+      if (!this.event) return ''
+      return this.$t('eventDetail.shareText', { game: this.gameLabel(this.event.gameType) })
+    },
+    whatsappUrl() {
+      return `https://wa.me/?text=${encodeURIComponent(this.shareText + ' ' + this.shareUrl)}`
+    },
+    telegramUrl() {
+      return `https://t.me/share/url?url=${encodeURIComponent(this.shareUrl)}&text=${encodeURIComponent(this.shareText)}`
+    },
+    twitterUrl() {
+      return `https://twitter.com/intent/tweet?text=${encodeURIComponent(this.shareText)}&url=${encodeURIComponent(this.shareUrl)}`
+    },
+    facebookUrl() {
+      return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.shareUrl)}`
+    },
   },
   async mounted() {
     await this.loadGames()
     await this.loadEvent()
     this.setupPolling()
+    document.addEventListener('click', this.onShareDocClick)
   },
   beforeUnmount() {
     clearInterval(this.pollTimer)
     clearInterval(this.eventPollTimer)
+    document.removeEventListener('click', this.onShareDocClick)
   },
   methods: {
     async loadGames() {
@@ -415,14 +468,31 @@ export default {
         }
       })
     },
+    // ── Share ─────────────────────────────────────────────────────────────────
+    doShare() {
+      // On mobile: delegate to the native OS share sheet (one-tap WhatsApp, SMS, etc.)
+      if (navigator.share) {
+        navigator.share({
+          title: this.$t('eventDetail.shareTitle', { game: this.gameLabel(this.event.gameType) }),
+          text:  this.shareText,
+          url:   this.shareUrl,
+        }).catch(() => {}) // AbortError = user dismissed — ignore
+        return
+      }
+      // Desktop: toggle our own dropdown
+      this.shareMenu = !this.shareMenu
+    },
+    onShareDocClick(e) {
+      if (this.$refs.shareWrap && !this.$refs.shareWrap.contains(e.target)) {
+        this.shareMenu = false
+      }
+    },
     async copyLink() {
       try {
-        await navigator.clipboard.writeText(window.location.href)
-        this.copyLinkLabel = this.$t('eventDetail.copyLinkDone')
-        setTimeout(() => { this.copyLinkLabel = this.$t('eventDetail.copyLink') }, 2000)
-      } catch {
-        this.copyLinkLabel = this.$t('eventDetail.copyLink')
-      }
+        await navigator.clipboard.writeText(this.shareUrl)
+        this.shareCopied = true
+        setTimeout(() => { this.shareCopied = false; this.shareMenu = false }, 1800)
+      } catch { /* clipboard blocked */ }
     },
   },
 }
@@ -480,12 +550,50 @@ export default {
 
 .card-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
 
-.copy-link-btn {
+/* ── Share button + dropdown ─────────────────────────────────────────────── */
+.share-wrap { position: relative; }
+
+.share-btn {
+  display: inline-flex; align-items: center; gap: 5px;
   background: transparent; border: 1px solid var(--border); color: var(--text-muted);
   border-radius: var(--r); padding: 2px 9px; font-size: 11px; font-family: var(--font);
   cursor: pointer; transition: color var(--transition), border-color var(--transition);
+  white-space: nowrap;
 }
-.copy-link-btn:hover { color: var(--brand); border-color: var(--brand); }
+.share-btn:hover { color: var(--brand); border-color: var(--brand); }
+
+.share-icon-svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+.share-dropdown {
+  position: absolute; top: calc(100% + 6px); right: 0;
+  background: var(--bg-overlay); border: 1px solid var(--border);
+  border-radius: var(--r-lg); box-shadow: var(--shadow-lg);
+  min-width: 170px; z-index: 1200; overflow: hidden;
+}
+
+.share-option {
+  display: flex; align-items: center; gap: 9px;
+  width: 100%; padding: 9px 14px; font-size: 13px;
+  color: var(--text-primary); text-decoration: none;
+  background: none; border: none; font-family: var(--font);
+  cursor: pointer; transition: background var(--transition);
+  white-space: nowrap; text-align: left;
+}
+.share-option:hover { background: var(--bg-elevated); }
+
+/* Simple Icons are black SVGs — invert in dark mode, keep in light */
+.si-icon {
+  width: 16px; height: 16px; flex-shrink: 0;
+  filter: invert(1) brightness(1.4);
+}
+html.light .si-icon { filter: none; }
+
+.share-divider { border: none; border-top: 1px solid var(--border); margin: 2px 0; }
+
+.share-drop-enter-active { transition: opacity .15s ease, transform .15s ease; }
+.share-drop-leave-active { transition: opacity .1s  ease, transform .1s  ease; }
+.share-drop-enter-from,
+.share-drop-leave-to     { opacity: 0; transform: translateY(-4px); }
 .event-description {
   font-size: 13px; color: var(--text-secondary); background: var(--bg-elevated);
   border-left: 3px solid var(--border); border-radius: 0 var(--r) var(--r) 0;
@@ -686,5 +794,7 @@ label { display: block; font-size: 12px; color: var(--text-secondary); margin-bo
   .event-card        { padding: 14px 16px; }
   .chat-box          { height: 50vh; }
   .modal             { width: calc(100vw - 32px); }
+  /* On narrow screens the dropdown can't safely anchor right — keep it in view */
+  .share-dropdown { right: auto; left: 0; }
 }
 </style>

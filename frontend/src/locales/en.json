@@ -320,6 +320,9 @@
     "couldNotSaveResult": "Could not save result.",
     "copyLink": "📋 Copy link",
     "copyLinkDone": "✅ Copied!",
+    "share": "Share",
+    "shareTitle": "{game} on ChallengeMe",
+    "shareText": "Check out this {game} challenge! Come and play.",
     "rematch": "⚔️ Rematch",
     "privateInvite": "🔒 Private challenge — for {username} only"
   },

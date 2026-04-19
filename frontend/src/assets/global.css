@@ -38,6 +38,13 @@
   --shadow-lg: 0 8px 32px rgba(0,0,0,.6);
 
   --transition: 150ms ease;
+
+  /* Shell layout — shared between App.vue and MapPage.vue */
+  --header-h: 52px;
+  --bnav-h:   56px;
+  /* Safe-area-aware totals: header height + notch / nav height + home indicator */
+  --shell-top: calc(var(--header-h) + env(safe-area-inset-top,    0px));
+  --shell-bot: calc(var(--bnav-h)   + env(safe-area-inset-bottom, 0px));
 }
 
 /* ── Light mode overrides ────────────────────────────────────────────────── */
