@@ -1,4 +1,5 @@
 {
+  "appName": "ChallengeMe",
   "nav": {
     "map": "🗺️ Map",
     "leaderboard": "🏆 Leaderboard",
@@ -78,7 +79,9 @@
   },
   "safety": {
     "createWarning": "Challenges take place at public locations. Meeting strangers is at your own risk. Let someone you trust know where and when.",
-    "meetupWarning": "Always meet in a public place. Let someone you trust know where you're going."
+    "meetupWarning": "Always meet in a public place. Let someone you trust know where you're going.",
+    "acceptWarning": "Meet in a public place, not in the evening. Let someone you trust know the location and time.",
+    "tosLink": "Read our Terms of Service"
   },
   "map": {
     "postChallenge": "📍 Post a Challenge",
@@ -116,7 +119,11 @@
     "won": "🏆 {username} won!",
     "filterGames": "Filter Games",
     "filterHint": "Pick game types — only selected will show",
-    "filterClear": "Clear filter"
+    "filterClear": "Clear filter",
+    "locationNameLabel": "Venue description (optional)",
+    "locationNamePlaceholder": "e.g. \"Table in Stromovka park\"",
+    "inviteFriendLabel": "Invite a friend (optional)",
+    "inviteFriendNone": "No invite — public challenge"
   },
   "friends": {
     "friends": "Friends",
@@ -127,6 +134,7 @@
     "unfriendConfirm": "Remove {username} from your friends?",
     "noRequests": "No pending requests.",
     "accept": "Accept",
+    "decline": "Decline",
     "searchPlaceholder": "Search by username…",
     "typeToSearch": "Type at least 2 characters to search.",
     "searching": "Searching…",
@@ -138,7 +146,13 @@
     "submitReport": "Submit Report",
     "enterReason": "Please enter a reason",
     "reportSuccess": "Report submitted successfully",
-    "reportFailed": "Failed to submit report"
+    "reportFailed": "Failed to submit report",
+    "activity": "Activity",
+    "noActivity": "No recent activity from friends.",
+    "activityWon": "🏆 beat",
+    "activityLost": "lost to",
+    "activityDrew": "🤝 drew with",
+    "activityIn": "in"
   },
   "leaderboard": {
     "title": "🏆 Leaderboard",
@@ -151,7 +165,9 @@
     "losses": "❌ Losses",
     "draws": "🤝 Draws",
     "games": "Games",
-    "you": "you"
+    "you": "you",
+    "allGames": "All games",
+    "rating": "⚡ ELO"
   },
   "player": {
     "notFound": "Player not found.",
@@ -166,6 +182,7 @@
     "report": "🚩 Report",
     "couldNotSendRequest": "Could not send request.",
     "couldNotUnfriend": "Could not unfriend.",
+    "statsByGame": "Stats by Game",
     "gameHistory": "Game History",
     "noGames": "No completed games yet.",
     "dangerZone": "⚠️ Danger Zone",
@@ -191,7 +208,14 @@
       "failed": "Failed to submit."
     },
     "couldNotDelete": "Could not delete account.",
-    "opponentSaid": "opponent said"
+    "opponentSaid": "opponent said",
+    "block": "Block",
+    "unblock": "Unblock",
+    "addBio": "+ Add bio",
+    "bioPlaceholder": "Tell others about yourself… (max 160 chars)",
+    "favoriteGame": "Favorite game",
+    "noFavorite": "None",
+    "eloTrend": "📈 ELO History"
   },
   "result": {
     "won": "🏆 Won",
@@ -202,9 +226,10 @@
   "myGames": {
     "title": "🎯 My Challenges",
     "couldNotLoad": "Could not load your challenges.",
-    "noGames": "You haven't created any challenges yet.",
+    "noGames": "You're not participating in any challenges yet.",
     "goToMap": "📍 Go to Map",
     "waitingForAccept": "⏳ Waiting for someone to accept…",
+    "waitingApproval": "⏳ Waiting for {username} to approve…",
     "wantsToPlay": "⚔️ {username} wants to play!",
     "playing": "🏃 Playing vs {username}",
     "youSubmitted": "You: ✅ submitted",
@@ -251,7 +276,13 @@
     "markResolved": "Mark resolved",
     "failedBan": "Failed to ban user",
     "failedUnban": "Failed to unban user",
-    "failedResolve": "Failed to resolve report"
+    "failedResolve": "Failed to resolve report",
+    "tabReports": "Reports",
+    "tabDisputes": "Disputes",
+    "noDisputes": "No disputed games.",
+    "game": "Game:",
+    "creator": "Creator:",
+    "challenger": "Challenger:"
   },
   "eventDetail": {
     "back": "← Back",
@@ -286,7 +317,11 @@
     "couldNotApprove": "Could not approve.",
     "couldNotReject": "Could not reject.",
     "couldNotCancel": "Could not cancel.",
-    "couldNotSaveResult": "Could not save result."
+    "couldNotSaveResult": "Could not save result.",
+    "copyLink": "📋 Copy link",
+    "copyLinkDone": "✅ Copied!",
+    "rematch": "⚔️ Rematch",
+    "privateInvite": "🔒 Private challenge — for {username} only"
   },
   "chat": {
     "title": "Chats",
@@ -305,5 +340,49 @@
   "lang": {
     "cs": "🇨🇿 CS",
     "en": "🇬🇧 EN"
+  },
+  "achievements": {
+    "title": "🏅 Badges",
+    "FIRST_WIN":          "🥇 First Win",
+    "WINS_5":             "🔥 5 Wins",
+    "WINS_10":            "⚡ 10 Wins",
+    "WINS_25":            "💎 25 Wins",
+    "GAMES_10":           "🎮 10 Games Played",
+    "GAMES_50":           "🎲 50 Games",
+    "VARIETY_5":          "🌍 Master of 5 Games",
+    "WIN_STREAK_3":       "🔥 3 in a Row",
+    "WIN_STREAK_5":       "🌊 5 in a Row"
+  },
+  "auth": {
+    "forgotPassword": "Forgot password?",
+    "forgotTitle": "Reset Password",
+    "forgotSubtitle": "Enter your email and we'll send you a reset link.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "sendLink": "Send link",
+    "sending": "Sending…",
+    "linkSent": "If the email exists, you'll receive a link shortly.",
+    "resetTitle": "New Password",
+    "newPasswordLabel": "New password",
+    "confirmPasswordLabel": "Confirm password",
+    "resetBtn": "Set password",
+    "resetting": "Saving…",
+    "resetSuccess": "Password changed. You can now log in.",
+    "passwordMismatch": "Passwords do not match.",
+    "tokenInvalid": "Link is invalid or has expired.",
+    "backToLogin": "← Back to login"
+  },
+  "theme": {
+    "light": "☀️ Light",
+    "dark": "🌙 Dark"
+  },
+  "notif": {
+    "CHALLENGE_ACCEPTED": "⚔️ {actor} accepted your challenge!",
+    "CHALLENGE_APPROVED": "✅ {actor} approved your application! Head to the location.",
+    "CHALLENGE_REJECTED": "❌ {actor} rejected your application.",
+    "RESULT_SUBMITTED":   "📋 {actor} submitted their result.",
+    "CHALLENGE_INVITE":      "🎯 {actor} invited you to a challenge!",
+    "EVENT_EXPIRED":         "⏰ A challenge expired and was marked disputed.",
+    "ACHIEVEMENT_UNLOCKED":  "🏅 You unlocked a new badge!"
   }
 }

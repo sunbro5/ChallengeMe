@@ -6,7 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = {
+    @Index(name = "idx_user_username", columnList = "username", unique = true),
+    @Index(name = "idx_user_email",    columnList = "email",    unique = true)
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,6 +30,11 @@ public class User {
     private int losses   = 0;
     private int draws    = 0;
     private int disputes = 0;
+    private int rating   = 1000;
+
+    @Column(length = 160)
+    private String bio;
+    private String favoriteGameKey;
 
     public User(String username, String password, String email) {
         this.username = username;

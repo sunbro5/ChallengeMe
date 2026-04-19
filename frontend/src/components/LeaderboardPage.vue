@@ -3,6 +3,19 @@
     <h2>{{ $t('leaderboard.title') }}</h2>
     <p class="subtitle">{{ $t('leaderboard.subtitle') }}</p>
 
+    <!-- ── Game filter ───────────────────────────────────────────────── -->
+    <div class="filter-bar">
+      <button
+        :class="['filter-btn', { active: !selectedGame }]"
+        @click="selectGame(null)"
+      >{{ $t('leaderboard.allGames') }}</button>
+      <button
+        v-for="g in games" :key="g.key"
+        :class="['filter-btn', { active: selectedGame === g.key }]"
+        @click="selectGame(g.key)"
+      >{{ g.icon }} {{ currentLocale === 'cs' ? g.nameCs : g.nameEn }}</button>
+    </div>
+
     <div v-if="loading" class="state-msg">{{ $t('common.loading') }}</div>
     <div v-else-if="error"   class="state-msg error">{{ error }}</div>
     <div v-else-if="!rows.length" class="state-msg">{{ $t('leaderboard.noResults') }}</div>
@@ -12,6 +25,7 @@
         <tr>
           <th>{{ $t('leaderboard.rank') }}</th>
           <th>{{ $t('leaderboard.player') }}</th>
+          <th v-if="!selectedGame" class="elo-col">{{ $t('leaderboard.rating') }}</th>
           <th>{{ $t('leaderboard.wins') }}</th>
           <th>{{ $t('leaderboard.losses') }}</th>
           <th>{{ $t('leaderboard.draws') }}</th>
@@ -33,6 +47,9 @@
             {{ row.username }}
             <span v-if="row.username === currentUser" class="you-tag">{{ $t('leaderboard.you') }}</span>
           </td>
+          <td v-if="!selectedGame" class="elo-col">
+            <span class="elo-badge">{{ row.rating || 1000 }}</span>
+          </td>
           <td class="wins">{{ row.wins }}</td>
           <td>{{ row.losses }}</td>
           <td>{{ row.draws }}</td>
@@ -45,26 +62,58 @@
 
 <script>
 import axios from 'axios'
+import { useI18n } from 'vue-i18n'
 
 export default {
   name: 'LeaderboardPage',
+  setup() {
+    const { locale } = useI18n()
+    return { locale }
+  },
   data() {
     return {
       rows: [],
+      games: [],
+      selectedGame: null,
       loading: true,
       error: '',
       currentUser: localStorage.getItem('username') || '',
     }
   },
+  computed: {
+    currentLocale() { return this.locale },
+  },
   async mounted() {
-    try {
-      const { data } = await axios.get('/api/leaderboard', { withCredentials: true })
-      this.rows = data
-    } catch {
-      this.error = this.$t('leaderboard.couldNotLoad')
-    } finally {
-      this.loading = false
-    }
+    await Promise.all([this.loadGames(), this.loadLeaderboard()])
+  },
+  methods: {
+    async loadGames() {
+      try {
+        const { data } = await axios.get('/api/games', { withCredentials: true })
+        this.games = data
+      } catch { /* non-fatal */ }
+    },
+
+    async loadLeaderboard() {
+      this.loading = true
+      this.error = ''
+      try {
+        const url = this.selectedGame
+          ? `/api/leaderboard/game/${this.selectedGame}`
+          : '/api/leaderboard'
+        const { data } = await axios.get(url, { withCredentials: true })
+        this.rows = data
+      } catch {
+        this.error = this.$t('leaderboard.couldNotLoad')
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async selectGame(key) {
+      this.selectedGame = key
+      await this.loadLeaderboard()
+    },
   },
 }
 </script>
@@ -84,6 +133,32 @@ h2 {
   letter-spacing: -.01em;
 }
 .subtitle { color: var(--text-muted); margin-bottom: 28px; font-size: 13px; }
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+.filter-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+.filter-btn:hover { border-color: var(--brand); color: var(--text-primary); }
+.filter-btn.active {
+  background: var(--brand-muted);
+  border-color: rgba(66,184,131,.4);
+  color: var(--brand);
+  font-weight: 600;
+}
 
 .state-msg { text-align: center; padding: 60px; color: var(--text-muted); }
 .state-msg.error { color: var(--red); }
@@ -125,6 +200,18 @@ td {
 .username { font-weight: 600; }
 .wins { color: var(--brand); font-weight: 700; }
 .total { color: var(--text-muted); font-size: 12px; }
+
+.elo-col { text-align: center; }
+.elo-badge {
+  display: inline-block;
+  background: var(--blue-muted, rgba(79,142,247,.12));
+  color: var(--blue, #4f8ef7);
+  border-radius: var(--r-full);
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
 
 .you-tag {
   background: var(--brand-muted);

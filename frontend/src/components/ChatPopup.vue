@@ -112,7 +112,7 @@ export default {
     },
     connectWebSocket() {
       this.stompClient = markRaw(new Client({
-        brokerURL: 'ws://localhost:8080/ws',
+        brokerURL: `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws`,
         reconnectDelay: 5000,
         connectHeaders: {
           login: localStorage.getItem('username') || ''

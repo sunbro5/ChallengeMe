@@ -10,11 +10,51 @@
         <div class="header-info">
           <h2>{{ profile.username }}</h2>
           <p v-if="profile.isMe" class="me-badge">{{ $t('player.thatsYou') }}</p>
+          <p v-if="profile.favoriteGameKey" class="fav-game">
+            {{ gameIcon(profile.favoriteGameKey) }} {{ gameLabel(profile.favoriteGameKey) }}
+          </p>
+        </div>
+      </div>
+
+      <!-- ── Bio ──────────────────────────────────────────────────────── -->
+      <div v-if="!profile.isMe && profile.bio" class="bio-box">
+        <p>{{ profile.bio }}</p>
+      </div>
+      <div v-if="profile.isMe" class="bio-edit-section">
+        <div v-if="!bioEditing">
+          <p v-if="profile.bio" class="bio-box clickable" @click="startBioEdit">{{ profile.bio }}</p>
+          <button v-else class="btn-edit-bio" @click="startBioEdit">{{ $t('player.addBio') }}</button>
+        </div>
+        <div v-else class="bio-edit-form">
+          <textarea
+            v-model="bioForm.bio"
+            :placeholder="$t('player.bioPlaceholder')"
+            maxlength="160"
+            rows="3"
+            class="bio-textarea"
+          ></textarea>
+          <div class="bio-game-row">
+            <label>{{ $t('player.favoriteGame') }}</label>
+            <select v-model="bioForm.favoriteGameKey" class="bio-game-select">
+              <option value="">— {{ $t('player.noFavorite') }} —</option>
+              <option v-for="g in games" :key="g.key" :value="g.key">{{ g.icon }} {{ gameLabel(g.key) }}</option>
+            </select>
+          </div>
+          <div class="bio-actions">
+            <button class="btn-save-bio" :disabled="bioSaving" @click="saveBio">
+              {{ bioSaving ? $t('common.saving') : $t('common.submit') }}
+            </button>
+            <button class="btn-cancel-bio" @click="bioEditing = false">{{ $t('common.cancel') }}</button>
+          </div>
         </div>
       </div>
 
       <!-- ── Stats row ───────────────────────────────────────────────── -->
       <div class="stats-row">
+        <div class="stat">
+          <span class="stat-value elo">{{ profile.rating || 1000 }}</span>
+          <span class="stat-label">{{ $t('leaderboard.rating') }}</span>
+        </div>
         <div class="stat">
           <span class="stat-value wins">{{ profile.wins }}</span>
           <span class="stat-label">{{ $t('player.wins') }}</span>
@@ -32,6 +72,42 @@
             {{ profile.disputes }}
           </span>
           <span class="stat-label">{{ $t('player.disputes') }}</span>
+        </div>
+      </div>
+
+      <!-- ── ELO trend sparkline ────────────────────────────────────── -->
+      <div v-if="ratingHistory.length >= 2" class="elo-trend-section">
+        <h3 class="section-title">{{ $t('player.eloTrend') }}</h3>
+        <div class="sparkline-wrap">
+          <svg :viewBox="`0 0 ${sparkW} ${sparkH}`" class="sparkline" preserveAspectRatio="none">
+            <polyline
+              :points="sparkPoints"
+              fill="none"
+              stroke="var(--brand)"
+              stroke-width="2"
+              stroke-linejoin="round"
+              stroke-linecap="round"
+            />
+          </svg>
+          <div class="spark-labels">
+            <span class="spark-start">{{ ratingHistory[0].rating }}</span>
+            <span class="spark-end" :class="trendClass">{{ ratingHistory[ratingHistory.length - 1].rating }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Achievements ───────────────────────────────────────────── -->
+      <div v-if="profile.achievements && profile.achievements.length" class="achievements-section">
+        <h3 class="section-title">{{ $t('achievements.title') }}</h3>
+        <div class="achievements-grid">
+          <div
+            v-for="a in profile.achievements"
+            :key="a.type"
+            class="achievement-badge"
+            :title="formatDate(a.awardedAt)"
+          >
+            {{ $t('achievements.' + a.type) }}
+          </div>
         </div>
       </div>
 
@@ -56,9 +132,39 @@
         >{{ $t('player.unfriend') }}</button>
 
         <button class="btn-report" @click="reportModal.visible = true">{{ $t('player.report') }}</button>
+
+        <button
+          v-if="!isBlocked"
+          class="btn-block"
+          @click="blockUser"
+          :disabled="actionBusy"
+        >🚫 {{ $t('player.block') }}</button>
+        <button
+          v-else
+          class="btn-unblock"
+          @click="unblockUser"
+          :disabled="actionBusy"
+        >✅ {{ $t('player.unblock') }}</button>
       </div>
 
       <p v-if="actionError" class="msg-error">{{ actionError }}</p>
+
+      <!-- ── Stats by game type ────────────────────────────────────────── -->
+      <div v-if="profile.gameStats && profile.gameStats.length" class="game-stats-section">
+        <h3 class="section-title">{{ $t('player.statsByGame') }}</h3>
+        <div class="game-stats-list">
+          <div v-for="s in profile.gameStats" :key="s.gameType" class="game-stat-row">
+            <span class="gs-icon">{{ gameIcon(s.gameType) }}</span>
+            <span class="gs-name">{{ gameLabel(s.gameType) }}</span>
+            <span class="gs-badges">
+              <span v-if="s.wins"     class="gs-badge win">{{ s.wins }}W</span>
+              <span v-if="s.losses"   class="gs-badge loss">{{ s.losses }}L</span>
+              <span v-if="s.draws"    class="gs-badge draw">{{ s.draws }}D</span>
+              <span v-if="s.disputes" class="gs-badge disp">{{ s.disputes }}S</span>
+            </span>
+          </div>
+        </div>
+      </div>
 
       <!-- ── Game history ─────────────────────────────────────────────── -->
       <h3 class="section-title">{{ $t('player.gameHistory') }}</h3>
@@ -168,11 +274,6 @@
 <script>
 import axios from 'axios'
 
-const GAME_META = {
-  TIC_TAC_TOE:         { icon: '❌', label: '❌⭕ Tic-Tac-Toe' },
-  ROCK_PAPER_SCISSORS: { icon: '✂️', label: '✂️ Rock Paper Scissors' },
-}
-
 export default {
   name: 'PlayerPage',
   data() {
@@ -180,23 +281,67 @@ export default {
       loading: true,
       error: '',
       profile: null,
+      gameMeta: {},
+      games: [],
       isLoggedIn: !!localStorage.getItem('isLoggedIn'),
       actionBusy: false,
       actionError: '',
+      isBlocked: false,
+      bioEditing: false,
+      bioSaving: false,
+      bioForm: { bio: '', favoriteGameKey: '' },
       reportModal: { visible: false, reason: '', message: '', success: false, busy: false },
       deleteAccountModal: false,
       deleteConfirmText: '',
       deleteAccountBusy: false,
       deleteAccountError: '',
+      ratingHistory: [],
+      sparkW: 300,
+      sparkH: 60,
     }
   },
   async mounted() {
-    await this.loadProfile()
+    await Promise.all([this.loadProfile(), this.loadGames()])
+    if (this.isLoggedIn && this.profile && !this.profile.isMe) {
+      this.loadBlockStatus()
+    }
+    this.loadRatingHistory()
+  },
+  computed: {
+    sparkPoints() {
+      if (this.ratingHistory.length < 2) return ''
+      const vals = this.ratingHistory.map(p => p.rating)
+      const minV = Math.min(...vals)
+      const maxV = Math.max(...vals)
+      const range = maxV - minV || 1
+      const pad = 4
+      return vals.map((v, i) => {
+        const x = pad + (i / (vals.length - 1)) * (this.sparkW - pad * 2)
+        const y = pad + (1 - (v - minV) / range) * (this.sparkH - pad * 2)
+        return `${x.toFixed(1)},${y.toFixed(1)}`
+      }).join(' ')
+    },
+    trendClass() {
+      if (this.ratingHistory.length < 2) return ''
+      const first = this.ratingHistory[0].rating
+      const last  = this.ratingHistory[this.ratingHistory.length - 1].rating
+      return last > first ? 'trend-up' : last < first ? 'trend-down' : 'trend-flat'
+    },
   },
   watch: {
-    '$route.params.username'() { this.loadProfile() },
+    '$route.params.username'() { this.loadProfile(); this.loadRatingHistory() },
   },
   methods: {
+    async loadRatingHistory() {
+      try {
+        const username = this.$route.params.username
+        const { data } = await axios.get(
+          `/api/players/${username}/rating-history`,
+          { withCredentials: true })
+        this.ratingHistory = data
+      } catch { /* non-fatal */ }
+    },
+
     async loadProfile() {
       this.loading = true; this.error = ''
       try {
@@ -208,6 +353,66 @@ export default {
         this.error = this.$t('player.notFound')
       } finally {
         this.loading = false
+      }
+    },
+
+    async loadGames() {
+      try {
+        const { data } = await axios.get('/api/games', { withCredentials: true })
+        this.games = data
+        const meta = {}
+        data.forEach(g => {
+          const locale = this.$i18n.locale
+          meta[g.key] = {
+            icon: g.icon,
+            label: (locale === 'cs' ? g.nameCs : g.nameEn) || g.nameEn || g.nameCs || g.key,
+          }
+        })
+        this.gameMeta = meta
+      } catch { /* non-fatal */ }
+    },
+
+    async loadBlockStatus() {
+      try {
+        const { data } = await axios.get(`/api/blocks/${this.profile.username}`, { withCredentials: true })
+        this.isBlocked = data
+      } catch { /* non-fatal */ }
+    },
+    async blockUser() {
+      this.actionBusy = true
+      try {
+        await axios.post(`/api/blocks/${this.profile.username}`, {}, { withCredentials: true })
+        this.isBlocked = true
+      } catch (e) {
+        this.actionError = e.response?.data || 'Could not block user'
+      } finally { this.actionBusy = false }
+    },
+    async unblockUser() {
+      this.actionBusy = true
+      try {
+        await axios.delete(`/api/blocks/${this.profile.username}`, { withCredentials: true })
+        this.isBlocked = false
+      } catch (e) {
+        this.actionError = e.response?.data || 'Could not unblock user'
+      } finally { this.actionBusy = false }
+    },
+    startBioEdit() {
+      this.bioForm.bio = this.profile.bio || ''
+      this.bioForm.favoriteGameKey = this.profile.favoriteGameKey || ''
+      this.bioEditing = true
+    },
+    async saveBio() {
+      this.bioSaving = true
+      try {
+        await axios.put('/api/players/me/profile', {
+          bio: this.bioForm.bio,
+          favoriteGameKey: this.bioForm.favoriteGameKey,
+        }, { withCredentials: true })
+        this.profile.bio = this.bioForm.bio || null
+        this.profile.favoriteGameKey = this.bioForm.favoriteGameKey || null
+        this.bioEditing = false
+      } catch { /* non-fatal */ } finally {
+        this.bioSaving = false
       }
     },
 
@@ -272,8 +477,8 @@ export default {
       }
     },
 
-    gameIcon(t)    { return GAME_META[t]?.icon  || '🎮' },
-    gameLabel(t)   { return GAME_META[t]?.label || t },
+    gameIcon(t)    { return this.gameMeta[t]?.icon  || '🎮' },
+    gameLabel(t)   { return this.gameMeta[t]?.label || t },
     formatDate(iso){ return iso ? new Date(iso).toLocaleDateString() : '—' },
     resultLabel(r) { return this.$t('result.' + r) || r },
   },
@@ -320,6 +525,70 @@ export default {
   letter-spacing: .04em;
 }
 
+.btn-block {
+  background: transparent; border: 1px solid rgba(248,81,73,.35); color: var(--red);
+  border-radius: var(--r); padding: 5px 13px; font-size: 12px; font-family: var(--font);
+  cursor: pointer; transition: background var(--transition);
+}
+.btn-block:hover { background: var(--red-muted); }
+.btn-unblock {
+  background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted);
+  border-radius: var(--r); padding: 5px 13px; font-size: 12px; font-family: var(--font);
+  cursor: pointer; transition: background var(--transition);
+}
+.btn-unblock:hover { background: var(--bg-overlay); }
+
+.fav-game { margin: 2px 0 0; font-size: 12px; color: var(--text-secondary); }
+
+.bio-box {
+  background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--r-md);
+  padding: 12px 16px; margin-bottom: 16px; font-size: 13px; color: var(--text-secondary);
+  line-height: 1.6; white-space: pre-wrap;
+}
+.bio-box.clickable { cursor: pointer; }
+.bio-box.clickable:hover { background: var(--bg-elevated); }
+
+.bio-edit-section { margin-bottom: 16px; }
+.btn-edit-bio {
+  background: transparent; border: 1px dashed var(--border); color: var(--text-muted);
+  border-radius: var(--r); padding: 7px 14px; font-size: 12px; font-family: var(--font);
+  cursor: pointer; width: 100%; transition: border-color var(--transition), color var(--transition);
+}
+.btn-edit-bio:hover { border-color: var(--brand); color: var(--brand); }
+
+.bio-edit-form { display: flex; flex-direction: column; gap: 8px; }
+.bio-textarea {
+  width: 100%; padding: 9px 12px; background: var(--bg-elevated); color: var(--text-primary);
+  border: 1px solid var(--border); border-radius: var(--r); font-size: 13px; resize: vertical;
+  font-family: var(--font); box-sizing: border-box; outline: none;
+  transition: border-color var(--transition);
+}
+.bio-textarea::placeholder { color: var(--text-muted); }
+.bio-textarea:focus { border-color: var(--brand); }
+
+.bio-game-row { display: flex; flex-direction: column; gap: 4px; }
+.bio-game-row label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .04em; }
+.bio-game-select {
+  background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 7px 10px; font-size: 13px; font-family: var(--font); outline: none;
+}
+.bio-game-select:focus { border-color: var(--brand); }
+
+.bio-actions { display: flex; gap: 8px; }
+.btn-save-bio {
+  background: var(--brand); color: #fff; border: none; border-radius: var(--r);
+  padding: 7px 16px; font-size: 13px; font-weight: 600; font-family: var(--font);
+  cursor: pointer; transition: background var(--transition);
+}
+.btn-save-bio:hover:not(:disabled) { background: var(--brand-hover); }
+.btn-save-bio:disabled { opacity: .5; cursor: default; }
+.btn-cancel-bio {
+  background: var(--bg-elevated); color: var(--text-secondary); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 7px 14px; font-size: 13px; font-family: var(--font);
+  cursor: pointer; transition: background var(--transition);
+}
+.btn-cancel-bio:hover { background: var(--bg-overlay); }
+
 .stats-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -334,7 +603,9 @@ export default {
   text-align: center;
   display: flex; flex-direction: column; gap: 5px;
 }
+.stats-row         { grid-template-columns: repeat(5, 1fr); }
 .stat-value         { font-size: 24px; font-weight: 700; line-height: 1; }
+.stat-value.elo     { color: var(--blue, #4f8ef7); }
 .stat-value.wins    { color: var(--brand); }
 .stat-value.losses  { color: var(--red); }
 .stat-value.draws   { color: var(--yellow); }
@@ -393,6 +664,74 @@ export default {
   padding: 7px 16px;
   font-size: 13px;
 }
+
+.elo-trend-section { margin-bottom: 28px; }
+.sparkline-wrap {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 12px 16px;
+}
+.sparkline {
+  display: block;
+  width: 100%;
+  height: 60px;
+}
+.spark-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+.spark-end.trend-up   { color: var(--brand); font-weight: 700; }
+.spark-end.trend-down { color: var(--red);   font-weight: 700; }
+.spark-end.trend-flat { color: var(--text-muted); }
+
+.achievements-section { margin-bottom: 28px; }
+.achievements-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.achievement-badge {
+  background: var(--brand-muted);
+  color: var(--brand);
+  border: 1px solid rgba(66,184,131,.3);
+  border-radius: var(--r-full);
+  padding: 5px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: default;
+  transition: background var(--transition);
+}
+.achievement-badge:hover { background: rgba(66,184,131,.2); }
+
+.game-stats-section { margin-bottom: 28px; }
+.game-stats-list { display: flex; flex-direction: column; gap: 6px; }
+.game-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.gs-icon  { font-size: 18px; flex-shrink: 0; }
+.gs-name  { font-size: 13px; font-weight: 500; color: var(--text-primary); flex: 1; }
+.gs-badges { display: flex; gap: 5px; flex-wrap: wrap; }
+.gs-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+  letter-spacing: .03em;
+}
+.gs-badge.win  { background: var(--brand-muted);  color: var(--brand); }
+.gs-badge.loss { background: var(--red-muted);    color: var(--red); }
+.gs-badge.draw { background: var(--yellow-muted); color: var(--yellow); }
+.gs-badge.disp { background: var(--orange-muted); color: var(--orange); }
 
 .section-title { font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .05em; margin: 0 0 14px; }
 .empty-history { color: var(--text-muted); text-align: center; padding: 32px 0; font-size: 13px; }

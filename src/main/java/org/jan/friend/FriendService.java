@@ -4,6 +4,7 @@ import org.jan.user.User;
 import org.jan.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,22 +42,34 @@ public class FriendService {
         return friendshipRepository.save(friendship);
     }
 
+    public void declineRequest(User addressee, Long friendshipId) {
+        Friendship friendship = friendshipRepository.findById(friendshipId)
+                .orElseThrow(() -> new IllegalArgumentException("Request not found"));
+        if (!friendship.getAddressee().getId().equals(addressee.getId())) {
+            throw new IllegalArgumentException("Not authorized");
+        }
+        friendshipRepository.delete(friendship);
+    }
+
     public void unfriend(User user, User friend) {
         friendshipRepository.findBetweenUsers(user, friend)
                 .ifPresent(friendshipRepository::delete);
     }
 
+    @Transactional(readOnly = true)
     public List<User> getFriends(User user) {
         return friendshipRepository.findAcceptedFriendships(user).stream()
                 .map(f -> f.getRequester().getId().equals(user.getId()) ? f.getAddressee() : f.getRequester())
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<Friendship> getPendingRequests(User user) {
         return friendshipRepository.findPendingRequests(user);
     }
 
     /** Returns "NONE", "PENDING", or "ACCEPTED" for the relationship between two users. */
+    @Transactional(readOnly = true)
     public String getFriendshipStatus(User user, User other) {
         return friendshipRepository.findBetweenUsers(user, other)
                 .map(f -> f.getStatus().name())

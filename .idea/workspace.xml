@@ -5,7 +5,79 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a1264b58-954b-4fbe-acfc-b845e9233026" name="Changes" comment="mobile">
+      <change afterPath="$PROJECT_DIR$/frontend/public/manifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/public/sw.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/ForgotPasswordPage.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/ResetPasswordPage.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/achievement/AchievementDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/achievement/AchievementRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/achievement/AchievementService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/achievement/AchievementType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/achievement/UserAchievement.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/block/Block.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/block/BlockController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/block/BlockRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/friend/dto/ActivityDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/game/EventExpiryScheduler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/notification/Notification.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/notification/NotificationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/notification/NotificationRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/notification/NotificationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/report/dto/DisputedEventDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/user/EmailService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/user/PasswordResetRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/user/PasswordResetToken.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/user/RatingHistory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/user/RatingHistoryRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/user/dto/GameTypeStatsDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jan/user/dto/RatingPointDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/settings.local.json" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/settings.local.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/assets/global.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/assets/global.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/AdminPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/AdminPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/ChatPopup.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/ChatPopup.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/EventDetailPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/EventDetailPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/FriendsPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/FriendsPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/HomePage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/HomePage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/LeaderboardPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/LeaderboardPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/LoginPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/LoginPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/MapPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/MapPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/MyGamesPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/MyGamesPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/PlayerPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/PlayerPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/locales/cs.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/locales/cs.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/locales/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/locales/en.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/ChallengeMeApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/ChallengeMeApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/chat/ChatService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/chat/ChatService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/config/CacheConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/config/CacheConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/friend/FriendController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/friend/FriendController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/friend/FriendService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/friend/FriendService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/friend/Friendship.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/friend/Friendship.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/friend/FriendshipRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/friend/FriendshipRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/game/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/game/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/game/GameEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/game/GameEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/game/GameEventController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/game/GameEventController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/game/GameEventCreateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/game/GameEventCreateRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/game/GameEventRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/game/GameEventRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/game/GameEventService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/game/GameEventService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/game/dto/GameEventDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/game/dto/GameEventDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/report/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/report/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/user/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/user/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/user/PlayerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/user/PlayerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/user/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/user/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/user/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/user/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jan/user/dto/PlayerProfileDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jan/user/dto/PlayerProfileDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application-prod.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-prod.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,37 +126,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Docker.Dockerfile.executor": "Run",
-    "Docker.docker-compose.yml.backend: Compose Deployment.executor": "Run",
-    "Docker.docker-compose.yml: Compose Deployment (1).executor": "Run",
-    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
-    "Maven.ChallengeMe [install].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "Spring Boot.ChallengeMeApplication.executor": "Run",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "nodejs_package_manager_path": "npm",
-    "onboarding.tips.debug.path": "C:/Users/mares/IdeaProjects/ChallengeMe/src/main/java/org/jan/Main.java",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "com.github.copilot.settings.network.NetworkConfigurable",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2026.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yml.backend: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yml: Compose Deployment (1).executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.ChallengeMe [install].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ChallengeMeApplication.executor&quot;: &quot;Run&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/mares/IdeaProjects/ChallengeMe/src/main/java/org/jan/Main.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.github.copilot.settings.network.NetworkConfigurable&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2026.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Docker.docker-compose.yml: Compose Deployment (1)">
     <configuration name="ChallengeMeApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <module name="ChallengeMe" />
@@ -199,7 +271,10 @@
       <workItem from="1776020412396" duration="11605000" />
       <workItem from="1776075921557" duration="1033000" />
       <workItem from="1776195455169" duration="5593000" />
-      <workItem from="1776425655541" duration="11193000" />
+      <workItem from="1776425655541" duration="12472000" />
+      <workItem from="1776541166961" duration="3197000" />
+      <workItem from="1776585223349" duration="1284000" />
+      <workItem from="1776612652613" duration="835000" />
     </task>
     <task id="LOCAL-00001" summary="2">
       <option name="closed" value="true" />
@@ -233,7 +308,15 @@
       <option name="project" value="LOCAL" />
       <updated>1776454406692</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="mobile">
+      <option name="closed" value="true" />
+      <created>1776459077534</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1776459077534</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

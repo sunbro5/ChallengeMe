@@ -58,6 +58,21 @@
           rows="3"
         ></textarea>
 
+        <label>{{ $t('map.locationNameLabel') }}</label>
+        <input
+          type="text"
+          v-model="createPanel.locationName"
+          :placeholder="$t('map.locationNamePlaceholder')"
+          maxlength="80"
+          class="text-input"
+        />
+
+        <label>{{ $t('map.inviteFriendLabel') }}</label>
+        <select v-model="createPanel.invitedUsername">
+          <option value="">{{ $t('map.inviteFriendNone') }}</option>
+          <option v-for="f in friends" :key="f.id" :value="f.username">{{ f.username }}</option>
+        </select>
+
         <div class="safety-note">
           <span class="safety-icon">⚠️</span>
           <span>{{ $t('safety.createWarning') }}</span>
@@ -96,6 +111,12 @@
         <p><span class="lbl">{{ $t('map.whenToMeet').slice(0,4) }}</span> {{ formatDate(detailPanel.event.scheduledAt) }}</p>
         <p v-if="detailPanel.event.description" class="event-description">
           {{ detailPanel.event.description }}
+        </p>
+        <p v-if="detailPanel.event.locationName" class="location-name">
+          📍 {{ detailPanel.event.locationName }}
+        </p>
+        <p v-if="detailPanel.event.invitedUsername" class="private-invite-badge">
+          {{ $t('eventDetail.privateInvite', { username: detailPanel.event.invitedUsername }) }}
         </p>
         <p>
           <span class="lbl"></span>
@@ -140,6 +161,11 @@
 
         <!-- ── Actions (logged-in users) ────────────────────────────── -->
         <template v-if="isLoggedIn">
+
+          <div v-if="detailPanel.event.status === 'OPEN' && !detailPanel.event.joined" class="accept-safety">
+            <span class="accept-safety-icon">⚠️</span>
+            <span>{{ $t('safety.acceptWarning') }} <router-link to="/tos" target="_blank" class="tos-link">{{ $t('safety.tosLink') }}</router-link></span>
+          </div>
 
           <button
             v-if="detailPanel.event.status === 'OPEN' && !detailPanel.event.joined"
@@ -271,6 +297,9 @@
 <script>
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import 'leaflet.markercluster/dist/MarkerCluster.css'
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
+import 'leaflet.markercluster'
 import { markRaw } from 'vue'
 import axios from 'axios'
 
@@ -299,15 +328,21 @@ export default {
   data() {
     return {
       map: null,
+      clusterGroup: null,
       markers: {},
       tempMarker: null,
       isLoggedIn: !!localStorage.getItem('isLoggedIn'),
 
       games: [],
+      friends: [],
       allEvents: [],
       activeFilters: [],
       filterPanel: { visible: false },
-      createPanel: { visible: false, lat: 0, lng: 0, gameType: '', scheduledAt: '', description: '', busy: false, error: '' },
+      createPanel: {
+        visible: false, lat: 0, lng: 0, gameType: '', scheduledAt: '',
+        description: '', locationName: '', invitedUsername: '',
+        busy: false, error: '',
+      },
       detailPanel: { visible: false, event: null, busy: false, error: '' },
       resultModal:  { visible: false, winner: '', note: '', busy: false, error: '' },
     }
@@ -319,15 +354,36 @@ export default {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors', maxZoom: 19,
     }).addTo(this.map)
+    this.clusterGroup = markRaw(L.markerClusterGroup({ maxClusterRadius: 50, showCoverageOnHover: false }))
+    this.map.addLayer(this.clusterGroup)
     this.map.on('click', this.onMapClick)
     this.loadEvents()
-    if (navigator.geolocation) {
+    if (this.isLoggedIn) this.loadFriends()
+
+    const q = this.$route.query
+    if (q.rematch && q.lat && q.lng) {
+      const lat = parseFloat(q.lat)
+      const lng = parseFloat(q.lng)
+      this.map.setView([lat, lng], 15)
+      this.createPanel.lat = lat
+      this.createPanel.lng = lng
+      if (q.gameType) this.createPanel.gameType = q.gameType
+      this.createPanel.visible = true
+      this.detailPanel.visible = false
+    } else if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(pos =>
         this.map.setView([pos.coords.latitude, pos.coords.longitude], 13))
     }
   },
   beforeUnmount() { if (this.map) this.map.remove() },
   methods: {
+    async loadFriends() {
+      try {
+        const { data } = await axios.get('/api/friends', { withCredentials: true })
+        this.friends = data
+      } catch { /* non-fatal */ }
+    },
+
     async loadGames() {
       try {
         const { data } = await axios.get('/api/games', { withCredentials: true })
@@ -347,7 +403,7 @@ export default {
     async loadEvents() {
       const { data } = await axios.get('/api/events', { withCredentials: true })
       this.allEvents = data
-      Object.values(this.markers).forEach(m => m.remove())
+      this.clusterGroup.clearLayers()
       this.markers = {}
       data.forEach(e => this.addMarker(e))
       this.applyFilter()
@@ -356,18 +412,18 @@ export default {
     addMarker(event) {
       const marker = L.marker([event.latitude, event.longitude],
           { icon: makeIcon(event.gameType, event.status) })
-        .addTo(this.map)
         .on('click', () => {
           this.cancelCreate()
           this.detailPanel.event = event
           this.detailPanel.visible = true
           this.detailPanel.error = ''
         })
+      this.clusterGroup.addLayer(marker)
       this.markers[event.id] = markRaw(marker)
     },
 
     refreshMarker(event) {
-      if (this.markers[event.id]) this.markers[event.id].remove()
+      if (this.markers[event.id]) this.clusterGroup.removeLayer(this.markers[event.id])
       this.addMarker(event)
     },
 
@@ -385,8 +441,10 @@ export default {
     },
 
     cancelCreate() {
-      this.createPanel.visible     = false
-      this.createPanel.description = ''
+      this.createPanel.visible       = false
+      this.createPanel.description   = ''
+      this.createPanel.locationName  = ''
+      this.createPanel.invitedUsername = ''
       if (this.tempMarker) { this.tempMarker.remove(); this.tempMarker = null }
     },
 
@@ -398,6 +456,8 @@ export default {
           latitude: this.createPanel.lat, longitude: this.createPanel.lng,
           gameType: this.createPanel.gameType, scheduledAt: this.createPanel.scheduledAt,
           description: this.createPanel.description || null,
+          locationName: this.createPanel.locationName || null,
+          invitedUsername: this.createPanel.invitedUsername || null,
         }, { withCredentials: true })
         this.allEvents.push(data)
         this.addMarker(data)
@@ -450,7 +510,7 @@ export default {
         const id = this.detailPanel.event.id
         await axios.delete(`/api/events/${id}`, { withCredentials: true })
         this.allEvents = this.allEvents.filter(e => e.id !== id)
-        if (this.markers[id]) { this.markers[id].remove(); delete this.markers[id] }
+        if (this.markers[id]) { this.clusterGroup.removeLayer(this.markers[id]); delete this.markers[id] }
         this.detailPanel.visible = false
       } catch (err) {
         this.detailPanel.error = err.response?.data || this.$t('map.couldNotCancel')
@@ -475,7 +535,7 @@ export default {
         this.detailPanel.event = data
         this.resultModal.visible = false
         if (data.status === 'FINISHED' || data.status === 'DISPUTED') {
-          if (this.markers[data.id]) { this.markers[data.id].remove(); delete this.markers[data.id] }
+          if (this.markers[data.id]) { this.clusterGroup.removeLayer(this.markers[data.id]); delete this.markers[data.id] }
         }
       } catch (err) {
         this.resultModal.error = err.response?.data || 'Could not save result.'
@@ -508,8 +568,8 @@ export default {
         const event = this.allEvents.find(e => String(e.id) === String(id))
         if (!event) return
         const show = this.activeFilters.length === 0 || this.activeFilters.includes(event.gameType)
-        if (show && !this.map.hasLayer(marker))  { marker.addTo(this.map) }
-        if (!show && this.map.hasLayer(marker))  { marker.remove() }
+        if (show  && !this.clusterGroup.hasLayer(marker)) { this.clusterGroup.addLayer(marker) }
+        if (!show &&  this.clusterGroup.hasLayer(marker)) { this.clusterGroup.removeLayer(marker) }
       })
     },
     statusLabel(s)  { return this.$t('status.' + s.toLowerCase()) },
@@ -583,6 +643,16 @@ textarea { resize: vertical; line-height: 1.4; }
   font-size: 13px; color: var(--text-secondary); background: var(--bg-elevated);
   border-radius: var(--r); padding: 8px 10px; margin-bottom: 10px;
   line-height: 1.5; white-space: pre-wrap;
+}
+.location-name {
+  font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;
+}
+.private-invite-badge {
+  font-size: 12px; font-weight: 600;
+  background: rgba(203,166,247,.12); color: var(--brand);
+  border: 1px solid rgba(203,166,247,.3);
+  border-radius: var(--r); padding: 4px 10px;
+  display: inline-block; margin-bottom: 10px;
 }
 
 .panel-actions { display: flex; gap: 8px; margin-top: 4px; }
@@ -694,6 +764,23 @@ textarea { resize: vertical; line-height: 1.4; }
   font-size:11px; color:var(--yellow); background:var(--yellow-muted);
   border-radius:var(--r); padding:5px 9px; margin-bottom:8px;
 }
+
+.accept-safety {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  background: var(--yellow-muted);
+  border: 1px solid rgba(210,153,34,.25);
+  border-radius: var(--r);
+  padding: 9px 12px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: var(--yellow);
+  line-height: 1.5;
+}
+.accept-safety-icon { flex-shrink: 0; }
+.accept-safety .tos-link { color: var(--yellow); font-weight: 600; text-decoration: underline; }
+.accept-safety .tos-link:hover { opacity: .8; }
 
 .panel-slide-enter-active,.panel-slide-leave-active { transition:transform .2s ease,opacity .2s ease; }
 .panel-slide-enter-from,.panel-slide-leave-to       { transform:translateX(30px); opacity:0; }

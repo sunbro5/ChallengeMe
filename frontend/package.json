@@ -12,6 +12,7 @@
     "@stomp/stompjs": "^7.0.0",
     "axios": "^1.6.0",
     "leaflet": "^1.9.4",
+    "leaflet.markercluster": "^1.5.3",
     "vue": "^3.4.0",
     "vue-i18n": "^9.14.0",
     "vue-router": "^5.0.4"

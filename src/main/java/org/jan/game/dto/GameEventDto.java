@@ -35,4 +35,8 @@ public class GameEventDto {
     String challengerResult;
     /** Optional free-text from the creator, e.g. skill level or location details. */
     String description;
+    /** Optional human-readable venue name. */
+    String locationName;
+    /** If set, only this username can accept (direct invite). */
+    String invitedUsername;
 }

@@ -40,6 +40,24 @@
   --transition: 150ms ease;
 }
 
+/* ── Light mode overrides ────────────────────────────────────────────────── */
+html.light {
+  --bg-base:     #f6f8fa;
+  --bg-surface:  #ffffff;
+  --bg-elevated: #f0f2f5;
+  --bg-overlay:  #e8eaf0;
+  --border:      #d0d7de;
+  --border-muted:#e8eaf0;
+
+  --text-primary:   #1f2328;
+  --text-secondary: #57606a;
+  --text-muted:     #8c959f;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.12);
+  --shadow:    0 2px 8px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.06);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.15);
+}
+
 /* ── Reset ───────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 

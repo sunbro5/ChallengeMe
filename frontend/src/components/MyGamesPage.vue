@@ -31,6 +31,7 @@
             <span>📅 {{ formatDate(ev.scheduledAt) }}</span>
             <a :href="mapsLink(ev)" target="_blank" class="map-link">📍 {{ $t('common.openInMaps') }}</a>
           </div>
+          <div v-if="ev.locationName" class="location-name">📍 {{ ev.locationName }}</div>
 
           <!-- Challenger section -->
           <div class="challenger-section">
@@ -40,35 +41,34 @@
             </div>
 
             <template v-else-if="ev.status === 'PENDING_APPROVAL'">
-              <div class="challenger-info">
-                <router-link :to="`/player/${ev.challengerUsername}`" class="challenger-link">
-                  {{ $t('myGames.wantsToPlay', { username: ev.challengerUsername }) }}
-                </router-link>
-              </div>
-              <div class="approval-actions">
-                <button
-                  class="btn-approve"
-                  :disabled="busy[ev.id]"
-                  @click="approve(ev)"
-                >{{ $t('common.approve') }}</button>
-                <button
-                  class="btn-reject"
-                  :disabled="busy[ev.id]"
-                  @click="reject(ev)"
-                >{{ $t('common.reject') }}</button>
+              <!-- Creator sees approve/reject -->
+              <template v-if="ev.isCreator">
+                <div class="challenger-info">
+                  <router-link :to="`/player/${ev.challengerUsername}`" class="challenger-link">
+                    {{ $t('myGames.wantsToPlay', { username: ev.challengerUsername }) }}
+                  </router-link>
+                </div>
+                <div class="approval-actions">
+                  <button class="btn-approve" :disabled="busy[ev.id]" @click="approve(ev)">{{ $t('common.approve') }}</button>
+                  <button class="btn-reject"  :disabled="busy[ev.id]" @click="reject(ev)">{{ $t('common.reject') }}</button>
+                </div>
+              </template>
+              <!-- Challenger waits -->
+              <div v-else class="waiting">
+                {{ $t('myGames.waitingApproval', { username: ev.creatorUsername }) }}
               </div>
             </template>
 
             <template v-else-if="ev.status === 'IN_PROGRESS'">
               <div class="inprogress-info">
-                {{ $t('myGames.playing', { username: ev.challengerUsername }) }}
+                {{ $t('myGames.playing', { username: opponentName(ev) }) }}
               </div>
               <div class="submit-status">
-                <span :class="ev.creatorResultSubmitted ? 'done' : 'pending'">
-                  {{ ev.creatorResultSubmitted ? $t('myGames.youSubmitted') : $t('myGames.youNotYet') }}
+                <span :class="ev.iHaveSubmitted ? 'done' : 'pending'">
+                  {{ ev.iHaveSubmitted ? $t('myGames.youSubmitted') : $t('myGames.youNotYet') }}
                 </span>
-                <span :class="ev.challengerResultSubmitted ? 'done' : 'pending'">
-                  {{ ev.challengerUsername }}: {{ ev.challengerResultSubmitted ? $t('myGames.submitted') : $t('myGames.notYet') }}
+                <span :class="opponentSubmitted(ev) ? 'done' : 'pending'">
+                  {{ opponentName(ev) }}: {{ opponentSubmitted(ev) ? $t('myGames.submitted') : $t('myGames.notYet') }}
                 </span>
               </div>
             </template>
@@ -92,7 +92,7 @@
           </div>
 
           <button
-            v-if="['OPEN','PENDING_APPROVAL','IN_PROGRESS'].includes(ev.status)"
+            v-if="ev.isCreator && ['OPEN','PENDING_APPROVAL','IN_PROGRESS'].includes(ev.status)"
             class="btn-cancel"
             :disabled="busy[ev.id]"
             @click="cancel(ev)"
@@ -130,7 +130,7 @@ export default {
     async loadGames() {
       try {
         const { data } = await axios.get('/api/games', { withCredentials: true })
-        data.forEach(g => { this.gameMeta[g.key] = { icon: g.icon, name: g.name } })
+        data.forEach(g => { this.gameMeta[g.key] = { icon: g.icon, nameCs: g.nameCs, nameEn: g.nameEn } })
       } catch { /* non-fatal */ }
     },
 
@@ -194,7 +194,15 @@ export default {
 
     gameLabel(type) {
       const m = this.gameMeta[type]
-      return m ? `${m.icon} ${m.name}` : type
+      if (!m) return type || ''
+      const name = this.$i18n?.locale === 'cs' ? m.nameCs : m.nameEn
+      return `${m.icon} ${name}`
+    },
+    opponentName(ev) {
+      return ev.isCreator ? ev.challengerUsername : ev.creatorUsername
+    },
+    opponentSubmitted(ev) {
+      return ev.isCreator ? ev.challengerResultSubmitted : ev.creatorResultSubmitted
     },
     statusLabel(s) { return this.$t('status.' + s.toLowerCase()) },
     formatDate(iso) { return iso ? new Date(iso).toLocaleString() : '—' },
@@ -288,6 +296,7 @@ export default {
   margin-bottom: 12px;
 }
 .map-link { color: var(--blue); text-decoration: none; }
+.location-name { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
 .map-link:hover { text-decoration: underline; }
 
 .challenger-section { margin-bottom: 12px; }

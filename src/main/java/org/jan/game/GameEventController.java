@@ -2,23 +2,31 @@ package org.jan.game;
 
 import org.jan.game.dto.ChallengeNotificationDto;
 import org.jan.game.dto.GameEventDto;
+import org.jan.notification.NotificationService;
 import org.jan.user.User;
 import org.jan.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 public class GameEventController {
 
     @Autowired private GameEventService      gameEventService;
+    @Autowired private GameEventRepository   gameEventRepository;
     @Autowired private UserRepository        userRepository;
     @Autowired private SimpMessagingTemplate messagingTemplate;
+    @Autowired private NotificationService   notificationService;
 
     // ── DTO builder ───────────────────────────────────────────────────────────
 
@@ -55,6 +63,8 @@ public class GameEventController {
                 .creatorResult(disputed ? resultLabel(event.getCreatorResult()) : null)
                 .challengerResult(disputed ? resultLabel(event.getChallengerResult()) : null)
                 .description(event.getDescription())
+                .locationName(event.getLocationName())
+                .invitedUsername(event.getInvitedUsername())
                 .build();
     }
 
@@ -97,7 +107,16 @@ public class GameEventController {
             User user = resolve(auth);
             GameEvent event = gameEventService.createEvent(
                     user, req.getLatitude(), req.getLongitude(),
-                    req.getGameType(), req.getScheduledAt(), req.getDescription());
+                    req.getGameType(), req.getScheduledAt(), req.getDescription(),
+                    req.getLocationName(), req.getInvitedUsername());
+            // Notify the invited user (if any)
+            if (req.getInvitedUsername() != null && !req.getInvitedUsername().isBlank()) {
+                User invited = userRepository.findByUsername(req.getInvitedUsername());
+                if (invited != null) {
+                    notificationService.create(invited, "CHALLENGE_INVITE",
+                            user.getUsername(), user.getUsername() + " invited you to a challenge!", event.getId());
+                }
+            }
             return ResponseEntity.ok(toDto(event, user));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -117,6 +136,8 @@ public class GameEventController {
                             event.getId(),
                             user.getUsername(),
                             event.getGameType().name()));
+            notificationService.create(event.getCreator(), "CHALLENGE_ACCEPTED",
+                    user.getUsername(), user.getUsername() + " accepted your challenge!", event.getId());
             return ResponseEntity.ok(toDto(event, user));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -127,7 +148,12 @@ public class GameEventController {
     public ResponseEntity<?> approveChallenger(@PathVariable Long id, Authentication auth) {
         try {
             User user = resolve(auth);
-            return ResponseEntity.ok(toDto(gameEventService.approveChallenger(user, id), user));
+            GameEvent event = gameEventService.approveChallenger(user, id);
+            if (event.getChallenger() != null) {
+                notificationService.create(event.getChallenger(), "CHALLENGE_APPROVED",
+                        user.getUsername(), user.getUsername() + " approved your challenge! Head to the location.", id);
+            }
+            return ResponseEntity.ok(toDto(event, user));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -137,7 +163,12 @@ public class GameEventController {
     public ResponseEntity<?> rejectChallenger(@PathVariable Long id, Authentication auth) {
         try {
             User user = resolve(auth);
-            return ResponseEntity.ok(toDto(gameEventService.rejectChallenger(user, id), user));
+            GameEvent event = gameEventService.rejectChallenger(user, id);
+            if (event.getChallenger() != null) {
+                notificationService.create(event.getChallenger(), "CHALLENGE_REJECTED",
+                        user.getUsername(), user.getUsername() + " rejected your application.", id);
+            }
+            return ResponseEntity.ok(toDto(event, user));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -153,15 +184,21 @@ public class GameEventController {
         }
     }
 
+    @CacheEvict(value = "leaderboard", allEntries = true)
     @PostMapping("/api/events/{id}/result")
     public ResponseEntity<?> reportResult(@PathVariable Long id,
                                           @RequestBody GameResultRequest req,
                                           Authentication auth) {
         try {
             User user = resolve(auth);
-            return ResponseEntity.ok(toDto(
-                    gameEventService.reportResult(user, id, req.getWinnerUsername(), req.getResultNote()),
-                    user));
+            GameEvent event = gameEventService.reportResult(user, id, req.getWinnerUsername(), req.getResultNote());
+            // Notify the other participant that a result was submitted
+            event.getParticipants().stream()
+                    .filter(p -> !p.getId().equals(user.getId()))
+                    .findFirst()
+                    .ifPresent(other -> notificationService.create(other, "RESULT_SUBMITTED",
+                            user.getUsername(), user.getUsername() + " submitted their result.", id));
+            return ResponseEntity.ok(toDto(event, user));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -176,15 +213,54 @@ public class GameEventController {
 
     // ── Leaderboard ───────────────────────────────────────────────────────────
 
+    @Cacheable("leaderboard")
     @GetMapping("/api/leaderboard")
     public ResponseEntity<List<LeaderboardEntryDto>> getLeaderboard() {
         return ResponseEntity.ok(userRepository.findLeaderboard().stream()
                 .limit(50)
                 .map(u -> new LeaderboardEntryDto(
-                        u.getUsername(), u.getWins(), u.getLosses(), u.getDraws(), u.getDisputes()))
+                        u.getUsername(), u.getWins(), u.getLosses(), u.getDraws(), u.getDisputes(), u.getRating()))
                 .collect(Collectors.toList()));
     }
 
+    // ── Leaderboard by game type ──────────────────────────────────────────────
+
+    @GetMapping("/api/leaderboard/game/{gameType}")
+    public ResponseEntity<List<LeaderboardEntryDto>> getLeaderboardByGame(
+            @PathVariable String gameType) {
+        GameType type;
+        try {
+            type = GameType.valueOf(gameType.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        List<GameEvent> events = gameEventRepository.findFinishedByGameType(type);
+
+        Map<String, int[]> stats = new HashMap<>(); // {wins, losses, draws}
+        for (GameEvent ev : events) {
+            for (User p : ev.getParticipants()) {
+                stats.putIfAbsent(p.getUsername(), new int[3]);
+                int[] s = stats.get(p.getUsername());
+                if (ev.getWinner() == null) {
+                    s[2]++;
+                } else if (ev.getWinner().getId().equals(p.getId())) {
+                    s[0]++;
+                } else {
+                    s[1]++;
+                }
+            }
+        }
+
+        return ResponseEntity.ok(
+                stats.entrySet().stream()
+                        .map(e -> new LeaderboardEntryDto(e.getKey(),
+                                e.getValue()[0], e.getValue()[1], e.getValue()[2], 0, 0))
+                        .sorted(Comparator.comparingInt(LeaderboardEntryDto::wins).reversed())
+                        .limit(50)
+                        .collect(Collectors.toList()));
+    }
+
     // ── Inner DTO for leaderboard (local — no need for a separate file) ───────
-    public record LeaderboardEntryDto(String username, int wins, int losses, int draws, int disputes) {}
+    public record LeaderboardEntryDto(String username, int wins, int losses, int draws, int disputes, int rating) {}
 }

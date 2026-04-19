@@ -44,7 +44,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Auth endpoints — always public
                 .requestMatchers(HttpMethod.GET,  "/api/auth/captcha").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register",
+                        "/api/auth/forgot-password", "/api/auth/reset-password").permitAll()
                 // Public read endpoints — home page map, game catalogue, player profiles, leaderboard
                 .requestMatchers(HttpMethod.GET, "/api/events/public").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/games", "/api/games/**").permitAll()

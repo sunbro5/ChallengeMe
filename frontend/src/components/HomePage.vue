@@ -5,7 +5,7 @@
     <div class="side-panel">
       <div class="brand">
         <span class="brand-dot"></span>
-        <span class="brand-name">ChallengeMe</span>
+        <span class="brand-name">{{ $t('appName') }}</span>
       </div>
       <p class="tagline">{{ $t('home.tagline') }}</p>
 

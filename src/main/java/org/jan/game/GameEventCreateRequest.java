@@ -11,4 +11,6 @@ public class GameEventCreateRequest {
     private GameType gameType;
     private LocalDateTime scheduledAt;
     private String description;
+    private String locationName;
+    private String invitedUsername;
 }

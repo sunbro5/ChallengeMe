@@ -2,6 +2,7 @@ package org.jan.game;
 
 import org.jan.game.dto.GameDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,7 @@ public class GameController {
 
     @Autowired private GameRepository gameRepository;
 
+    @Cacheable("games")
     @GetMapping
     public ResponseEntity<List<GameDto>> getAll() {
         return ResponseEntity.ok(

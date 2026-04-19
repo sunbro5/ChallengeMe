@@ -7,7 +7,10 @@ import lombok.Setter;
 import org.jan.user.User;
 
 @Entity
-@Table(name = "friendships")
+@Table(name = "friendships", indexes = {
+    @Index(name = "idx_friendship_requester", columnList = "requester_id"),
+    @Index(name = "idx_friendship_addressee", columnList = "addressee_id")
+})
 @Getter
 @Setter
 @NoArgsConstructor

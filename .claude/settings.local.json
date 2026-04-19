@@ -3,7 +3,12 @@
     "allow": [
       "Bash(mvn compile:*)",
       "Bash(./mvnw compile:*)",
-      "Bash(ls \"C:\\\\Users\\\\mares\\\\IdeaProjects\\\\ChallengeMe\"/*.yml \"C:\\\\Users\\\\mares\\\\IdeaProjects\\\\ChallengeMe\"/*.sh)"
+      "Bash(ls \"C:\\\\Users\\\\mares\\\\IdeaProjects\\\\ChallengeMe\"/*.yml \"C:\\\\Users\\\\mares\\\\IdeaProjects\\\\ChallengeMe\"/*.sh)",
+      "Bash(npm install:*)",
+      "Bash(npm list:*)",
+      "Bash(findstr /r /s \"leaderboard\" \"C:\\\\Users\\\\mares\\\\IdeaProjects\\\\ChallengeMe\\\\src\\\\main\\\\java\\\\org\\\\jan\")",
+      "Bash(findstr \".java:\")",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('C:/Users/mares/IdeaProjects/ChallengeMe/frontend/src/locales/cs.json','utf8'\\)\\); console.log\\('OK'\\)\")"
     ]
   }
 }

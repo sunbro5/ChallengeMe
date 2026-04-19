@@ -1,4 +1,5 @@
 {
+  "appName": "Vyzvi mě",
   "nav": {
     "map": "🗺️ Mapa",
     "leaderboard": "🏆 Žebříček",
@@ -78,7 +79,9 @@
   },
   "safety": {
     "createWarning": "Výzvy probíhají na veřejných místech. Setkání s cizími lidmi je na vlastní riziko. Informuj někoho blízkého o místě a čase.",
-    "meetupWarning": "Vždy se setkávej na veřejném místě. Informuj někoho blízkého, kam jdeš."
+    "meetupWarning": "Vždy se setkávej na veřejném místě. Informuj někoho blízkého, kam jdeš.",
+    "acceptWarning": "Setkej se na veřejném místě, ne večer. Informuj někoho blízkého o místě a čase.",
+    "tosLink": "Přečti si podmínky užívání"
   },
   "map": {
     "postChallenge": "📍 Vydat výzvu",
@@ -116,7 +119,11 @@
     "won": "🏆 {username} vyhrál!",
     "filterGames": "Filtrovat hry",
     "filterHint": "Vyber typy her — zobrazí se jen vybrané",
-    "filterClear": "Zrušit filtr"
+    "filterClear": "Zrušit filtr",
+    "locationNameLabel": "Popis místa (volitelné)",
+    "locationNamePlaceholder": "např. „U stolu ve Stromovce",
+    "inviteFriendLabel": "Pozvat přítele (volitelné)",
+    "inviteFriendNone": "Bez pozvánky — veřejná výzva"
   },
   "friends": {
     "friends": "Přátelé",
@@ -127,6 +134,7 @@
     "unfriendConfirm": "Odebrat {username} z přátel?",
     "noRequests": "Žádné čekající žádosti.",
     "accept": "Přijmout",
+    "decline": "Odmítnout",
     "searchPlaceholder": "Hledat podle jména…",
     "typeToSearch": "Zadej alespoň 2 znaky.",
     "searching": "Hledám…",
@@ -138,7 +146,13 @@
     "submitReport": "Odeslat nahlášení",
     "enterReason": "Zadej důvod",
     "reportSuccess": "Nahlášení odesláno",
-    "reportFailed": "Nahlášení selhalo"
+    "reportFailed": "Nahlášení selhalo",
+    "activity": "Aktivita",
+    "noActivity": "Žádná nedávná aktivita přátel.",
+    "activityWon": "🏆 porazil(a)",
+    "activityLost": "prohrál(a) s",
+    "activityDrew": "🤝 remizoval(a) s",
+    "activityIn": "ve"
   },
   "leaderboard": {
     "title": "🏆 Žebříček",
@@ -151,7 +165,9 @@
     "losses": "❌ Prohry",
     "draws": "🤝 Remízy",
     "games": "Hry",
-    "you": "ty"
+    "you": "ty",
+    "allGames": "Všechny hry",
+    "rating": "⚡ ELO"
   },
   "player": {
     "notFound": "Hráč nenalezen.",
@@ -166,6 +182,7 @@
     "report": "🚩 Nahlásit",
     "couldNotSendRequest": "Žádost se nepodařilo odeslat.",
     "couldNotUnfriend": "Nepodařilo se odebrat přítele.",
+    "statsByGame": "Statistiky podle hry",
     "gameHistory": "Historie her",
     "noGames": "Zatím žádné dokončené hry.",
     "dangerZone": "⚠️ Nebezpečná zóna",
@@ -191,7 +208,14 @@
       "failed": "Odeslání selhalo."
     },
     "couldNotDelete": "Účet se nepodařilo smazat.",
-    "opponentSaid": "soupeř řekl"
+    "opponentSaid": "soupeř řekl",
+    "block": "Zablokovat",
+    "unblock": "Odblokovat",
+    "addBio": "+ Přidat bio",
+    "bioPlaceholder": "Řekni ostatním něco o sobě… (max 160 znaků)",
+    "favoriteGame": "Oblíbená hra",
+    "noFavorite": "Žádná",
+    "eloTrend": "📈 Vývoj ELO"
   },
   "result": {
     "won": "🏆 Výhra",
@@ -202,9 +226,10 @@
   "myGames": {
     "title": "🎯 Moje výzvy",
     "couldNotLoad": "Výzvy se nepodařilo načíst.",
-    "noGames": "Zatím jsi nevydal žádnou výzvu.",
+    "noGames": "Zatím se neúčastníš žádné výzvy.",
     "goToMap": "📍 Jít na mapu",
     "waitingForAccept": "⏳ Čekám, až někdo přijme…",
+    "waitingApproval": "⏳ Čekám na schválení od {username}…",
     "wantsToPlay": "⚔️ {username} chce hrát!",
     "playing": "🏃 Hraju vs {username}",
     "youSubmitted": "Ty: ✅ odesláno",
@@ -251,7 +276,13 @@
     "markResolved": "Označit jako vyřešeno",
     "failedBan": "Zabanování selhalo",
     "failedUnban": "Odbanování selhalo",
-    "failedResolve": "Označení selhalo"
+    "failedResolve": "Označení selhalo",
+    "tabReports": "Nahlášení",
+    "tabDisputes": "Spory",
+    "noDisputes": "Žádné sporné výsledky.",
+    "game": "Hra:",
+    "creator": "Vystavovatel:",
+    "challenger": "Vyzyvatel:"
   },
   "eventDetail": {
     "back": "← Zpět",
@@ -286,7 +317,11 @@
     "couldNotApprove": "Nepodařilo se schválit.",
     "couldNotReject": "Nepodařilo se odmítnout.",
     "couldNotCancel": "Nepodařilo se zrušit.",
-    "couldNotSaveResult": "Výsledek se nepodařilo uložit."
+    "couldNotSaveResult": "Výsledek se nepodařilo uložit.",
+    "copyLink": "📋 Kopírovat odkaz",
+    "copyLinkDone": "✅ Zkopírováno!",
+    "rematch": "⚔️ Odvetný zápas",
+    "privateInvite": "🔒 Soukromá výzva — pouze pro {username}"
   },
   "chat": {
     "title": "Chaty",
@@ -305,5 +340,49 @@
   "lang": {
     "cs": "🇨🇿 CS",
     "en": "🇬🇧 EN"
+  },
+  "achievements": {
+    "title": "🏅 Odznaky",
+    "FIRST_WIN":          "🥇 První výhra",
+    "WINS_5":             "🔥 5 výher",
+    "WINS_10":            "⚡ 10 výher",
+    "WINS_25":            "💎 25 výher",
+    "GAMES_10":           "🎮 10 odehraných her",
+    "GAMES_50":           "🎲 50 her",
+    "VARIETY_5":          "🌍 Mistr 5 her",
+    "WIN_STREAK_3":       "🔥 3× v řadě",
+    "WIN_STREAK_5":       "🌊 5× v řadě"
+  },
+  "auth": {
+    "forgotPassword": "Zapomenuté heslo?",
+    "forgotTitle": "Obnovit heslo",
+    "forgotSubtitle": "Zadej svůj e-mail a pošleme ti odkaz pro obnovení hesla.",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "tvuj@email.cz",
+    "sendLink": "Odeslat odkaz",
+    "sending": "Odesílám…",
+    "linkSent": "Pokud e-mail existuje, přijde ti odkaz do pár minut.",
+    "resetTitle": "Nové heslo",
+    "newPasswordLabel": "Nové heslo",
+    "confirmPasswordLabel": "Potvrdit heslo",
+    "resetBtn": "Nastavit heslo",
+    "resetting": "Nastavuji…",
+    "resetSuccess": "Heslo bylo změněno. Můžeš se přihlásit.",
+    "passwordMismatch": "Hesla se neshodují.",
+    "tokenInvalid": "Odkaz je neplatný nebo vypršel.",
+    "backToLogin": "← Zpět na přihlášení"
+  },
+  "theme": {
+    "light": "☀️ Světlý",
+    "dark": "🌙 Tmavý"
+  },
+  "notif": {
+    "CHALLENGE_ACCEPTED": "⚔️ {actor} přijal(a) tvoji výzvu!",
+    "CHALLENGE_APPROVED": "✅ {actor} schválil(a) tvoji žádost! Jdi na místo.",
+    "CHALLENGE_REJECTED": "❌ {actor} odmítl(a) tvoji žádost.",
+    "RESULT_SUBMITTED":   "📋 {actor} odeslal(a) výsledek.",
+    "CHALLENGE_INVITE":      "🎯 {actor} tě pozval(a) na výzvu!",
+    "EVENT_EXPIRED":         "⏰ Výzva vypršela a byla označena jako sporná.",
+    "ACHIEVEMENT_UNLOCKED":  "🏅 Odemkl(a) jsi nový odznak!"
   }
 }

@@ -3,7 +3,7 @@
     <div v-if="isLoggedIn" class="logged-in-container">
       <div class="header">
         <div class="header-left">
-          <h1>ChallengeMe</h1>
+          <h1>{{ $t('appName') }}</h1>
           <nav class="nav-links">
             <router-link to="/map" class="nav-link">{{ $t('nav.map') }}</router-link>
             <router-link to="/leaderboard" class="nav-link">{{ $t('nav.leaderboard') }}</router-link>
@@ -13,6 +13,32 @@
           </nav>
         </div>
         <div class="header-right">
+          <!-- Notification bell -->
+          <div class="bell-wrap" ref="bellWrap">
+            <button class="bell-btn" @click="toggleBell" title="Notifications">
+              🔔
+              <span v-if="unreadCount > 0" class="bell-badge">{{ unreadCount > 9 ? '9+' : unreadCount }}</span>
+            </button>
+            <transition name="menu-drop">
+              <div v-if="bellOpen" class="notif-dropdown">
+                <div class="notif-header">
+                  <span>Notifications</span>
+                  <button v-if="unreadCount > 0" class="notif-read-all" @click="markAllRead">Mark all read</button>
+                </div>
+                <div v-if="notifications.length === 0" class="notif-empty">No notifications</div>
+                <div
+                  v-for="n in notifications"
+                  :key="n.id"
+                  :class="['notif-item', { unread: !n.read }]"
+                  @click="openNotification(n)"
+                >
+                  <span class="notif-text">{{ notifText(n) }}</span>
+                  <span class="notif-time">{{ formatNotifTime(n.createdAt) }}</span>
+                </div>
+              </div>
+            </transition>
+          </div>
+
           <div class="avatar-wrap" ref="avatarWrap">
             <button class="avatar-btn" @click="menuOpen = !menuOpen" :title="username">
               {{ username[0]?.toUpperCase() }}
@@ -27,6 +53,20 @@
                 <button class="avatar-menu-item" @click="goToMyGames">
                   {{ $t('user.myGames') }}
                 </button>
+                <hr class="avatar-menu-divider" />
+                <div class="avatar-menu-lang">
+                  <button
+                    v-for="loc in ['cs', 'en']"
+                    :key="loc"
+                    :class="['avatar-lang-btn', { active: currentLocale === loc }]"
+                    @click="setLocale(loc)"
+                  >{{ $t('lang.' + loc) }}</button>
+                </div>
+                <div class="avatar-menu-theme">
+                  <button :class="['avatar-theme-btn', { active: !darkMode }]" @click="setTheme('light')">{{ $t('theme.light') }}</button>
+                  <button :class="['avatar-theme-btn', { active: darkMode }]" @click="setTheme('dark')">{{ $t('theme.dark') }}</button>
+                </div>
+                <hr class="avatar-menu-divider" />
                 <button class="avatar-menu-item danger" @click="logout">
                   {{ $t('user.logout') }}
                 </button>
@@ -62,19 +102,10 @@
       </div>
     </div>
     <div v-else :class="['auth-container', { 'auth-full': isHomePage }]">
-      <h1 v-if="!isHomePage">ChallengeMe</h1>
+      <h1 v-if="!isHomePage">{{ $t('appName') }}</h1>
       <router-view />
     </div>
 
-    <!-- Language switcher -->
-    <div class="lang-bar">
-      <button
-        v-for="loc in ['cs', 'en']"
-        :key="loc"
-        :class="['lang-btn', { active: currentLocale === loc }]"
-        @click="setLocale(loc)"
-      >{{ $t('lang.' + loc) }}</button>
-    </div>
   </div>
 </template>
 
@@ -97,6 +128,11 @@ export default {
       isAdmin: false,
       username: '',
       menuOpen: false,
+      darkMode: true,
+      bellOpen: false,
+      notifications: [],
+      unreadCount: 0,
+      _notifPoll: null,
       toasts: [],
       _toastSeq: 0,
     }
@@ -112,14 +148,25 @@ export default {
   mounted() {
     this.syncAuth()
     document.addEventListener('click', this.onDocClick)
+    if (this.isLoggedIn) this.startNotifPoll()
+    // Restore saved theme
+    const savedTheme = localStorage.getItem('theme')
+    this.darkMode = savedTheme !== 'light'
+    this.applyTheme(this.darkMode)
   },
   beforeUnmount() {
     document.removeEventListener('click', this.onDocClick)
+    clearInterval(this._notifPoll)
   },
   watch: {
     '$route'() {
       this.syncAuth()
       this.menuOpen = false
+      this.bellOpen = false
+    },
+    isLoggedIn(val) {
+      if (val) this.startNotifPoll()
+      else { clearInterval(this._notifPoll); this.unreadCount = 0; this.notifications = [] }
     }
   },
   methods: {
@@ -132,6 +179,63 @@ export default {
       if (this.$refs.avatarWrap && !this.$refs.avatarWrap.contains(e.target)) {
         this.menuOpen = false
       }
+      if (this.$refs.bellWrap && !this.$refs.bellWrap.contains(e.target)) {
+        this.bellOpen = false
+      }
+    },
+    startNotifPoll() {
+      this.fetchUnreadCount()
+      clearInterval(this._notifPoll)
+      this._notifPoll = setInterval(this.fetchUnreadCount, 30000)
+    },
+    async fetchUnreadCount() {
+      try {
+        const { data } = await axios.get('/api/notifications/unread-count', { withCredentials: true })
+        this.unreadCount = data
+      } catch { /* not logged in or failed */ }
+    },
+    async toggleBell() {
+      this.bellOpen = !this.bellOpen
+      this.menuOpen = false
+      if (this.bellOpen) {
+        try {
+          const { data } = await axios.get('/api/notifications', { withCredentials: true })
+          this.notifications = data
+        } catch { /* non-fatal */ }
+      }
+    },
+    async markAllRead() {
+      try {
+        await axios.post('/api/notifications/read-all', {}, { withCredentials: true })
+        this.notifications.forEach(n => { n.read = true })
+        this.unreadCount = 0
+      } catch { /* non-fatal */ }
+    },
+    openNotification(n) {
+      if (!n.read) {
+        axios.post(`/api/notifications/${n.id}/read`, {}, { withCredentials: true }).catch(() => {})
+        n.read = true
+        if (this.unreadCount > 0) this.unreadCount--
+      }
+      this.bellOpen = false
+      if (n.eventId) this.$router.push(`/event/${n.eventId}`)
+    },
+    notifText(n) {
+      if (n.type && n.actorUsername) {
+        const key = `notif.${n.type}`
+        const t = this.$t(key, { actor: n.actorUsername })
+        if (t !== key) return t
+      }
+      return n.text
+    },
+    formatNotifTime(iso) {
+      if (!iso) return ''
+      const d = new Date(iso)
+      const now = new Date()
+      const diffH = Math.floor((now - d) / 3600000)
+      if (diffH < 1) return 'Just now'
+      if (diffH < 24) return `${diffH}h ago`
+      return d.toLocaleDateString()
     },
     goToProfile() {
       this.menuOpen = false
@@ -144,6 +248,18 @@ export default {
     setLocale(loc) {
       i18n.global.locale.value = loc
       localStorage.setItem('locale', loc)
+    },
+    setTheme(mode) {
+      this.darkMode = mode === 'dark'
+      this.applyTheme(this.darkMode)
+    },
+    applyTheme(dark) {
+      if (dark) {
+        document.documentElement.classList.remove('light')
+      } else {
+        document.documentElement.classList.add('light')
+      }
+      localStorage.setItem('theme', dark ? 'dark' : 'light')
     },
     addToast(notif) {
       let text = '🔔 New notification'
@@ -423,8 +539,7 @@ h1::before {
   .nav-links  { display: none; }
   .bottom-nav { display: flex; }
 
-  /* push lang-bar and toasts above the bottom nav */
-  .lang-bar        { bottom: 64px; }
+  /* push toasts above the bottom nav */
   .toast-container { bottom: 124px; right: 12px; }
   .toast           { max-width: calc(100vw - 24px); font-size: 12px; }
 
@@ -436,33 +551,121 @@ h1::before {
   .header-left { gap: 10px; }
 }
 
-/* ── Language switcher ───────────────────────────────────────────────────── */
-.lang-bar {
-  position: fixed;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 8000;
-  display: flex;
-  gap: 2px;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: var(--r-full);
-  padding: 3px;
+/* ── Notification bell ───────────────────────────────────────────────────── */
+.bell-wrap { position: relative; margin-right: 8px; }
+
+.bell-btn {
+  background: none; border: none; cursor: pointer; font-size: 18px;
+  position: relative; width: 32px; height: 32px; display: flex;
+  align-items: center; justify-content: center; border-radius: 50%;
+  transition: background var(--transition);
+}
+.bell-btn:hover { background: var(--bg-elevated); }
+
+.bell-badge {
+  position: absolute; top: 1px; right: 1px;
+  background: var(--red); color: #fff;
+  font-size: 9px; font-weight: 700; line-height: 1;
+  min-width: 16px; height: 16px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 3px; pointer-events: none;
 }
 
-.lang-btn {
+.notif-dropdown {
+  position: absolute; top: calc(100% + 8px); right: 0;
+  background: var(--bg-overlay); border: 1px solid var(--border);
+  border-radius: var(--r-lg); box-shadow: var(--shadow-lg);
+  width: 300px; max-height: 400px; overflow-y: auto;
+  z-index: 9999;
+}
+
+.notif-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 14px 8px; border-bottom: 1px solid var(--border);
+  font-size: 12px; font-weight: 600; color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: .04em;
+}
+.notif-read-all {
+  background: none; border: none; color: var(--brand); font-size: 11px;
+  font-weight: 600; cursor: pointer; font-family: var(--font); padding: 0;
+}
+.notif-read-all:hover { text-decoration: underline; }
+
+.notif-empty {
+  padding: 24px 14px; text-align: center;
+  color: var(--text-muted); font-size: 13px;
+}
+
+.notif-item {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 10px 14px; cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+}
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { background: var(--bg-elevated); }
+.notif-item.unread { background: var(--brand-muted); }
+.notif-item.unread:hover { background: rgba(66,184,131,.15); }
+
+.notif-text { font-size: 13px; color: var(--text-primary); line-height: 1.4; }
+.notif-time { font-size: 11px; color: var(--text-muted); }
+
+@media (max-width: 640px) {
+  .notif-dropdown { width: calc(100vw - 24px); right: -60px; }
+  .bell-wrap { margin-right: 4px; }
+}
+
+/* ── Language switcher (in avatar dropdown) ──────────────────────────────── */
+.avatar-menu-lang {
+  display: flex;
+  gap: 4px;
+  padding: 7px 10px;
+}
+
+.avatar-lang-btn {
+  flex: 1;
   background: transparent;
-  border: none;
+  border: 1px solid var(--border);
   color: var(--text-muted);
   font-size: 11px;
   font-weight: 600;
-  padding: 3px 12px;
-  border-radius: var(--r-full);
+  padding: 4px 0;
+  border-radius: var(--r);
   cursor: pointer;
-  transition: background var(--transition), color var(--transition);
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
   font-family: var(--font);
 }
-.lang-btn:hover { color: var(--text-primary); background: var(--bg-overlay); }
-.lang-btn.active { background: var(--bg-overlay); color: var(--text-primary); }
+.avatar-lang-btn:hover { color: var(--text-primary); background: var(--bg-elevated); }
+.avatar-lang-btn.active {
+  background: var(--brand-muted);
+  border-color: rgba(66,184,131,.4);
+  color: var(--brand);
+}
+
+/* ── Theme switcher (in avatar dropdown) ─────────────────────────────────── */
+.avatar-menu-theme {
+  display: flex;
+  gap: 4px;
+  padding: 4px 10px 7px;
+}
+
+.avatar-theme-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 0;
+  border-radius: var(--r);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+  font-family: var(--font);
+}
+.avatar-theme-btn:hover { color: var(--text-primary); background: var(--bg-elevated); }
+.avatar-theme-btn.active {
+  background: var(--brand-muted);
+  border-color: rgba(66,184,131,.4);
+  color: var(--brand);
+}
 </style>

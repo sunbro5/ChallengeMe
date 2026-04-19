@@ -1,9 +1,17 @@
 name: Deploy to VPS
 
+# Spustí se při tagu v libovolném z těchto formátů:
+#   v1.0.0  /  v2.3.1-hotfix      (semver)
+#   release/1.0.0  /  release/hotfix/1.0.1
 on:
   push:
     tags:
       - 'release/**'   # release/1.0.0, release/hotfix/1.0.1 …
+
+# Zabrání souběžným deployům — druhý tag počká, třetí předchozí nezruší
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -17,26 +25,25 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: deploy
           key: ${{ secrets.VPS_SSH_KEY }}
-          script_stop: true        # přeruší při první chybě (set -e)
+          script_stop: true     # přeruší při první chybě (set -e)
           envs: GITHUB_REF_NAME
           script: |
             set -euo pipefail
             cd /home/deploy/ChallengeMe
 
-            echo "==> Fetching tag $GITHUB_REF_NAME"
-            git fetch --tags --quiet
-            git checkout "$GITHUB_REF_NAME"
+            echo "==> Fetching tag: $GITHUB_REF_NAME"
+            # --force: zajistí aktualizaci tagu i po force-push
+            # --prune: odstraní smazané remote refs
+            git fetch origin --tags --force --prune
 
-            echo "==> Building images & starting services"
-            docker compose up -d --build --remove-orphans
+            # Prefix "tags/" odstraňuje nejednoznačnost (tag vs. branch se stejným jménem)
+            # -f přepíše lokální změny (build artefakty apod.)
+            git checkout -f "tags/$GITHUB_REF_NAME"
 
-            echo "==> Waiting for backend health (max 2 min)"
-            timeout 120 sh -c '
-              until docker compose exec -T backend \
-                wget -qO- http://localhost:8080/actuator/health 2>/dev/null \
-                | grep -q "\"status\":\"UP\""; do
-                echo "  still starting..."; sleep 5
-              done'
+            echo "==> Building & starting services"
+            # --wait:         blokuje dokud všechny kontejnery s healthcheckem nejsou healthy
+            # --wait-timeout: selže po 3 minutách místo věčného čekání
+            docker compose up -d --build --remove-orphans --wait --wait-timeout 180
 
             echo "==> Pruning dangling images"
             docker image prune -f

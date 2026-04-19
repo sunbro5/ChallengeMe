@@ -18,9 +18,14 @@
         <div class="card-meta">
           <span>📅 {{ formatDate(event.scheduledAt) }}</span>
           <a :href="mapsLink(event)" target="_blank" class="link">{{ $t('eventDetail.openInMaps') }}</a>
+          <button class="copy-link-btn" @click="copyLink">{{ copyLinkLabel }}</button>
         </div>
 
         <p v-if="event.description" class="event-description">{{ event.description }}</p>
+        <p v-if="event.locationName" class="location-name-badge">📍 {{ event.locationName }}</p>
+        <p v-if="event.invitedUsername" class="private-invite-badge">
+          {{ $t('eventDetail.privateInvite', { username: event.invitedUsername }) }}
+        </p>
 
         <div class="card-meta">
           <span>{{ $t('eventDetail.host') }}
@@ -41,6 +46,11 @@
 
         <!-- ── Actions ────────────────────────────────────────────────────── -->
         <template v-if="isLoggedIn">
+
+          <div v-if="event.status === 'OPEN' && !event.isCreator && !event.joined" class="accept-safety">
+            <span class="accept-safety-icon">⚠️</span>
+            <span>{{ $t('safety.acceptWarning') }} <router-link to="/tos" target="_blank" class="tos-link">{{ $t('safety.tosLink') }}</router-link></span>
+          </div>
 
           <button
             v-if="event.status === 'OPEN' && !event.isCreator && !event.joined"
@@ -89,6 +99,12 @@
             <span v-else>{{ $t('common.draw') }}</span>
             <span v-if="event.resultNote" class="result-note">"{{ event.resultNote }}"</span>
           </div>
+
+          <button
+            v-if="event.status === 'FINISHED' && event.joined"
+            class="btn-rematch"
+            @click="rematch"
+          >{{ $t('eventDetail.rematch') }}</button>
 
           <div v-if="event.status === 'DISPUTED'" class="dispute-box">
             <p class="dispute-title">{{ $t('common.disputedResult') }}</p>
@@ -182,14 +198,16 @@ export default {
       actionError: '',
       gameMeta:    {},
 
-      messages:   [],
-      chatInput:  '',
-      pollTimer:  null,
+      messages:        [],
+      chatInput:       '',
+      pollTimer:       null,
+      eventPollTimer:  null,
 
       currentUser: localStorage.getItem('username') || '',
       isLoggedIn:  localStorage.getItem('isLoggedIn') === 'true',
 
       resultModal: { visible: false, winner: '', note: '', busy: false, error: '' },
+      copyLinkLabel: '',
     }
   },
   computed: {
@@ -201,22 +219,23 @@ export default {
         : this.event.creatorUsername
     },
   },
+  created() {
+    this.copyLinkLabel = this.$t('eventDetail.copyLink')
+  },
   async mounted() {
     await this.loadGames()
     await this.loadEvent()
-    if (this.otherUser) {
-      await this.loadMessages()
-      this.pollTimer = setInterval(this.loadMessages, 4000)
-    }
+    this.setupPolling()
   },
   beforeUnmount() {
     clearInterval(this.pollTimer)
+    clearInterval(this.eventPollTimer)
   },
   methods: {
     async loadGames() {
       try {
         const { data } = await axios.get('/api/games', { withCredentials: true })
-        data.forEach(g => { this.gameMeta[g.key] = { icon: g.icon, name: g.name } })
+        data.forEach(g => { this.gameMeta[g.key] = { icon: g.icon, nameCs: g.nameCs, nameEn: g.nameEn } })
       } catch { /* non-fatal */ }
     },
 
@@ -235,6 +254,35 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+
+    // ── Polling helpers ───────────────────────────────────────────────────────
+    setupPolling() {
+      // Start message polling whenever we have a chat partner
+      if (this.otherUser && !this.pollTimer) {
+        this.loadMessages()
+        this.pollTimer = setInterval(this.loadMessages, 4000)
+      }
+      // Poll the event itself while waiting for state changes
+      const awaitingUpdate = this.event &&
+        ['OPEN', 'PENDING_APPROVAL'].includes(this.event.status)
+      if (awaitingUpdate && !this.eventPollTimer) {
+        this.eventPollTimer = setInterval(this.pollEvent, 5000)
+      } else if (!awaitingUpdate) {
+        clearInterval(this.eventPollTimer)
+        this.eventPollTimer = null
+      }
+    },
+
+    async pollEvent() {
+      try {
+        const { data } = await axios.get(
+          `/api/events/${this.$route.params.id}`,
+          { withCredentials: true }
+        )
+        this.event = data
+        this.setupPolling()
+      } catch { /* non-fatal */ }
     },
 
     async loadMessages() {
@@ -281,6 +329,7 @@ export default {
           { withCredentials: true }
         )
         this.event = data
+        this.setupPolling()
       } catch (e) {
         this.actionError = e.response?.data || this.$t('eventDetail.couldNotApply')
       } finally { this.busy = false }
@@ -294,10 +343,7 @@ export default {
           { withCredentials: true }
         )
         this.event = data
-        if (this.otherUser && !this.pollTimer) {
-          await this.loadMessages()
-          this.pollTimer = setInterval(this.loadMessages, 4000)
-        }
+        this.setupPolling()
       } catch (e) {
         this.actionError = e.response?.data || this.$t('eventDetail.couldNotApprove')
       } finally { this.busy = false }
@@ -347,7 +393,9 @@ export default {
 
     gameLabel(type) {
       const m = this.gameMeta[type]
-      return m ? `${m.icon} ${m.name}` : (type || '')
+      if (!m) return type || ''
+      const name = this.$i18n?.locale === 'cs' ? m.nameCs : m.nameEn
+      return `${m.icon} ${name}`
     },
     statusLabel(s) { return this.$t('status.' + s.toLowerCase()) },
     formatDate(iso) { return iso ? new Date(iso).toLocaleString() : '—' },
@@ -356,6 +404,26 @@ export default {
       return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     },
     mapsLink(ev) { return `https://www.google.com/maps?q=${ev.latitude},${ev.longitude}` },
+    rematch() {
+      this.$router.push({
+        path: '/map',
+        query: {
+          rematch: '1',
+          lat: this.event.latitude,
+          lng: this.event.longitude,
+          gameType: this.event.gameType,
+        }
+      })
+    },
+    async copyLink() {
+      try {
+        await navigator.clipboard.writeText(window.location.href)
+        this.copyLinkLabel = this.$t('eventDetail.copyLinkDone')
+        setTimeout(() => { this.copyLinkLabel = this.$t('eventDetail.copyLink') }, 2000)
+      } catch {
+        this.copyLinkLabel = this.$t('eventDetail.copyLink')
+      }
+    },
   },
 }
 </script>
@@ -410,11 +478,28 @@ export default {
 .status-badge.disputed         { background: var(--orange-muted); color: var(--orange); }
 .status-badge.cancelled        { background: rgba(139,148,158,.08); color: var(--text-muted); }
 
-.card-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; display: flex; gap: 16px; }
+.card-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+
+.copy-link-btn {
+  background: transparent; border: 1px solid var(--border); color: var(--text-muted);
+  border-radius: var(--r); padding: 2px 9px; font-size: 11px; font-family: var(--font);
+  cursor: pointer; transition: color var(--transition), border-color var(--transition);
+}
+.copy-link-btn:hover { color: var(--brand); border-color: var(--brand); }
 .event-description {
   font-size: 13px; color: var(--text-secondary); background: var(--bg-elevated);
   border-left: 3px solid var(--border); border-radius: 0 var(--r) var(--r) 0;
   padding: 8px 12px; margin-bottom: 12px; white-space: pre-wrap; line-height: 1.5;
+}
+.location-name-badge {
+  font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;
+}
+.private-invite-badge {
+  font-size: 12px; font-weight: 600;
+  background: rgba(203,166,247,.12); color: var(--brand);
+  border: 1px solid rgba(203,166,247,.3);
+  border-radius: var(--r); padding: 4px 10px;
+  display: inline-block; margin-bottom: 10px;
 }
 .link { color: var(--blue); text-decoration: none; }
 .link:hover { text-decoration: underline; }
@@ -486,6 +571,15 @@ export default {
   font-family: var(--font); transition: background var(--transition);
 }
 .btn-danger:hover:not(:disabled) { background: rgba(248,81,73,.2); }
+
+.btn-rematch {
+  background: var(--brand-muted); color: var(--brand);
+  border: 1px solid rgba(66,184,131,.35); border-radius: var(--r);
+  padding: 7px 16px; font-size: 13px; font-weight: 600; font-family: var(--font);
+  cursor: pointer; display: inline-block; margin-bottom: 10px;
+  transition: background var(--transition);
+}
+.btn-rematch:hover { background: rgba(66,184,131,.22); }
 
 .btn-cancel {
   background: transparent; border: 1px solid rgba(248,81,73,.3); color: var(--red);

@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "game_events")
+@Table(name = "game_events", indexes = {
+    @Index(name = "idx_event_status_created", columnList = "status, created_at DESC"),
+    @Index(name = "idx_event_creator",        columnList = "creator_id")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -36,6 +39,14 @@ public class GameEvent {
     /** Optional free-text description from the creator (e.g. skill level, location details). */
     @Column(length = 500)
     private String description;
+
+    /** Optional human-readable venue name, e.g. "Table in Stromovka park". */
+    @Column(length = 80)
+    private String locationName;
+
+    /** If set, only this username can accept the challenge (direct invite). */
+    @Column(length = 50)
+    private String invitedUsername;
 
     /** Wall-clock time when the event was posted. Used for the daily creation limit. */
     private LocalDateTime createdAt;

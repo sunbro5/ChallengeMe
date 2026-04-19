@@ -21,3 +21,10 @@ axios.interceptors.response.use(
 )
 
 createApp(App).use(router).use(i18n).mount('#app')
+
+// Register service worker for PWA support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {/* non-fatal */})
+  })
+}

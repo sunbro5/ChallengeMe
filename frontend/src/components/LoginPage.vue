@@ -11,6 +11,9 @@
       {{ $t('login.noAccount') }}
       <router-link to="/register" class="link">{{ $t('login.registerHere') }}</router-link>
     </p>
+    <p class="toggle-text">
+      <router-link to="/forgot-password" class="link-muted">{{ $t('auth.forgotPassword') }}</router-link>
+    </p>
   </div>
 </template>
 
@@ -134,6 +137,8 @@ button:disabled { opacity: .4; cursor: default; }
 }
 .link { color: var(--brand); text-decoration: none; font-weight: 600; }
 .link:hover { text-decoration: underline; }
+.link-muted { color: var(--text-muted); text-decoration: none; font-size: 12px; }
+.link-muted:hover { color: var(--brand); }
 
 @media (max-width: 420px) {
   .auth-form { padding: 24px 18px; border-radius: var(--r-lg); }

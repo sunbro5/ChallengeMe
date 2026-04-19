@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
-    @Query("SELECT f FROM Friendship f WHERE (f.requester = ?1 OR f.addressee = ?1) AND f.status = 'ACCEPTED'")
+    @Query("SELECT f FROM Friendship f JOIN FETCH f.requester JOIN FETCH f.addressee WHERE (f.requester = ?1 OR f.addressee = ?1) AND f.status = 'ACCEPTED'")
     List<Friendship> findAcceptedFriendships(User user);
 
     @Query("SELECT f FROM Friendship f WHERE f.addressee = ?1 AND f.status = 'PENDING'")

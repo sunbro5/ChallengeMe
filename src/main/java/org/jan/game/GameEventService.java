@@ -1,6 +1,9 @@
 package org.jan.game;
 
+import org.jan.achievement.AchievementService;
 import org.jan.config.ProfanityFilter;
+import org.jan.user.RatingHistory;
+import org.jan.user.RatingHistoryRepository;
 import org.jan.user.User;
 import org.jan.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +28,20 @@ public class GameEventService {
     @Autowired
     private PublicEventCacheService publicEventCacheService;
 
+    @Autowired
+    private AchievementService achievementService;
+
+    @Autowired
+    private RatingHistoryRepository ratingHistoryRepository;
+
     static final int DAILY_EVENT_LIMIT = 5;
 
     // ── Create ────────────────────────────────────────────────────────────────
 
     @Transactional
     public GameEvent createEvent(User creator, double latitude, double longitude,
-                                  GameType gameType, LocalDateTime scheduledAt, String description) {
+                                  GameType gameType, LocalDateTime scheduledAt,
+                                  String description, String locationName, String invitedUsername) {
         LocalDateTime startOfDay = LocalDateTime.now().toLocalDate().atStartOfDay();
         long todayCount = gameEventRepository.countByCreatorSince(creator, startOfDay);
         if (todayCount >= DAILY_EVENT_LIMIT) {
@@ -49,6 +59,10 @@ public class GameEventService {
             profanityFilter.check(description);
         }
         event.setDescription(description != null ? description.strip() : null);
+        event.setLocationName(locationName != null && !locationName.isBlank()
+                ? locationName.strip() : null);
+        event.setInvitedUsername(invitedUsername != null && !invitedUsername.isBlank()
+                ? invitedUsername.strip() : null);
         event.setCreatedAt(LocalDateTime.now());
         event.setStatus(EventStatus.OPEN);
         event.getParticipants().add(creator);
@@ -72,6 +86,11 @@ public class GameEventService {
 
         if (isParticipant(event, challenger))
             throw new IllegalArgumentException("You already joined this event");
+
+        // If creator sent a direct invite, only that user can accept
+        String invited = event.getInvitedUsername();
+        if (invited != null && !invited.equalsIgnoreCase(challenger.getUsername()))
+            throw new IllegalArgumentException("This challenge is a private invite for another player");
 
         event.getParticipants().add(challenger);
         event.setStatus(EventStatus.PENDING_APPROVAL);
@@ -197,23 +216,28 @@ public class GameEventService {
 
     // ── Queries ───────────────────────────────────────────────────────────────
 
+    @Transactional(readOnly = true)
     public List<PublicEventDto> getPublicEvents() {
         return publicEventCacheService.getTop200Open();
     }
 
     /** Events shown on the map: OPEN, PENDING_APPROVAL, IN_PROGRESS. */
+    @Transactional(readOnly = true)
     public List<GameEvent> getActiveEvents() {
         return gameEventRepository.findByStatusIn(
                 List.of(EventStatus.OPEN, EventStatus.PENDING_APPROVAL, EventStatus.IN_PROGRESS));
     }
 
+    @Transactional(readOnly = true)
     public GameEvent getEvent(Long id) { return load(id); }
 
-    /** All events created by this user, newest scheduled first. */
-    public List<GameEvent> getMyEvents(User creator) {
-        return gameEventRepository.findByCreatorOrderByScheduledAtDesc(creator);
+    /** All events where the user is a participant (creator or challenger), newest scheduled first. */
+    @Transactional(readOnly = true)
+    public List<GameEvent> getMyEvents(User user) {
+        return gameEventRepository.findAllByParticipantOrderByScheduledAtDesc(user);
     }
 
+    @Transactional(readOnly = true)
     public List<GameEvent> getPlayerHistory(User player) {
         return gameEventRepository.findByParticipantAndStatusIn(
                 player, List.of(EventStatus.FINISHED, EventStatus.DISPUTED));
@@ -250,36 +274,64 @@ public class GameEventService {
             event.setResultNote(note);
 
             if (cr.isEmpty()) {
-                // Draw
+                // Draw — 1 bulk UPDATE
                 event.setWinner(null);
-                event.getParticipants().forEach(p -> {
-                    p.setDraws(p.getDraws() + 1);
-                    userRepository.save(p);
-                });
+                userRepository.bulkIncrementDraws(
+                        event.getParticipants().stream().map(User::getId).toList());
             } else {
-                // Win
+                // Win — 2 bulk UPDATEs
                 User winner = event.getParticipants().stream()
                         .filter(p -> p.getUsername().equals(cr))
                         .findFirst()
                         .orElseThrow();
                 event.setWinner(winner);
-                winner.setWins(winner.getWins() + 1);
-                userRepository.save(winner);
-
-                event.getParticipants().stream()
+                userRepository.bulkIncrementWins(List.of(winner.getId()));
+                List<Long> loserIds = event.getParticipants().stream()
                         .filter(p -> !p.getId().equals(winner.getId()))
-                        .forEach(loser -> {
-                            loser.setLosses(loser.getLosses() + 1);
-                            userRepository.save(loser);
-                        });
+                        .map(User::getId).toList();
+                userRepository.bulkIncrementLosses(loserIds);
             }
         } else {
-            // ── Disagreement ───────────────────────────────────────────────
+            // ── Disagreement — 1 bulk UPDATE ───────────────────────────────
             event.setStatus(EventStatus.DISPUTED);
-            event.getParticipants().forEach(p -> {
-                p.setDisputes(p.getDisputes() + 1);
-                userRepository.save(p);
-            });
+            userRepository.bulkIncrementDisputes(
+                    event.getParticipants().stream().map(User::getId).toList());
         }
+
+        // ── ELO update (only on agreement) ────────────────────────────────
+        if (event.getStatus() == EventStatus.FINISHED && event.getParticipants().size() == 2) {
+            // Use participants already in the persistence context — no extra findById needed
+            List<User> parts = event.getParticipants();
+            User pA = parts.get(0);
+            User pB = parts.get(1);
+            if (event.getWinner() == null) {
+                applyElo(pA, pB, 0.5); // draw
+            } else if (event.getWinner().getId().equals(pA.getId())) {
+                applyElo(pA, pB, 1.0);
+            } else {
+                applyElo(pA, pB, 0.0);
+            }
+        }
+
+        // ── Achievement evaluation ────────────────────────────────────────
+        if (event.getStatus() == EventStatus.FINISHED) {
+            for (User participant : event.getParticipants()) {
+                achievementService.evaluate(participant, event);
+            }
+        }
+    }
+
+    // ── ELO calculation (K=32, floor 100) ────────────────────────────────────
+    private void applyElo(User pA, User pB, double scoreA) {
+        int rA = pA.getRating();
+        int rB = pB.getRating();
+        double expA = 1.0 / (1.0 + Math.pow(10, (rB - rA) / 400.0));
+        int K = 32;
+        pA.setRating(Math.max(100, rA + (int) Math.round(K * (scoreA - expA))));
+        pB.setRating(Math.max(100, rB + (int) Math.round(K * ((1 - scoreA) - (1 - expA)))));
+        userRepository.saveAll(List.of(pA, pB));
+        ratingHistoryRepository.saveAll(List.of(
+                new RatingHistory(pA, pA.getRating()),
+                new RatingHistory(pB, pB.getRating())));
     }
 }

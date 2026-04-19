@@ -5,15 +5,24 @@ import org.jan.user.CaptchaService.CaptchaChallenge;
 import org.jan.user.dto.LoginResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired private UserService    userService;
-    @Autowired private UserRepository userRepository;
-    @Autowired private CaptchaService captchaService;
+    @Autowired private UserService             userService;
+    @Autowired private UserRepository          userRepository;
+    @Autowired private CaptchaService          captchaService;
+    @Autowired private PasswordResetRepository resetRepository;
+    @Autowired private EmailService            emailService;
+
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     /** Generates a new math challenge for the registration form. Public endpoint. */
     @GetMapping("/captcha")
@@ -52,6 +61,51 @@ public class AuthController {
     public ResponseEntity<String> logout(HttpSession session) {
         session.invalidate();
         return ResponseEntity.ok("Logged out");
+    }
+
+    /**
+     * Step 1 — the user submits their email.
+     * Always returns 200 OK (we don't reveal whether the email is registered).
+     */
+    @PostMapping("/forgot-password")
+    @Transactional
+    public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> body) {
+        String email = body.getOrDefault("email", "").trim().toLowerCase();
+        User user = userRepository.findByEmailIgnoreCase(email);
+        if (user != null) {
+            // Delete any existing token for this user first
+            resetRepository.deleteByUser(user);
+            String token = UUID.randomUUID().toString();
+            resetRepository.save(new PasswordResetToken(token, user));
+            emailService.sendPasswordResetEmail(email, token);
+        }
+        return ResponseEntity.ok("If the email exists, a reset link has been sent.");
+    }
+
+    /**
+     * Step 2 — the user submits their new password together with the token from the email.
+     */
+    @PostMapping("/reset-password")
+    @Transactional
+    public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> body) {
+        String token    = body.getOrDefault("token",    "").trim();
+        String password = body.getOrDefault("password", "").trim();
+
+        if (token.isEmpty() || password.isEmpty()) {
+            return ResponseEntity.badRequest().body("Token and password are required.");
+        }
+
+        PasswordResetToken prt = resetRepository.findByToken(token).orElse(null);
+        if (prt == null || prt.isExpired()) {
+            return ResponseEntity.badRequest().body("Invalid or expired reset link.");
+        }
+
+        User user = prt.getUser();
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+        resetRepository.delete(prt);
+
+        return ResponseEntity.ok("Password reset successfully.");
     }
 
     @DeleteMapping("/account")

@@ -7,56 +7,97 @@
           <input type="checkbox" v-model="showResolved" @change="loadReports" />
           {{ $t('admin.showResolved') }}
         </label>
-        <button class="refresh-btn" @click="loadReports">{{ $t('admin.refresh') }}</button>
+        <button class="refresh-btn" @click="reload">{{ $t('admin.refresh') }}</button>
       </div>
     </div>
 
-    <div v-if="loading" class="loading">{{ $t('admin.loading') }}</div>
-    <div v-else-if="filtered.length === 0" class="empty">{{ $t('admin.noReports') }}</div>
+    <div class="admin-tabs">
+      <button :class="['admin-tab', { active: tab === 'reports' }]" @click="tab = 'reports'">
+        {{ $t('admin.tabReports') }}
+      </button>
+      <button :class="['admin-tab', { active: tab === 'disputes' }]" @click="tab = 'disputes'">
+        {{ $t('admin.tabDisputes') }}
+        <span v-if="disputes.length" class="tab-badge">{{ disputes.length }}</span>
+      </button>
+    </div>
 
-    <div v-else class="reports-list">
-      <div
-        v-for="report in filtered"
-        :key="report.id"
-        :class="['report-card', { resolved: report.status === 'RESOLVED' }]"
-      >
-        <div class="report-meta">
-          <span class="badge" :class="report.status === 'PENDING' ? 'pending' : 'resolved-badge'">
-            {{ report.status }}
-          </span>
-          <span class="date">{{ formatDate(report.createdAt) }}</span>
+    <!-- Reports tab -->
+    <div v-if="tab === 'reports'">
+      <div v-if="loading" class="loading">{{ $t('admin.loading') }}</div>
+      <div v-else-if="filtered.length === 0" class="empty">{{ $t('admin.noReports') }}</div>
+      <div v-else class="reports-list">
+        <div
+          v-for="report in filtered"
+          :key="report.id"
+          :class="['report-card', { resolved: report.status === 'RESOLVED' }]"
+        >
+          <div class="report-meta">
+            <span class="badge" :class="report.status === 'PENDING' ? 'pending' : 'resolved-badge'">
+              {{ report.status }}
+            </span>
+            <span class="date">{{ formatDate(report.createdAt) }}</span>
+          </div>
+          <div class="report-body">
+            <div class="report-row">
+              <span class="label">{{ $t('admin.reporter') }}</span>
+              <span>{{ report.reporterUsername }}</span>
+            </div>
+            <div class="report-row">
+              <span class="label">{{ $t('admin.reported') }}</span>
+              <span>{{ report.reportedUsername }}</span>
+              <span v-if="report.reportedBanned" class="banned-tag">{{ $t('admin.banned') }}</span>
+            </div>
+            <div class="report-row reason-row">
+              <span class="label">{{ $t('admin.reason') }}</span>
+              <span class="reason-text">{{ report.reason }}</span>
+            </div>
+          </div>
+          <div class="report-actions">
+            <button v-if="!report.reportedBanned" class="ban-btn" @click="banUser(report)">{{ $t('admin.banUser') }}</button>
+            <button v-else class="unban-btn" @click="unbanUser(report)">{{ $t('admin.unbanUser') }}</button>
+            <button v-if="report.status === 'PENDING'" class="resolve-btn" @click="resolveReport(report)">{{ $t('admin.markResolved') }}</button>
+          </div>
         </div>
-        <div class="report-body">
-          <div class="report-row">
-            <span class="label">{{ $t('admin.reporter') }}</span>
-            <span>{{ report.reporterUsername }}</span>
+      </div>
+    </div>
+
+    <!-- Disputes tab -->
+    <div v-if="tab === 'disputes'">
+      <div v-if="disputesLoading" class="loading">{{ $t('admin.loading') }}</div>
+      <div v-else-if="disputes.length === 0" class="empty">{{ $t('admin.noDisputes') }}</div>
+      <div v-else class="reports-list">
+        <div v-for="d in disputes" :key="d.id" class="report-card">
+          <div class="report-meta">
+            <span class="badge pending">DISPUTED</span>
+            <span class="date">{{ d.scheduledAt ? formatDate(d.scheduledAt) : '' }}</span>
           </div>
-          <div class="report-row">
-            <span class="label">{{ $t('admin.reported') }}</span>
-            <span>{{ report.reportedUsername }}</span>
-            <span v-if="report.reportedBanned" class="banned-tag">{{ $t('admin.banned') }}</span>
+          <div class="report-body">
+            <div class="report-row">
+              <span class="label">{{ $t('admin.game') }}</span>
+              <span>{{ d.gameType }}</span>
+            </div>
+            <div class="report-row">
+              <span class="label">{{ $t('admin.creator') }}</span>
+              <span>{{ d.creatorUsername }}</span>
+              <span class="claim">→ {{ d.creatorResult || 'draw' }}</span>
+            </div>
+            <div class="report-row">
+              <span class="label">{{ $t('admin.challenger') }}</span>
+              <span>{{ d.challengerUsername }}</span>
+              <span class="claim">→ {{ d.challengerResult || 'draw' }}</span>
+            </div>
           </div>
-          <div class="report-row reason-row">
-            <span class="label">{{ $t('admin.reason') }}</span>
-            <span class="reason-text">{{ report.reason }}</span>
+          <div class="report-actions">
+            <button class="resolve-btn" @click="resolveDispute(d, d.creatorUsername)">
+              ✅ {{ d.creatorUsername }}
+            </button>
+            <button class="resolve-btn" @click="resolveDispute(d, d.challengerUsername)">
+              ✅ {{ d.challengerUsername }}
+            </button>
+            <button class="resolve-btn" @click="resolveDispute(d, null)">
+              🤝 {{ $t('common.draw') }}
+            </button>
           </div>
-        </div>
-        <div class="report-actions">
-          <button
-            v-if="!report.reportedBanned"
-            class="ban-btn"
-            @click="banUser(report)"
-          >{{ $t('admin.banUser') }}</button>
-          <button
-            v-else
-            class="unban-btn"
-            @click="unbanUser(report)"
-          >{{ $t('admin.unbanUser') }}</button>
-          <button
-            v-if="report.status === 'PENDING'"
-            class="resolve-btn"
-            @click="resolveReport(report)"
-          >{{ $t('admin.markResolved') }}</button>
         </div>
       </div>
     </div>
@@ -70,9 +111,12 @@ export default {
   name: 'AdminPage',
   data() {
     return {
+      tab: 'reports',
       reports: [],
       loading: true,
-      showResolved: false
+      showResolved: false,
+      disputes: [],
+      disputesLoading: false,
     }
   },
   computed: {
@@ -81,9 +125,13 @@ export default {
     }
   },
   mounted() {
-    this.loadReports()
+    this.reload()
   },
   methods: {
+    reload() {
+      this.loadReports()
+      this.loadDisputes()
+    },
     async loadReports() {
       this.loading = true
       try {
@@ -93,6 +141,27 @@ export default {
         console.error('Failed to load reports', e)
       } finally {
         this.loading = false
+      }
+    },
+    async loadDisputes() {
+      this.disputesLoading = true
+      try {
+        const res = await axios.get('/api/admin/disputes', { withCredentials: true })
+        this.disputes = res.data
+      } catch (e) {
+        console.error('Failed to load disputes', e)
+      } finally {
+        this.disputesLoading = false
+      }
+    },
+    async resolveDispute(dispute, winnerUsername) {
+      try {
+        await axios.post(`/api/admin/disputes/${dispute.id}/resolve`,
+          { winnerUsername: winnerUsername || '' },
+          { withCredentials: true })
+        this.disputes = this.disputes.filter(d => d.id !== dispute.id)
+      } catch (e) {
+        alert(e.response?.data || 'Failed to resolve dispute')
       }
     },
     async banUser(report) {
@@ -183,6 +252,26 @@ export default {
   color: var(--text-muted);
   padding: 60px 0;
   font-size: 14px;
+}
+
+.admin-tabs {
+  display: flex; gap: 2px; border-bottom: 1px solid var(--border); margin-bottom: 20px;
+}
+.admin-tab {
+  padding: 8px 16px; border: none; background: transparent; cursor: pointer;
+  font-size: 13px; font-weight: 500; color: var(--text-secondary); font-family: var(--font);
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color var(--transition);
+}
+.admin-tab:hover { color: var(--text-primary); }
+.admin-tab.active { color: var(--brand); border-bottom-color: var(--brand); font-weight: 600; }
+.tab-badge {
+  background: var(--red); color: #fff; border-radius: var(--r-full);
+  font-size: 10px; font-weight: 700; padding: 1px 6px; margin-left: 5px;
+}
+.claim {
+  font-size: 12px; color: var(--text-secondary); margin-left: 4px;
+  background: var(--bg-elevated); border-radius: var(--r); padding: 1px 7px;
 }
 
 .reports-list {

@@ -1,24 +1,31 @@
 package org.jan.friend;
 
+import org.jan.friend.dto.ActivityDto;
 import org.jan.friend.dto.FriendDto;
 import org.jan.friend.dto.FriendRequestDto;
 import org.jan.friend.dto.UserSearchDto;
+import org.jan.game.EventStatus;
+import org.jan.game.GameEvent;
+import org.jan.game.GameEventRepository;
 import org.jan.user.User;
 import org.jan.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/friends")
 public class FriendController {
 
-    @Autowired private FriendService  friendService;
-    @Autowired private UserRepository userRepository;
+    @Autowired private FriendService       friendService;
+    @Autowired private UserRepository      userRepository;
+    @Autowired private GameEventRepository gameEventRepository;
 
     private User resolveUser(Authentication auth) {
         return userRepository.findByUsername(auth.getName());
@@ -33,10 +40,9 @@ public class FriendController {
         }
 
         List<UserSearchDto> results = userRepository
-                .findByUsernameContainingIgnoreCaseAndRoleNot(q.trim(), "ADMIN")
+                .findTop20ByUsernameContainingIgnoreCaseAndRoleNot(q.trim(), "ADMIN")
                 .stream()
                 .filter(u -> !u.getId().equals(user.getId()))
-                .limit(20)
                 .map(u -> new UserSearchDto(u.getId(), u.getUsername(),
                         friendService.getFriendshipStatus(user, u)))
                 .collect(Collectors.toList());
@@ -64,6 +70,16 @@ public class FriendController {
         }
     }
 
+    @DeleteMapping("/requests/{friendshipId}")
+    public ResponseEntity<String> declineRequest(@PathVariable Long friendshipId, Authentication auth) {
+        try {
+            friendService.declineRequest(resolveUser(auth), friendshipId);
+            return ResponseEntity.ok("Request declined");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @DeleteMapping("/with/{friendId}")
     public ResponseEntity<String> unfriend(@PathVariable Long friendId, Authentication auth) {
         User friend = userRepository.findById(friendId).orElse(null);
@@ -80,6 +96,53 @@ public class FriendController {
                 .map(f -> new FriendDto(f.getId(), f.getUsername()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(friends);
+    }
+
+    /** Last 20 FINISHED games involving any of the current user's friends. */
+    @GetMapping("/activity")
+    public ResponseEntity<List<ActivityDto>> getActivity(Authentication auth) {
+        User user = resolveUser(auth);
+        List<User> friends = friendService.getFriends(user);
+        if (friends.isEmpty()) return ResponseEntity.ok(List.of());
+
+        List<GameEvent> events = gameEventRepository.findFinishedByParticipantsIn(
+                friends, PageRequest.of(0, 20));
+
+        // Pre-build a Set for O(1) friend lookup instead of O(n) per event
+        Set<String> friendNames = friends.stream()
+                .map(User::getUsername)
+                .collect(java.util.stream.Collectors.toSet());
+
+        List<ActivityDto> feed = events.stream().map(e -> {
+            String winnerUsername  = e.getWinner() != null ? e.getWinner().getUsername() : null;
+            List<String> names = e.getParticipants().stream()
+                    .map(User::getUsername).collect(Collectors.toList());
+            // Find the friend who participated (for the "subject" line)
+            String friend = names.stream()
+                    .filter(friendNames::contains)
+                    .findFirst().orElse(names.isEmpty() ? "" : names.get(0));
+            String opponent = names.stream()
+                    .filter(n -> !n.equals(friend))
+                    .findFirst().orElse("");
+            String outcome; // from the friend's perspective
+            if (winnerUsername == null) {
+                outcome = "draw";
+            } else if (winnerUsername.equals(friend)) {
+                outcome = "won";
+            } else {
+                outcome = "lost";
+            }
+            return new ActivityDto(
+                    e.getId(),
+                    friend,
+                    opponent,
+                    outcome,
+                    e.getGameType().name(),
+                    e.getScheduledAt()
+            );
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(feed);
     }
 
     @GetMapping("/requests")
