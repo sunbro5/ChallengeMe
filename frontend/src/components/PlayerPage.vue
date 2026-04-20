@@ -68,10 +68,13 @@
           <span class="stat-label">{{ $t('player.draws') }}</span>
         </div>
         <div class="stat">
-          <span class="stat-value disputes" :class="{ warning: profile.disputes > 0 }">
+          <span class="stat-value disputes" :class="{ warning: disputeRate !== null && disputeRate > 25 }">
             {{ profile.disputes }}
           </span>
           <span class="stat-label">{{ $t('player.disputes') }}</span>
+          <span v-if="disputeRate !== null && disputeRate > 0" class="dispute-rate-badge" :class="{ 'rate-warn': disputeRate > 25 }">
+            {{ disputeRate }}%
+          </span>
         </div>
       </div>
 
@@ -326,6 +329,13 @@ export default {
       const first = this.ratingHistory[0].rating
       const last  = this.ratingHistory[this.ratingHistory.length - 1].rating
       return last > first ? 'trend-up' : last < first ? 'trend-down' : 'trend-flat'
+    },
+    // Dispute rate as percentage (0–100). null when fewer than 5 games (not meaningful).
+    disputeRate() {
+      if (!this.profile) return null
+      const total = this.profile.wins + this.profile.losses + this.profile.draws
+      if (total < 5) return null
+      return Math.round((this.profile.disputes / total) * 100)
     },
   },
   watch: {
@@ -611,6 +621,15 @@ export default {
 .stat-value.draws   { color: var(--yellow); }
 .stat-value.disputes { color: var(--text-muted); }
 .stat-value.disputes.warning { color: var(--red); }
+
+.dispute-rate-badge {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+.dispute-rate-badge.rate-warn { color: var(--red); }
 .stat-label         { font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: .04em; }
 
 .actions-row {

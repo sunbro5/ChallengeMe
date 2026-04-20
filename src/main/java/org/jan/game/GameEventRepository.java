@@ -1,6 +1,7 @@
 package org.jan.game;
 
 import org.jan.user.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -71,4 +72,29 @@ public interface GameEventRepository extends JpaRepository<GameEvent, Long> {
     List<GameEvent> findByParticipantAndStatusIn(
             @Param("user")     User user,
             @Param("statuses") List<EventStatus> statuses);
+
+    /**
+     * Count FINISHED 1v1 events involving both users since the given cutoff.
+     * Used to compute the ELO diminishing-returns multiplier for repeated opponents.
+     * Note: called before the current event is persisted as FINISHED, so the count
+     * reflects only *prior* matches this window.
+     */
+    @Query("SELECT COUNT(DISTINCT e) FROM GameEvent e " +
+           "JOIN e.participants p1 JOIN e.participants p2 " +
+           "WHERE p1 = :a AND p2 = :b " +
+           "AND e.status = 'FINISHED' AND e.scheduledAt >= :since")
+    long countRecentFinishedBetween(
+            @Param("a")     User a,
+            @Param("b")     User b,
+            @Param("since") LocalDateTime since);
+
+    /**
+     * Recent FINISHED events — used by the admin fraud panel to detect pairs that play
+     * each other suspiciously often.  Capped at {@code pageable.pageSize} rows (use
+     * {@code PageRequest.of(0, 500)}) to prevent unbounded memory load.
+     */
+    @Query("SELECT DISTINCT e FROM GameEvent e JOIN FETCH e.participants " +
+           "WHERE e.status = 'FINISHED' AND e.scheduledAt >= :since " +
+           "ORDER BY e.scheduledAt DESC")
+    List<GameEvent> findFinishedSince(@Param("since") LocalDateTime since, Pageable pageable);
 }

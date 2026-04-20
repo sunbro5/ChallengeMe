@@ -178,6 +178,13 @@ public class GameEventService {
         if (event.getStatus() != EventStatus.IN_PROGRESS)
             throw new IllegalArgumentException("Can only report a result for an in-progress event");
 
+        // Result must be submitted within 24 hours of the scheduled time.
+        // Prevents fraudulent backdated games created purely for ELO farming.
+        if (LocalDateTime.now().isAfter(event.getScheduledAt().plusHours(24)))
+            throw new IllegalArgumentException(
+                    "Result submission window has expired (24 h after scheduled time). " +
+                    "Contact an admin if you need assistance.");
+
         if (!isParticipant(event, reporter))
             throw new IllegalArgumentException("Only participants can report the result");
 
@@ -300,17 +307,25 @@ public class GameEventService {
 
         // ── ELO update (only on agreement) ────────────────────────────────
         if (event.getStatus() == EventStatus.FINISHED && event.getParticipants().size() == 2) {
-            // Use participants already in the persistence context — no extra findById needed
             List<User> parts = event.getParticipants();
             User pA = parts.get(0);
             User pB = parts.get(1);
-            if (event.getWinner() == null) {
-                applyElo(pA, pB, 0.5); // draw
-            } else if (event.getWinner().getId().equals(pA.getId())) {
-                applyElo(pA, pB, 1.0);
-            } else {
-                applyElo(pA, pB, 0.0);
-            }
+
+            // Diminishing returns for repeated opponents within 7 days.
+            // The query runs before the current event is persisted as FINISHED,
+            // so count = number of *prior* matches this week between the same pair.
+            long priorMatches = gameEventRepository.countRecentFinishedBetween(
+                    pA, pB, LocalDateTime.now().minusDays(7));
+            double kMultiplier = switch ((int) Math.min(priorMatches, 3)) {
+                case 0 -> 1.0;  // 1st match this week: full ELO
+                case 1 -> 0.6;  // 2nd match: 60 %
+                case 2 -> 0.3;  // 3rd match: 30 %
+                default -> 0.0; // 4th+ match: no ELO change
+            };
+
+            double scoreA = event.getWinner() == null ? 0.5
+                    : event.getWinner().getId().equals(pA.getId()) ? 1.0 : 0.0;
+            applyElo(pA, pB, scoreA, kMultiplier);
         }
 
         // ── Achievement evaluation ────────────────────────────────────────
@@ -322,16 +337,23 @@ public class GameEventService {
     }
 
     // ── ELO calculation (K=32, floor 100) ────────────────────────────────────
-    private void applyElo(User pA, User pB, double scoreA) {
+    /**
+     * @param kMultiplier  fraction of the full K-factor to apply (0.0–1.0).
+     *                     Pass 1.0 for a normal match, less for repeated opponents.
+     */
+    private void applyElo(User pA, User pB, double scoreA, double kMultiplier) {
         int rA = pA.getRating();
         int rB = pB.getRating();
         double expA = 1.0 / (1.0 + Math.pow(10, (rB - rA) / 400.0));
-        int K = 32;
+        double K = 32 * kMultiplier;
         pA.setRating(Math.max(100, rA + (int) Math.round(K * (scoreA - expA))));
         pB.setRating(Math.max(100, rB + (int) Math.round(K * ((1 - scoreA) - (1 - expA)))));
         userRepository.saveAll(List.of(pA, pB));
-        ratingHistoryRepository.saveAll(List.of(
-                new RatingHistory(pA, pA.getRating()),
-                new RatingHistory(pB, pB.getRating())));
+        // Record history only when ELO actually changes (kMultiplier > 0)
+        if (kMultiplier > 0) {
+            ratingHistoryRepository.saveAll(List.of(
+                    new RatingHistory(pA, pA.getRating()),
+                    new RatingHistory(pB, pB.getRating())));
+        }
     }
 }

@@ -12,8 +12,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "game_events", indexes = {
-    @Index(name = "idx_event_status_created", columnList = "status, created_at DESC"),
-    @Index(name = "idx_event_creator",        columnList = "creator_id")
+    @Index(name = "idx_event_status_created",     columnList = "status, created_at DESC"),
+    @Index(name = "idx_event_creator",            columnList = "creator_id"),
+    @Index(name = "idx_event_status_scheduledat", columnList = "status, scheduled_at")
 })
 @Getter
 @Setter

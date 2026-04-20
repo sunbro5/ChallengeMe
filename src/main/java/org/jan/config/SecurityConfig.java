@@ -54,7 +54,7 @@ public class SecurityConfig {
                 // WebSocket upgrade — auth happens inside the STOMP CONNECT frame
                 .requestMatchers("/api/ws/**").permitAll()
                 // Admin-only section
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 // Everything else requires a valid session
                 .anyRequest().authenticated()
             )

@@ -19,6 +19,12 @@
         {{ $t('admin.tabDisputes') }}
         <span v-if="disputes.length" class="tab-badge">{{ disputes.length }}</span>
       </button>
+      <button :class="['admin-tab', { active: tab === 'fraud' }]" @click="tab = 'fraud'; loadFraud()">
+        {{ $t('admin.tabFraud') }}
+        <span v-if="fraud && (fraud.suspiciousPairs.length + fraud.highDisputeUsers.length) > 0" class="tab-badge tab-badge-warn">
+          {{ fraud.suspiciousPairs.length + fraud.highDisputeUsers.length }}
+        </span>
+      </button>
     </div>
 
     <!-- Reports tab -->
@@ -59,6 +65,55 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Fraud tab -->
+    <div v-if="tab === 'fraud'">
+      <div v-if="fraudLoading" class="loading">{{ $t('admin.loading') }}</div>
+      <template v-else-if="fraud">
+        <!-- Suspicious pairs -->
+        <h3 class="fraud-section-title">{{ $t('admin.suspiciousPairs') }}</h3>
+        <div v-if="fraud.suspiciousPairs.length === 0" class="empty" style="padding:20px 0">
+          {{ $t('admin.noSuspiciousPairs') }}
+        </div>
+        <div v-else class="reports-list">
+          <div v-for="p in fraud.suspiciousPairs" :key="p.userA + p.userB" class="report-card fraud-pair">
+            <div class="fraud-pair-names">
+              <router-link :to="`/player/${p.userA}`" class="fraud-player">{{ p.userA }}</router-link>
+              <span class="fraud-vs">vs</span>
+              <router-link :to="`/player/${p.userB}`" class="fraud-player">{{ p.userB }}</router-link>
+            </div>
+            <span class="fraud-count">{{ p.matchCount }} {{ $t('admin.matchesThisWeek') }}</span>
+          </div>
+        </div>
+
+        <!-- High dispute rate users -->
+        <h3 class="fraud-section-title" style="margin-top:24px">{{ $t('admin.highDisputeUsers') }}</h3>
+        <div v-if="fraud.highDisputeUsers.length === 0" class="empty" style="padding:20px 0">
+          {{ $t('admin.noHighDisputeUsers') }}
+        </div>
+        <div v-else class="reports-list">
+          <div v-for="u in fraud.highDisputeUsers" :key="u.userId" class="report-card">
+            <div class="report-body">
+              <div class="report-row">
+                <router-link :to="`/player/${u.username}`" class="fraud-player">{{ u.username }}</router-link>
+                <span class="fraud-rate-badge">
+                  {{ $t('admin.disputeRate') }}: <strong>{{ Math.round(u.disputeRate * 100) }}%</strong>
+                </span>
+                <span class="fraud-games">{{ u.totalGames }} {{ $t('admin.totalGames') }}</span>
+              </div>
+              <div class="report-row" style="font-size:11px; color:var(--text-muted)">
+                {{ u.wins }}W · {{ u.losses }}L · {{ u.draws }}D · {{ u.disputes }} spory
+              </div>
+            </div>
+            <div class="report-actions">
+              <button class="ban-btn" @click="resetElo(u)" :disabled="u.eloReset">
+                {{ u.eloReset ? $t('admin.resetEloOk') : $t('admin.resetElo') }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </template>
     </div>
 
     <!-- Disputes tab -->
@@ -117,6 +172,8 @@ export default {
       showResolved: false,
       disputes: [],
       disputesLoading: false,
+      fraud: null,
+      fraudLoading: false,
     }
   },
   computed: {
@@ -186,6 +243,27 @@ export default {
         report.status = 'RESOLVED'
       } catch (e) {
         alert(e.response?.data || this.$t('admin.failedResolve'))
+      }
+    },
+    async loadFraud() {
+      if (this.fraud || this.fraudLoading) return  // already loaded
+      this.fraudLoading = true
+      try {
+        const { data } = await axios.get('/api/admin/fraud', { withCredentials: true })
+        this.fraud = data
+      } catch (e) {
+        console.error('Failed to load fraud panel', e)
+      } finally {
+        this.fraudLoading = false
+      }
+    },
+    async resetElo(user) {
+      if (!confirm(this.$t('admin.resetEloConfirm', { username: user.username }))) return
+      try {
+        await axios.post(`/api/admin/users/${user.userId}/reset-elo`, {}, { withCredentials: true })
+        user.eloReset = true
+      } catch (e) {
+        alert(e.response?.data || this.$t('admin.resetEloFail'))
       }
     },
     formatDate(dateStr) {
@@ -396,4 +474,46 @@ export default {
   transition: background var(--transition);
 }
 .resolve-btn:hover { background: var(--bg-overlay); }
+
+/* ── Fraud panel ─────────────────────────────────────────────────────────── */
+.tab-badge-warn { background: var(--orange); }
+
+.fraud-section-title {
+  font-size: 13px; font-weight: 600; color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: .05em; margin-bottom: 10px;
+}
+
+.fraud-pair {
+  display: flex; align-items: center; justify-content: space-between;
+  border-left-color: var(--orange); gap: 12px;
+}
+
+.fraud-pair-names {
+  display: flex; align-items: center; gap: 10px;
+}
+
+.fraud-player {
+  color: var(--blue); font-size: 13px; font-weight: 600; text-decoration: none;
+}
+.fraud-player:hover { text-decoration: underline; }
+
+.fraud-vs {
+  font-size: 11px; color: var(--text-muted); font-weight: 500;
+}
+
+.fraud-count {
+  font-size: 12px; font-weight: 700; color: var(--orange);
+  background: var(--orange-muted); border-radius: var(--r-full);
+  padding: 2px 10px; white-space: nowrap;
+}
+
+.fraud-rate-badge {
+  font-size: 12px; color: var(--red);
+  background: var(--red-muted); border-radius: var(--r-full);
+  padding: 2px 10px; margin-left: 8px;
+}
+
+.fraud-games {
+  font-size: 12px; color: var(--text-muted); margin-left: 8px;
+}
 </style>
