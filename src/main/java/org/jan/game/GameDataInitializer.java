@@ -541,76 +541,6 @@ public class GameDataInitializer implements ApplicationRunner {
                 )
         );
 
-        seed("NOHEJBAL", "⚽🦵",
-                "Nohejbal", "Footvolley (Nohejbal)",
-                "Volejbal nohama — česká národní hra", "Volleyball with feet — Czech national sport",
-                "Nohejbal je česká míčová hra kombinující prvky fotbalu a volejbalu. Hraje se na kurtu odděleném sítí, přičemž hráči smějí míč dotýkat pouze nohama, hlavou a hrudníkem. Na každé straně hraje 1, 2 nebo 3 hráči.",
-                "Nohejbal is a Czech ball sport combining elements of football and volleyball. Played on a court divided by a net, players may only touch the ball with their feet, knees, thighs, chest, or head — hands are forbidden.",
-                "Vyhraj set ziskem 11 bodů s minimálně 2bodovým náskokem. Zápas se hraje na 3 vítězné sety.",
-                "Win a set by reaching 11 points with at least a 2-point lead. A match is best of 3 sets.",
-                List.of(
-                        "Míč smíte hrát pouze nohama, kolenem, stehnem, bokem, břichem nebo hlavou — ruce jsou zakázány.",
-                        "Každá strana smí před přehráním přes síť použít maximálně 3 dotyky.",
-                        "Jeden hráč nesmí míč dotknout dvakrát za sebou.",
-                        "Podání: podávající kopne míč přes síť — musí přistát v soupeřově poli.",
-                        "Bod se hraje při každém podání (rally-point systém).",
-                        "Set vyhrává ten, kdo dosáhne 11 bodů s 2bodovým náskokem."
-                ),
-                List.of(
-                        "The ball may only be played with feet, knee, thigh, hip, belly, or head — hands are forbidden.",
-                        "Each side may touch the ball a maximum of 3 times before sending it over the net.",
-                        "The same player may not touch the ball twice in a row.",
-                        "Serve: the serving player kicks the ball over the net into the opponent's court.",
-                        "A point is played on every serve (rally-point system).",
-                        "A set is won by the first side to reach 11 points with a 2-point lead."
-                ),
-                List.of(
-                        "Nohejbal je hra systémem — domluv se se spoluhráči na signálech a taktice.",
-                        "Overcut (prudký kop shora) způsobí strmý pád míče za sítí.",
-                        "Udržuj míč nízko nad sítí — čím nižší přechod, tím hůře soupeř brání."
-                ),
-                List.of(
-                        "Nohejbal is a team game — agree on signals and tactics with your partner.",
-                        "The overcut (sharp downward kick) causes the ball to drop steeply behind the net.",
-                        "Keep the ball low over the net — the lower the crossing, the harder it is to defend."
-                )
-        );
-
-        seed("BOWLING", "🎳",
-                "Bowling", "Bowling",
-                "Sraz co nejvíce kuželek — kdo má nejvíc bodů, vyhrává", "Knock down as many pins as possible — highest score wins",
-                "Bowling je hra, při níž hráč kutálí kouli po dráze a snaží se srazit všech 10 kuželek. Hra má 10 framů, v každém framu má hráč 2 pokusy (nebo 3 ve 10. framu při strike/spare).",
-                "Bowling is a game where a player rolls a ball down a lane to knock down 10 pins. A game consists of 10 frames; each frame allows 2 rolls (or up to 3 in the 10th frame on a strike or spare).",
-                "Nasbírej co nejvíce bodů za 10 framů. Maximum je 300 (dvanáct strike za sebou). Hráč s nejvyšším celkovým skóre vyhrává.",
-                "Score as many points as possible in 10 frames. The maximum score is 300 (twelve consecutive strikes). Highest total score wins.",
-                List.of(
-                        "Hra má 10 framů; každý hráč má v každém framu 2 hody.",
-                        "Strike (všech 10 kuželek na první pokus): označuje se X, bonusem jsou body za příštích 2 hodů.",
-                        "Spare (zbylé kuželky na druhý pokus): označuje se /, bonusem jsou body za příští 1 hod.",
-                        "Otevřený frame (ani strike ani spare): počítají se jen sražené kuželky.",
-                        "Ve 10. framu: strike nebo spare dávají právo na bonusové hody (celkem až 3 hody).",
-                        "Hráč s nejvyšším součtem skóre po 10 framech vyhrává."
-                ),
-                List.of(
-                        "A game has 10 frames; each player gets 2 rolls per frame.",
-                        "Strike (all 10 pins on the first roll): marked X; bonus = next 2 rolls' total.",
-                        "Spare (remaining pins on the second roll): marked /; bonus = next 1 roll.",
-                        "Open frame (neither strike nor spare): only pins knocked down count.",
-                        "In the 10th frame, a strike or spare grants bonus rolls (up to 3 total).",
-                        "Highest cumulative score after 10 frames wins."
-                ),
-                List.of(
-                        "Míř na špendlík (první kuželku) pod mírným úhlem — přímý hod nedává dostatečný pin-action.",
-                        "Vyber si bod na šipkách na dráze jako zaměřovací bod, ne kuželky.",
-                        "Snažíš-li se o spare, přizpůsob nástupní pozici zbývajícím kuželkám."
-                ),
-                List.of(
-                        "Aim at the head pin at a slight angle — a straight shot does not generate enough pin action.",
-                        "Use the arrows on the lane as your targeting point, not the pins themselves.",
-                        "When going for a spare, adjust your starting position based on which pins remain."
-                )
-        );
-
         seed("TWENTY_ONE", "🃏",
                 "Dvacet jedna", "Blackjack (21)",
                 "Přiblíž se k 21, aniž překročíš", "Get as close to 21 as possible without going over",
@@ -709,39 +639,6 @@ public class GameDataInitializer implements ApplicationRunner {
                         "A two-sided open four cannot be blocked — create one whenever you can.",
                         "Control the centre of the board — it has the most adjacent cells for expansion.",
                         "Build threats on multiple lines simultaneously so your opponent cannot block them all."
-                )
-        );
-
-        seed("PENALTY_SHOOTOUT", "⚽🥅",
-                "Penaltový rozstřel", "Penalty Shootout",
-                "Každý kope 5 penalt — kdo dá více, vyhrává", "Each player takes 5 penalties — most goals wins",
-                "Penaltový rozstřel je fotbalová minihra pro dva hráče (nebo dva týmy). Každý hráč nebo tým kopí 5 penalt střídavě. Potřebuješ brankáře — role se mohou střídat nebo je určen třetí hráč jako gólman.",
-                "A penalty shootout is a football mini-game for two players or two teams. Each player or team takes 5 penalties alternately. You need a goalkeeper — roles can alternate or a third player can act as keeper.",
-                "Vstřel více branek z 5 penalt než soupeř. Při nerozhodném stavu se pokračuje náhlou smrtí.",
-                "Score more goals from 5 penalties than your opponent. If level after 5, sudden death continues.",
-                List.of(
-                        "Hráči střídavě kopají penalty — první vybírá los.",
-                        "Každý hráč kope 5 penalt; brankář se střídá nebo je určen předem.",
-                        "Po 5 kolech hráč s více vstřelenými brankami vyhrává.",
-                        "Při remíze po 5 kolech: sudden death — každý kope 1 penaltu, dokud jeden uspěje a druhý ne.",
-                        "Brankář musí stát na brankové čáře do okamžiku kopu."
-                ),
-                List.of(
-                        "Players alternate taking penalties — order decided by coin toss.",
-                        "Each player takes 5 penalties; the keeper role alternates or is fixed in advance.",
-                        "After 5 rounds the player with more goals wins.",
-                        "If level: sudden death — each takes one penalty until one scores and the other misses.",
-                        "The goalkeeper must stay on the goal line until the ball is kicked."
-                ),
-                List.of(
-                        "Vyber si roh předem a drž se ho — neváhej na poslední chvíli.",
-                        "Variuj výšku a sílu kopů — nepředvídatelnost mate brankáře.",
-                        "Jako brankář čti nástupní polohu kopajícího — odrazí se do místa rozběhu."
-                ),
-                List.of(
-                        "Pick your corner in advance and commit to it — don't hesitate at the last moment.",
-                        "Vary the height and power of your kicks — unpredictability confuses the keeper.",
-                        "As keeper, read the kicker's run-up — they tend to shoot to the side of their approach."
                 )
         );
 
@@ -848,41 +745,6 @@ public class GameDataInitializer implements ApplicationRunner {
                 )
         );
 
-        seed("VOLLEYBALL", "🏐",
-                "Volejbal", "Volleyball",
-                "Třídoteková hra přes síť — první na 25 bodů", "Three-touch game over the net — first to 25 points",
-                "Volejbal je týmový sport 6 hráčů (nebo 2 v beach volejbalu). Hráči smějí míč dotknout maximálně třikrát na své straně sítě a přehrát ho na stranu soupeře. Cílem je přimět míč dopadnout na soupeřovu stranu nebo přimět soupeře k chybě.",
-                "Volleyball is a team sport with 6 players per side (or 2 in beach volleyball). Each team may touch the ball up to 3 times before sending it over the net. The goal is to make the ball land on the opponent's side or force them into an error.",
-                "Vyhraj set ziskem 25 bodů s minimálně 2bodovým náskokem. Zápas na 3 vítězné sety z 5 (5. set do 15 bodů).",
-                "Win a set by reaching 25 points with at least a 2-point lead. A match is best of 3 sets (5th set to 15 points).",
-                List.of(
-                        "Každý tým smí na své straně míč dotknout maximálně 3× před přehráním.",
-                        "Jeden hráč nesmí míč dotknout dvakrát za sebou (kromě bloku).",
-                        "Podání: hráč stojí za zadní čárou a vybídne míč do soupeřovy části.",
-                        "Bod: míč dopadne na soupeřovu stranu, soupeř chybuje nebo poruší pravidla.",
-                        "Rotace: tým, který získá podání, rotuje o jednu pozici po směru hodinových ručiček.",
-                        "Set do 25 bodů (2 body rozdíl); 5. set do 15 bodů."
-                ),
-                List.of(
-                        "Each team may touch the ball a maximum of 3 times before returning it.",
-                        "The same player may not touch the ball twice in a row (except on a block).",
-                        "Service: the server stands behind the back line and hits the ball into the opponent's court.",
-                        "Point scored: the ball lands in the opponent's court, or the opponent commits an error.",
-                        "Rotation: the team winning the serve rotates one position clockwise.",
-                        "Set to 25 points (2-point lead); 5th set to 15 points."
-                ),
-                List.of(
-                        "Nahrávka: měkký, kontrolovaný dotek nad sítí — umísti míč přesně pro smečaře.",
-                        "Smeč: dostaň ruku co nejvýše nad síť, udeř prudce shora do volného prostoru.",
-                        "Příjem: drž nohy od sebe a paže pevně u sebe — hraje se pažemi, ne rukama."
-                ),
-                List.of(
-                        "Setting: a soft, controlled touch above the net — place the ball precisely for the spiker.",
-                        "Spike: get your hand as high as possible above the net, strike sharply downward into open space.",
-                        "Reception: feet shoulder-width apart, arms together firm — play the ball with your forearms, not your hands."
-                )
-        );
-
         seed("BASKETBALL", "🏀",
                 "Basketbal", "Basketball",
                 "Košíkovaná — kdo dá více košů, vyhrává", "Most points wins — shoot the ball in the basket",
@@ -915,41 +777,6 @@ public class GameDataInitializer implements ApplicationRunner {
                         "In 1v1, use the crossover dribble — it changes your attack direction and wrong-foots your opponent.",
                         "Shoot with a full wrist snap and a raised index finger — the follow-through puts backspin on the ball.",
                         "Stay active off the ball — make yourself available for give-and-go passes."
-                )
-        );
-
-        seed("TENNIS", "🎾",
-                "Tenis", "Tennis",
-                "Klasický tenis — kdo vyhraje více setů, vítězí", "Classic tennis — win more sets to win the match",
-                "Tenis je dvorceová hra pro 2 hráče (nebo 2 páry). Hráči odpalují míček raketou přes síť a snaží se ho umístit tak, aby ho soupeř nedokázal vrátit. Hraje se na antuce, trávě nebo tvrdém povrchu.",
-                "Tennis is a racket sport for 2 players (or 2 pairs). Players hit a ball back and forth over a net, trying to place it where the opponent cannot return it. Played on clay, grass, or hard courts.",
-                "Vyhraj zápas ziskem 2 setů ze 3. Set se hraje na 6 her (2 hry rozdíl). Gamy: 0–15–30–40–hra; při deuce (40:40) je nutný 2bodový náskok.",
-                "Win the match by taking 2 sets out of 3. A set is played to 6 games (2 game lead). Games go 0–15–30–40–game; at deuce (40:40) a 2-point lead is needed.",
-                List.of(
-                        "Podání: hráč servíruje míček diagonálně do soupeřova servisního pole. Má 2 pokusy.",
-                        "Dvojchyba: dvě chybné podání za sebou = bod soupeři.",
-                        "Bod: míček za čárou, v síti nebo se soupeř nedotkne po prvním odrazu.",
-                        "Hra: 0–15–30–40–hra; při 40:40 (deuce) nutný dvouúder na výhru.",
-                        "Set: 6 her s 2hrami rozdílem. Při 6:6 tie-break (7 bodů, 2bodový náskok).",
-                        "Zápas: 2 sety ze 3 (nebo 3 ze 5)."
-                ),
-                List.of(
-                        "Service: the player serves the ball diagonally into the opponent's service box. Two attempts allowed.",
-                        "Double fault: two consecutive service faults = opponent's point.",
-                        "Point: ball lands out, hits the net, or opponent fails to return after the first bounce.",
-                        "Game: 0–15–30–40–game; at 40:40 (deuce) a two-point advantage is needed.",
-                        "Set: 6 games with a 2-game lead. At 6:6, a tie-break (first to 7 with 2-point lead) decides.",
-                        "Match: best of 3 sets (or best of 5)."
-                ),
-                List.of(
-                        "Topspin forehand: kartáčuj míček zdola nahoru — míček se kroutí dolů.",
-                        "Serve and volley: po podání postupuj rychle k síti — zkrátí soupeřův reakční čas.",
-                        "Cross-court je bezpečnější úder — delší vzdálenost, nižší síť v rozích."
-                ),
-                List.of(
-                        "Topspin forehand: brush the ball upward — the ball dips sharply and bounces high.",
-                        "Serve and volley: rush the net after serving — this shortens your opponent's reaction time.",
-                        "Cross-court shots are safer — longer distance, lower net at the corners."
                 )
         );
 
@@ -1034,6 +861,119 @@ public class GameDataInitializer implements ApplicationRunner {
                         "Castle early to protect your king and connect your rooks.",
                         "Trade pieces when you are ahead in material; avoid trades when behind.",
                         "Always consider your opponent's threats before making your own move."
+                )
+        );
+
+        seed("UNO", "🃏🌈",
+                "UNO", "UNO",
+                "Zbav se všech karet jako první — nezapomeň říct UNO!", "Get rid of all your cards first — don't forget to say UNO!",
+                "UNO je oblíbená karetní hra pro 2–10 hráčů se speciálním balíčkem 108 karet. Hráči se snaží co nejrychleji zbavit všech svých karet přikládáním karet stejné barvy nebo hodnoty na odkladiště. Akční karty (Přeskoč, Ber 2, Otočení, Divoká) přidávají dramatičnost a náhlé zvraty — a kdo mu zbyde poslední karta, musí hlasitě zvolat 'UNO!'",
+                "UNO is a popular card game for 2–10 players with a special 108-card deck. Players race to empty their hand by matching the top discard by colour or number. Action cards (Skip, Draw Two, Reverse, Wild) create drama and sudden swings — and the player left with one card must loudly call 'UNO!'",
+                "Jako první se zbav všech svých karet. Předposlední kartu oznam hlasitým 'UNO!' — zapomeneš-li a soupeř si toho všimne dříve, než zahraješ další tah, bereš 2 trestné karty.",
+                "Be the first to empty your hand. When playing your second-to-last card, call 'UNO!' loudly — if you forget and an opponent catches you before your next turn, draw 2 penalty cards.",
+                List.of(
+                        "Každý hráč dostane 7 karet; vrchní karta balíčku se odkryje jako startovní odkladiště.",
+                        "Na tahu přilož kartu stejné barvy nebo hodnoty jako vrchní karta odkladiště — nebo zahraj speciální kartu.",
+                        "Nemáš-li co přiložit, dobereš 1 kartu z balíčku; pokud ji můžeš zahrát, smíš ji zahrát okamžitě, jinak tah končí.",
+                        "Přeskoč: příští hráč ztrácí tah. Otočení: u 2 hráčů funguje jako Přeskoč. Ber 2: příštíhráč bere 2 karty a přeskočí tah.",
+                        "Divoká karta: zahrát na cokoli, hráč zvolí novou barvu.",
+                        "Divoká Ber 4: smíš zahrát pouze pokud nemáš kartu aktuální barvy; příštíhráč bere 4 karty a přeskočí tah; soupeř může hru zpochybnit.",
+                        "Zbývá-li ti 1 karta, zvolej 'UNO!' — zapomeneš-li a soupeř si toho všimne před svým dalším tahem, bereš 2 karty navíc.",
+                        "Kdo jako první vyloží všechny karty, vyhrává kolo."
+                ),
+                List.of(
+                        "Each player gets 7 cards; the top card of the draw pile is turned face-up to start the discard pile.",
+                        "On your turn play a card matching the top discard by colour or number — or play a special card.",
+                        "If you cannot play, draw one card; if it is playable you may play it immediately, otherwise your turn ends.",
+                        "Skip: next player loses a turn. Reverse: with 2 players acts as Skip. Draw Two: next player draws 2 cards and loses a turn.",
+                        "Wild: may be played on any card; the player then names the new colour.",
+                        "Wild Draw Four: may only be played when you have no card of the current colour; next player draws 4 and loses a turn; opponent may challenge.",
+                        "When you have 1 card left, call 'UNO!' — forget and an opponent catches you before their next turn, draw 2 penalty cards.",
+                        "The first player to play their last card wins the round."
+                ),
+                List.of(
+                        "Drž si akční karty (Ber 2, Divoká Ber 4) na krizové situace, kdy soupeřovi zbývá málo karet.",
+                        "Při hraní Divoké karty přepni na barvu, které máš v ruce nejvíce.",
+                        "Sleduj počet karet soupeře — jakmile volá UNO, zasypej ho akcemi a přimej ho brát."
+                ),
+                List.of(
+                        "Save action cards (Draw Two, Wild Draw Four) for when your opponent is close to winning.",
+                        "When playing a Wild, switch to the colour you hold the most of.",
+                        "Watch your opponent's hand size — once they call UNO, hit them with action cards to force draws."
+                )
+        );
+
+        seed("ZOLIKY", "🃏🃏",
+                "Žolíky", "Žolíky (Rummy with Jokers)",
+                "Sestavuj skupiny a postupky — kdo se zbaví karet první, vyhrává", "Form sets and runs — first to empty their hand wins",
+                "Žolíky jsou česká karetní hra pro 2–4 hráče se standardním balíčkem 54 karet (52 + 2 žolíky). Hráči střídavě dobírají a odkládají karty a snaží se sestavit skupiny (3–4 karty stejné hodnoty různých barev) a postupky (3 a více karet stejné barvy v pořadí). Žolík (joker) zastupuje libovolnou kartu.",
+                "Žolíky is a Czech card game for 2–4 players using a standard 54-card deck (52 + 2 jokers). Players take turns drawing and discarding, trying to form sets (3–4 cards of the same rank in different suits) and runs (3+ consecutive cards of the same suit). A joker substitutes any card.",
+                "Jako první rozlož všechny karty do platných skupin a postupků a odhoď poslední kartu na odkladiště. Kdo se jako první zbaví celé ruky, vyhrává kolo.",
+                "Be the first to meld all your cards into valid sets and runs and discard the final card. The first player to empty their hand wins the round.",
+                List.of(
+                        "Každý hráč dostane 13 karet (při 2 hráčích) nebo 10 karet (3–4 hráči); zbytek tvoří dobírací balíček s jednou odkrytou kartou jako odkladiště.",
+                        "Na tahu dobereš 1 kartu — buď z vrcholu balíčku, nebo z vrcholu odkladiště.",
+                        "Skupiny: 3 nebo 4 karty stejné hodnoty různých barev (např. tři sedmičky).",
+                        "Postupky: 3 nebo více karet stejné barvy v pořadí (např. 5–6–7 srdcová). Eso může být nejvyšší (Q–K–A) i nejnižší (A–2–3).",
+                        "Hotové kombinace (skupiny nebo postupky) položíš na stůl před sebe — soupeři je vidí.",
+                        "Na již ležící kombinace (své i soupeřovy) smíš přikládat pasující karty.",
+                        "Žolík zastupuje libovolnou kartu v kombinaci; z položené kombinace ho nelze vzít.",
+                        "Tah končí odložením 1 karty na odkladiště. Kdo vyloží vše a odhodí poslední kartu, vyhrává."
+                ),
+                List.of(
+                        "Each player gets 13 cards (2 players) or 10 cards (3–4 players); the rest form a draw pile with one card face-up as the discard pile.",
+                        "On your turn draw 1 card — either from the top of the draw pile or the top of the discard pile.",
+                        "Sets: 3 or 4 cards of the same rank in different suits (e.g. three sevens).",
+                        "Runs: 3 or more consecutive cards of the same suit (e.g. 5–6–7 of hearts). Ace can be high (Q–K–A) or low (A–2–3).",
+                        "Completed melds (sets or runs) are placed face-up on the table in front of you.",
+                        "You may add matching cards to any meld already on the table — yours or your opponent's.",
+                        "A joker substitutes any card in a meld; once placed on the table it cannot be taken.",
+                        "End your turn by discarding 1 card. The first player to table all cards and discard the last one wins."
+                ),
+                List.of(
+                        "Beri z odkladiště pouze tehdy, pokud ta karta okamžitě dokončí kombinaci — jinak odhaluješ soupeři svůj plán.",
+                        "Žolíka neplýtvej na malé kombinace — šetři ho na těžko sestavitelnou postupku nebo rozhodující skupinu.",
+                        "Sleduj, co soupeř odkládá — poznáš, jaké barvy nebo hodnoty nepotřebuje, a přizpůsobíš strategii."
+                ),
+                List.of(
+                        "Only take from the discard pile if that card immediately completes a meld — otherwise you reveal your strategy.",
+                        "Don't waste a joker on a small meld — save it for a run that is hard to complete naturally.",
+                        "Watch what your opponent discards — you will learn which suits or ranks they do not need and adapt your strategy."
+                )
+        );
+
+        seed("PUB_QUIZ", "🧠❓",
+                "Hospodský kvíz", "Pub Quiz",
+                "10 otázek — kdo ví víc, vyhrává mozkem", "10 questions — outsmart your opponent",
+                "Hospodský kvíz je hra vědomostí pro 2 hráče. Jeden hráč pokládá otázky z telefonu nebo vlastní hlavy, druhý odpovídá — pak se role vymění. Alternativně oba odpovídají nezávisle na stejné otázky z neutrálního zdroje. Kdo odpoví správně na více otázek, vyhrává. Žádné vybavení není potřeba — stačí telefon nebo dobrá paměť.",
+                "Pub Quiz is a knowledge game for two players. One player asks questions from their phone or memory, the other answers — then roles swap. Alternatively, both answer the same questions independently from a neutral source. The player with more correct answers wins. No equipment needed — just a phone or a good memory.",
+                "Kdo odpoví správně na více otázek z dohodnutého počtu (doporučeno 10), vyhrává. Při remíze rozhoduje náhlá smrt — jedna otázka, kdo odpoví první a správně.",
+                "The player with more correct answers out of the agreed total (10 recommended) wins. On a tie, sudden death applies — one question, first correct answer wins.",
+                List.of(
+                        "Dohodněte se na počtu otázek (standard: 10) a případně tématu (obecné znalosti, sport, film, hudba, zeměpis…).",
+                        "Formát A — Examinátor: jeden hráč pokládá otázky (z trivia aplikace, Wikipedie nebo vlastní hlavy), druhý odpovídá; po 5 otázkách se role vymění.",
+                        "Formát B — Simultánní: oba hráči odpovídají nezávisle na stejné otázky z neutrálního zdroje (trivia web, kvízová aplikace), pak porovnají výsledky.",
+                        "Časový limit na odpověď: doporučeno 30 sekund — lze dohodnout jinak.",
+                        "Správná odpověď = 1 bod. Přibližná nebo neúplná odpověď = diskuze, případně půl bodu.",
+                        "Po 10 otázkách sečtěte body. Při remíze: jedna otázka náhlou smrtí — kdo odpoví první a správně, vyhrává."
+                ),
+                List.of(
+                        "Agree on the number of questions (standard: 10) and optionally the topic (general knowledge, sport, film, music, geography…).",
+                        "Format A — Examiner: one player asks questions (from a trivia app, Wikipedia, or memory), the other answers; swap roles after 5 questions.",
+                        "Format B — Simultaneous: both players answer the same questions independently from a neutral source (trivia website, quiz app), then compare.",
+                        "Time limit per question: 30 seconds recommended — agree beforehand.",
+                        "Correct answer = 1 point. Partial or approximate answers — discuss and optionally award half a point.",
+                        "After 10 questions tally the scores. On a tie: sudden death — one question, first correct answer wins."
+                ),
+                List.of(
+                        "Buď přesný v otázkách — vyhni se nejednoznačným formulacím, aby nedocházelo ke sporům o správnost odpovědi.",
+                        "V simultánním formátu si odpovědi napište tajně před odhalením — zabraňuje cheatu.",
+                        "Střídej témata, ve kterých jsi silný, s obtížnějšími — udržíš tempo a soupeře překvapíš."
+                ),
+                List.of(
+                        "Keep questions precise — avoid ambiguous phrasing to prevent disputes over what counts as correct.",
+                        "In simultaneous format, write your answers secretly before revealing — it prevents cheating.",
+                        "Mix topics you are strong in with harder ones — it keeps momentum and catches your opponent off guard."
                 )
         );
     }

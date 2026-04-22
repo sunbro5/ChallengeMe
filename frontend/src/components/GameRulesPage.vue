@@ -9,9 +9,7 @@
     <section class="how-it-works">
       <h3>{{ $t('gameRules.howItWorks') }}</h3>
       <ol class="steps">
-        <li v-for="(step, i) in steps" :key="i">
-          <span class="step-icon"></span>{{ step }}
-        </li>
+        <li v-for="(step, i) in steps" :key="i">{{ step }}</li>
       </ol>
     </section>
 
@@ -27,7 +25,6 @@
         @click="activeKey = activeKey === game.key ? null : game.key"
       >
         <div class="card-header">
-          <span class="card-icon">{{ game.icon }}</span>
           <div class="card-title-block">
             <h3>{{ game.name }}</h3>
             <p class="card-tagline">{{ game.tagline }}</p>
@@ -59,7 +56,6 @@
             </div>
 
             <div class="report-note">
-              <span class="report-icon">📝</span>
               {{ $t('gameRules.reportNote') }}
             </div>
           </div>
@@ -179,11 +175,6 @@ export default {
   color: var(--text-primary);
   line-height: 1.5;
 }
-.step-icon {
-  font-size: 16px;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
 
 .state-msg {
   text-align: center;
@@ -222,7 +213,6 @@ export default {
   border-left: 3px solid var(--brand);
   user-select: none;
 }
-.card-icon { font-size: 24px; flex-shrink: 0; }
 .card-title-block { flex: 1; }
 .card-title-block h3 { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
 .card-tagline { font-size: 12px; color: var(--text-muted); }
@@ -264,9 +254,6 @@ export default {
 .tips h4 { color: var(--yellow); }
 
 .report-note {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--r);
@@ -276,7 +263,6 @@ export default {
   line-height: 1.5;
   margin-top: 16px;
 }
-.report-icon { font-size: 14px; flex-shrink: 0; }
 
 .expand-enter-active,
 .expand-leave-active { transition: opacity 0.2s ease; }

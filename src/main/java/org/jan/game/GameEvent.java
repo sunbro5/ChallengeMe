@@ -49,13 +49,20 @@ public class GameEvent {
     @Column(length = 50)
     private String invitedUsername;
 
+    /**
+     * Whether the creator opted into team mode for this event.
+     * Only meaningful for game types listed in TEAM_GAME_TYPES (e.g. PUB_QUIZ, BEER_PONG).
+     * When true, extra players can join a team via /api/events/{id}/team/join.
+     */
+    private boolean teamMode = false;
+
     /** Wall-clock time when the event was posted. Used for the daily creation limit. */
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     private EventStatus status = EventStatus.OPEN;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "game_event_participants",
             joinColumns = @JoinColumn(name = "event_id"),

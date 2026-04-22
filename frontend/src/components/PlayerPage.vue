@@ -8,7 +8,12 @@
       <div class="profile-header">
         <div class="avatar">{{ profile.username[0].toUpperCase() }}</div>
         <div class="header-info">
-          <h2>{{ profile.username }}</h2>
+          <div class="header-name-row">
+            <h2>{{ profile.username }}</h2>
+            <span class="rank-badge" :style="{ color: playerRank.color, borderColor: playerRank.color }">
+              {{ $t(`rank.${playerRank.key}`) }}
+            </span>
+          </div>
           <p v-if="profile.isMe" class="me-badge">{{ $t('player.thatsYou') }}</p>
           <p v-if="profile.favoriteGameKey" class="fav-game">
             {{ gameIcon(profile.favoriteGameKey) }} {{ gameLabel(profile.favoriteGameKey) }}
@@ -78,6 +83,21 @@
         </div>
       </div>
 
+      <!-- ── Reputation score ──────────────────────────────────────── -->
+      <div class="rep-section">
+        <span class="rep-label">{{ $t('reputation.score') }}</span>
+        <template v-if="profile.reputationScore != null">
+          <span class="rep-stars">
+            <span
+              v-for="i in 5" :key="i"
+              :class="['star', i <= profile.reputationScore ? 'filled' : 'empty']"
+            >★</span>
+          </span>
+          <span class="rep-votes">({{ profile.thumbsUp }}👍 · {{ profile.thumbsDown }}👎)</span>
+        </template>
+        <span v-else class="rep-too-few">{{ $t('reputation.tooFew') }}</span>
+      </div>
+
       <!-- ── ELO trend sparkline ────────────────────────────────────── -->
       <div v-if="ratingHistory.length >= 2" class="elo-trend-section">
         <h3 class="section-title">{{ $t('player.eloTrend') }}</h3>
@@ -134,6 +154,12 @@
           :disabled="actionBusy"
         >{{ $t('player.unfriend') }}</button>
 
+        <button
+          v-if="!isBlocked"
+          class="btn-challenge"
+          @click="showChallengeModal = true"
+        >{{ $t('player.challenge') }}</button>
+
         <button class="btn-report" @click="reportModal.visible = true">{{ $t('player.report') }}</button>
 
         <button
@@ -141,13 +167,13 @@
           class="btn-block"
           @click="blockUser"
           :disabled="actionBusy"
-        >🚫 {{ $t('player.block') }}</button>
+        >{{ $t('player.block') }}</button>
         <button
           v-else
           class="btn-unblock"
           @click="unblockUser"
           :disabled="actionBusy"
-        >✅ {{ $t('player.unblock') }}</button>
+        >{{ $t('player.unblock') }}</button>
       </div>
 
       <p v-if="actionError" class="msg-error">{{ actionError }}</p>
@@ -249,6 +275,13 @@
       </div>
     </div>
 
+    <!-- ── Challenge modal ──────────────────────────────────────────────── -->
+    <ChallengeModal
+      v-if="showChallengeModal && profile"
+      :targetUsername="profile.username"
+      @close="showChallengeModal = false"
+    />
+
     <!-- ── Report modal ────────────────────────────────────────────────── -->
     <div v-if="reportModal.visible" class="modal-overlay" @click.self="reportModal.visible = false">
       <div class="modal">
@@ -276,9 +309,12 @@
 
 <script>
 import axios from 'axios'
+import { getRank } from '../utils/rank.js'
+import ChallengeModal from './ChallengeModal.vue'
 
 export default {
   name: 'PlayerPage',
+  components: { ChallengeModal },
   data() {
     return {
       loading: true,
@@ -298,6 +334,7 @@ export default {
       deleteConfirmText: '',
       deleteAccountBusy: false,
       deleteAccountError: '',
+      showChallengeModal: false,
       ratingHistory: [],
       sparkW: 300,
       sparkH: 60,
@@ -329,6 +366,9 @@ export default {
       const first = this.ratingHistory[0].rating
       const last  = this.ratingHistory[this.ratingHistory.length - 1].rating
       return last > first ? 'trend-up' : last < first ? 'trend-down' : 'trend-flat'
+    },
+    playerRank() {
+      return getRank(this.profile?.rating || 1000)
     },
     // Dispute rate as percentage (0–100). null when fewer than 5 games (not meaningful).
     disputeRate() {
@@ -521,7 +561,18 @@ export default {
   font-size: 1.6rem; font-weight: 700;
   flex-shrink: 0;
 }
-.header-info h2 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+.header-name-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.header-info h2  { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+.rank-badge {
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  opacity: .9;
+  flex-shrink: 0;
+}
 .me-badge {
   display: inline-flex;
   margin-top: 4px;
@@ -663,6 +714,20 @@ export default {
   transition: background var(--transition);
 }
 .btn-unfriend:hover { background: var(--red-muted); }
+.btn-challenge {
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: var(--r);
+  padding: 7px 16px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: background var(--transition);
+}
+.btn-challenge:hover { background: var(--brand-hover); }
+
 .btn-report {
   background: transparent;
   border: 1px solid var(--border);
@@ -683,6 +748,21 @@ export default {
   padding: 7px 16px;
   font-size: 13px;
 }
+
+.rep-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+.rep-label    { color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; font-weight: 600; }
+.rep-stars    { display: flex; gap: 1px; }
+.star         { font-size: 16px; line-height: 1; }
+.star.filled  { color: #c9a227; }
+.star.empty   { color: var(--border); }
+.rep-votes    { font-size: 12px; color: var(--text-muted); }
+.rep-too-few  { font-size: 12px; color: var(--text-muted); font-style: italic; }
 
 .elo-trend-section { margin-bottom: 28px; }
 .sparkline-wrap {

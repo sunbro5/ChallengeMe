@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Value;
 import org.jan.achievement.AchievementDto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Value
@@ -23,4 +24,8 @@ public class PlayerProfileDto {
     List<GameHistoryDto> games;
     List<GameTypeStatsDto> gameStats;
     List<AchievementDto> achievements;
+    int thumbsUp;
+    int thumbsDown;
+    LocalDateTime memberSince;
+    Integer reputationScore;  // 1–5, null if fewer than 5 games
 }

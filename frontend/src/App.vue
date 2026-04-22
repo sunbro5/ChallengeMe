@@ -9,6 +9,7 @@
             <router-link to="/leaderboard" class="nav-link">{{ $t('nav.leaderboard') }}</router-link>
             <router-link to="/friends" class="nav-link">{{ $t('nav.friends') }}</router-link>
             <router-link to="/games" class="nav-link">{{ $t('nav.games') }}</router-link>
+            <router-link to="/tournaments" class="nav-link">{{ $t('nav.tournaments') }}</router-link>
             <router-link v-if="isAdmin" to="/admin" class="nav-link admin-link">{{ $t('nav.admin') }}</router-link>
           </nav>
         </div>
@@ -67,6 +68,10 @@
                   <button :class="['avatar-theme-btn', { active: darkMode }]" @click="setTheme('dark')">{{ $t('theme.dark') }}</button>
                 </div>
                 <hr class="avatar-menu-divider" />
+                <router-link to="/tos"     class="avatar-menu-item-link">{{ $t('footer.terms') }}</router-link>
+                <router-link to="/privacy" class="avatar-menu-item-link">{{ $t('footer.privacy') }}</router-link>
+                <button class="avatar-menu-item muted" @click="resetCookies">{{ $t('footer.cookieSettings') }}</button>
+                <hr class="avatar-menu-divider" />
                 <button class="avatar-menu-item danger" @click="logout">
                   {{ $t('user.logout') }}
                 </button>
@@ -82,11 +87,12 @@
 
       <!-- Mobile bottom navigation -->
       <nav class="bottom-nav">
-        <router-link to="/map"         class="bnav-link"><span class="bnav-icon">🗺️</span><span class="bnav-label">{{ $t('nav.mapShort') }}</span></router-link>
-        <router-link to="/leaderboard" class="bnav-link"><span class="bnav-icon">🏆</span><span class="bnav-label">{{ $t('nav.leaderboardShort') }}</span></router-link>
-        <router-link to="/friends"     class="bnav-link"><span class="bnav-icon">👥</span><span class="bnav-label">{{ $t('nav.friendsShort') }}</span></router-link>
-        <router-link to="/games"       class="bnav-link"><span class="bnav-icon">🎮</span><span class="bnav-label">{{ $t('nav.gamesShort') }}</span></router-link>
-        <router-link v-if="isAdmin" to="/admin" class="bnav-link bnav-admin"><span class="bnav-icon">⚙️</span><span class="bnav-label">{{ $t('nav.adminShort') }}</span></router-link>
+        <router-link to="/map"         class="bnav-link">{{ $t('nav.mapShort') }}</router-link>
+        <router-link to="/leaderboard" class="bnav-link">{{ $t('nav.leaderboardShort') }}</router-link>
+        <router-link to="/friends"     class="bnav-link">{{ $t('nav.friendsShort') }}</router-link>
+        <router-link to="/games"       class="bnav-link">{{ $t('nav.gamesShort') }}</router-link>
+        <router-link to="/tournaments" class="bnav-link">{{ $t('nav.tournamentsShort') }}</router-link>
+        <router-link v-if="isAdmin" to="/admin" class="bnav-link bnav-admin">{{ $t('nav.adminShort') }}</router-link>
       </nav>
 
       <!-- Toast notifications -->
@@ -106,7 +112,18 @@
     <div v-else :class="['auth-container', { 'auth-full': isHomePage }]">
       <h1 v-if="!isHomePage">{{ $t('appName') }}</h1>
       <router-view />
+      <!-- Legal footer — visible on login/register/forgot-password etc. -->
+      <footer class="legal-footer">
+        <router-link to="/tos" class="footer-link">{{ $t('footer.terms') }}</router-link>
+        <span class="footer-sep">·</span>
+        <router-link to="/privacy" class="footer-link">{{ $t('footer.privacy') }}</router-link>
+        <span class="footer-sep">·</span>
+        <span class="footer-copy">{{ $t('footer.contact') }}</span>
+      </footer>
     </div>
+
+    <!-- Cookie consent banner — shown on first visit, above bottom nav -->
+    <CookieBanner ref="cookieBanner" @consent="onCookieConsent" />
 
   </div>
 </template>
@@ -115,11 +132,13 @@
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import ChatPopup from './components/ChatPopup.vue'
+import CookieBanner from './components/CookieBanner.vue'
 import i18n from './i18n'
+import { initAnalytics } from './analytics.js'
 
 export default {
   name: 'App',
-  components: { ChatPopup },
+  components: { ChatPopup, CookieBanner },
   setup() {
     const { locale } = useI18n()
     return { locale }
@@ -286,6 +305,12 @@ export default {
       this.$router.push('/login')
       axios.post('/api/auth/logout', {}, { withCredentials: true })
         .catch(err => console.error('Logout error:', err))
+    },
+    onCookieConsent(consent) {
+      initAnalytics(consent)
+    },
+    resetCookies() {
+      this.$refs.cookieBanner?.reset()
     },
   }
 }
@@ -479,6 +504,42 @@ h1::before {
 .avatar-menu-item:hover { background: var(--bg-elevated); }
 .avatar-menu-item.danger { color: var(--red); }
 .avatar-menu-item.danger:hover { background: var(--red-muted); }
+.avatar-menu-item.muted { color: var(--text-muted); font-size: 11px; }
+.avatar-menu-item.muted:hover { color: var(--text-secondary); background: var(--bg-elevated); }
+
+/* Legal links in avatar menu */
+.avatar-menu-item-link {
+  display: block;
+  padding: 8px 14px;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: background var(--transition), color var(--transition);
+  font-family: var(--font);
+}
+.avatar-menu-item-link:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+/* Legal footer on auth pages */
+.legal-footer {
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.footer-link {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+.footer-link:hover { color: var(--brand); }
+.footer-sep { font-size: 11px; color: var(--border); }
+.footer-copy { font-size: 11px; color: var(--text-muted); }
 
 .menu-drop-enter-active { transition: opacity .15s ease, transform .15s ease; }
 .menu-drop-leave-active { transition: opacity .1s ease, transform .1s ease; }
@@ -530,20 +591,21 @@ h1::before {
 .bnav-link {
   flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
   color: var(--text-muted);
   text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
   min-height: 44px;
   transition: color var(--transition);
 }
-.bnav-link.router-link-active { color: var(--brand); }
+.bnav-link.router-link-active {
+  color: var(--brand);
+  font-weight: 600;
+}
 .bnav-link.bnav-admin { color: var(--red); }
 .bnav-link.bnav-admin.router-link-active { color: var(--red); }
-.bnav-icon  { font-size: 20px; line-height: 1; }
-.bnav-label { font-size: 10px; font-weight: 500; }
 
 /* ── Mobile breakpoint ───────────────────────────────────────────────────── */
 @media (max-width: 640px) {

@@ -6,7 +6,7 @@
       <!-- CS -->
       <template v-if="$i18n.locale === 'cs'">
         <h1>Podmínky užívání · ChallengeMe</h1>
-        <p class="updated">Poslední aktualizace: duben 2025</p>
+        <p class="updated">Poslední aktualizace: duben 2026</p>
 
         <section class="tos-section">
           <h2>1. Kdo jsme a jakou roli plníme</h2>
@@ -51,7 +51,7 @@
         </section>
 
         <section class="tos-section safety-section">
-          <h2>⚠️ 4. Bezpečnostní doporučení</h2>
+          <h2>4. Bezpečnostní doporučení</h2>
           <p>Před každým setkáním s cizí osobou doporučujeme:</p>
           <ul>
             <li>Setkávat se vždy <strong>na veřejném místě</strong> (park, náměstí, sportovní hřiště…)</li>
@@ -98,6 +98,7 @@
 
         <section class="tos-section">
           <h2>7. Ochrana osobních údajů (GDPR)</h2>
+          <p>Podrobné informace o zpracování osobních údajů a cookies naleznete v samostatném dokumentu: <router-link to="/privacy" class="tos-link">Zásady ochrany osobních údajů</router-link>.</p>
           <p><strong>Co sbíráme:</strong></p>
           <ul>
             <li>Uživatelské jméno a e-mailová adresa (pro správu účtu)</li>
@@ -159,7 +160,7 @@
       <!-- EN -->
       <template v-else>
         <h1>Terms of Service · ChallengeMe</h1>
-        <p class="updated">Last updated: April 2025</p>
+        <p class="updated">Last updated: April 2026</p>
 
         <section class="tos-section">
           <h2>1. Who we are and our role</h2>
@@ -205,7 +206,7 @@
         </section>
 
         <section class="tos-section safety-section">
-          <h2>⚠️ 4. Safety recommendations</h2>
+          <h2>4. Safety recommendations</h2>
           <p>Before meeting a stranger we recommend:</p>
           <ul>
             <li>Always meet in a <strong>public place</strong> (park, square, sports ground…)</li>
@@ -251,6 +252,7 @@
 
         <section class="tos-section">
           <h2>7. Privacy &amp; Data Protection (GDPR)</h2>
+          <p>For detailed information on personal data processing and cookies, see our separate document: <router-link to="/privacy" class="tos-link">Privacy Policy</router-link>.</p>
           <p><strong>What we collect:</strong></p>
           <ul>
             <li>Username and email address (for account management)</li>
@@ -402,6 +404,9 @@ h1 {
   border-radius: var(--r-md);
   padding: 20px 22px;
 }
+
+.tos-link { color: var(--brand); text-decoration: none; }
+.tos-link:hover { text-decoration: underline; }
 
 .tos-footer-note {
   font-size: 12px;

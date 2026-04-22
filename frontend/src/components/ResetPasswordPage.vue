@@ -59,11 +59,14 @@ export default {
   methods: {
     async submit() {
       this.error = ''
+      if (!this.password || this.password.length < 8) {
+        this.error = this.$t('register.passwordTooShort')
+        return
+      }
       if (this.password !== this.confirm) {
         this.error = this.$t('auth.passwordMismatch')
         return
       }
-      if (!this.password) return
       this.busy = true
       try {
         await axios.post('/api/auth/reset-password', {

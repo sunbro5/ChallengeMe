@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users", indexes = {
@@ -35,6 +38,10 @@ public class User {
     @Column(length = 160)
     private String bio;
     private String favoriteGameKey;
+
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
     public User(String username, String password, String email) {
         this.username = username;

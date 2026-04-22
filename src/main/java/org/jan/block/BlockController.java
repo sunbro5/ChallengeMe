@@ -5,6 +5,7 @@ import org.jan.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,6 +19,7 @@ public class BlockController {
         return userRepository.findByUsername(auth.getName());
     }
 
+    @Transactional
     @PostMapping("/{username}")
     public ResponseEntity<String> blockUser(@PathVariable String username, Authentication auth) {
         User blocker = resolve(auth);
@@ -30,6 +32,7 @@ public class BlockController {
         return ResponseEntity.ok("User blocked");
     }
 
+    @Transactional
     @DeleteMapping("/{username}")
     public ResponseEntity<String> unblockUser(@PathVariable String username, Authentication auth) {
         User blocker = resolve(auth);
@@ -40,6 +43,7 @@ public class BlockController {
         return ResponseEntity.ok("User unblocked");
     }
 
+    @Transactional(readOnly = true)
     @GetMapping("/{username}")
     public ResponseEntity<Boolean> isBlocked(@PathVariable String username, Authentication auth) {
         User blocker = resolve(auth);

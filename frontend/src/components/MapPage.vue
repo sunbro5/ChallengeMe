@@ -8,7 +8,7 @@
         :class="['filter-toggle-btn', { active: activeFilters.length > 0 }]"
         @click="filterPanel.visible = !filterPanel.visible"
       >
-        🎮 {{ $t('map.filterGames') }}
+        {{ $t('map.filterGames') }}
         <span v-if="activeFilters.length > 0" class="filter-badge">{{ activeFilters.length }}</span>
         <span class="filter-chevron">{{ filterPanel.visible ? '▲' : '▼' }}</span>
       </button>
@@ -26,7 +26,7 @@
               v-for="g in games" :key="g.key"
               :class="['filter-pill', { active: activeFilters.includes(g.key) }]"
               @click="toggleFilter(g.key)"
-            >{{ g.icon }} {{ gameName(g) }}</button>
+            >{{ gameName(g) }}</button>
           </div>
         </div>
       </transition>
@@ -40,12 +40,10 @@
 
         <label>
           {{ $t('map.game') }}
-          <router-link to="/games" target="_blank" class="rules-link" :title="$t('map.rules')">ℹ️</router-link>
+          <router-link to="/games" target="_blank" class="rules-link">{{ $t('map.rules') }}</router-link>
         </label>
         <select v-model="createPanel.gameType">
-          <option v-for="g in games" :key="g.key" :value="g.key">
-            {{ g.icon }} {{ gameName(g) }}
-          </option>
+          <option v-for="g in games" :key="g.key" :value="g.key">{{ gameName(g) }}</option>
         </select>
 
         <label>{{ $t('map.whenToMeet') }}</label>
@@ -73,10 +71,12 @@
           <option v-for="f in friends" :key="f.id" :value="f.username">{{ f.username }}</option>
         </select>
 
-        <div class="safety-note">
-          <span class="safety-icon">⚠️</span>
-          <span>{{ $t('safety.createWarning') }}</span>
-        </div>
+        <label v-if="isTeamEligible" class="team-toggle-label">
+          <input type="checkbox" v-model="createPanel.teamMode" class="team-checkbox" />
+          {{ $t('map.teamModeLabel') }}
+        </label>
+
+        <div class="safety-note">{{ $t('safety.createWarning') }}</div>
 
         <div class="panel-actions">
           <button class="btn-primary" @click="submitCreate" :disabled="createPanel.busy">
@@ -99,7 +99,7 @@
 
         <h3>
           {{ gameLabel(detailPanel.event.gameType) }}
-          <router-link to="/games" target="_blank" class="rules-link" :title="$t('map.rules')">ℹ️</router-link>
+          <router-link to="/games" target="_blank" class="rules-link">{{ $t('map.rules') }}</router-link>
         </h3>
 
         <p>
@@ -113,7 +113,7 @@
           {{ detailPanel.event.description }}
         </p>
         <p v-if="detailPanel.event.locationName" class="location-name">
-          📍 {{ detailPanel.event.locationName }}
+          {{ detailPanel.event.locationName }}
         </p>
         <p v-if="detailPanel.event.invitedUsername" class="private-invite-badge">
           {{ $t('eventDetail.privateInvite', { username: detailPanel.event.invitedUsername }) }}
@@ -128,7 +128,7 @@
             v-for="p in detailPanel.event.participants" :key="p"
             :to="`/player/${p}`"
             class="participant-tag"
-          >👤 {{ p }}</router-link>
+          >{{ p }}</router-link>
           <span v-if="detailPanel.event.participants.length === 1" class="participant-tag empty">
             {{ $t('common.waitingForChallenger') }}
           </span>
@@ -137,7 +137,7 @@
         <!-- ── FINISHED ──────────────────────────────────────────────── -->
         <div v-if="detailPanel.event.status === 'FINISHED'" class="result-box">
           <div v-if="detailPanel.event.winnerUsername" class="result-win">
-            🏆 <strong>{{ detailPanel.event.winnerUsername }}</strong> {{ $t('map.won', { username: '' }).replace(' ', '') }}
+            <strong>{{ detailPanel.event.winnerUsername }}</strong> {{ $t('map.won', { username: '' }).trim() }}
           </div>
           <div v-else class="result-draw">{{ $t('common.draw') }}</div>
           <div v-if="detailPanel.event.resultNote" class="result-note">
@@ -163,7 +163,6 @@
         <template v-if="isLoggedIn">
 
           <div v-if="detailPanel.event.status === 'OPEN' && !detailPanel.event.joined" class="accept-safety">
-            <span class="accept-safety-icon">⚠️</span>
             <span>{{ $t('safety.acceptWarning') }} <router-link to="/tos" target="_blank" class="tos-link">{{ $t('safety.tosLink') }}</router-link></span>
           </div>
 
@@ -201,16 +200,16 @@
           <div v-if="detailPanel.event.status === 'IN_PROGRESS' && detailPanel.event.joined"
                class="meetup-box">
             <p>{{ $t('map.headToPin') }}</p>
-            <div class="safety-inline">⚠️ {{ $t('safety.meetupWarning') }}</div>
+            <div class="safety-inline">{{ $t('safety.meetupWarning') }}</div>
 
             <div class="submit-status">
               <span :class="detailPanel.event.creatorResultSubmitted ? 'submitted' : 'pending-submit'">
                 {{ detailPanel.event.creatorUsername }}:
-                {{ detailPanel.event.creatorResultSubmitted ? '✅ submitted' : '⏳ not yet' }}
+                {{ detailPanel.event.creatorResultSubmitted ? $t('eventDetail.submitted') : $t('eventDetail.notYet') }}
               </span>
               <span :class="detailPanel.event.challengerResultSubmitted ? 'submitted' : 'pending-submit'">
                 {{ detailPanel.event.challengerUsername }}:
-                {{ detailPanel.event.challengerResultSubmitted ? '✅ submitted' : '⏳ not yet' }}
+                {{ detailPanel.event.challengerResultSubmitted ? $t('eventDetail.submitted') : $t('eventDetail.notYet') }}
               </span>
             </div>
 
@@ -306,6 +305,12 @@ import axios from 'axios'
 const GAME_META_FALLBACK = { icon: '🎮', color: '#42b883' }
 let GAME_META_CACHE = {}
 
+/** Game types that support the team-join feature (must mirror backend TEAM_GAME_TYPES). */
+const TEAM_GAME_KEYS = new Set([
+  'PUB_QUIZ', 'BEER_PONG', 'FOOTBALL', 'BASKETBALL',
+  'UNO', 'KNIFFEL', 'JENGA', 'DOMINO', 'MEXICO_DICE', 'LIAR_DICE',
+])
+
 function makeIcon(gameType, status) {
   const meta = GAME_META_CACHE[gameType] || GAME_META_FALLBACK
   const dim  = status === 'IN_PROGRESS' || status === 'PENDING_APPROVAL'
@@ -340,7 +345,7 @@ export default {
       filterPanel: { visible: false },
       createPanel: {
         visible: false, lat: 0, lng: 0, gameType: '', scheduledAt: '',
-        description: '', locationName: '', invitedUsername: '',
+        description: '', locationName: '', invitedUsername: '', teamMode: false,
         busy: false, error: '',
       },
       detailPanel: { visible: false, event: null, busy: false, error: '' },
@@ -376,6 +381,12 @@ export default {
     }
   },
   beforeUnmount() { if (this.map) this.map.remove() },
+  computed: {
+    /** True when the currently selected game type supports team mode. */
+    isTeamEligible() {
+      return TEAM_GAME_KEYS.has(this.createPanel.gameType)
+    },
+  },
   methods: {
     async loadFriends() {
       try {
@@ -441,10 +452,11 @@ export default {
     },
 
     cancelCreate() {
-      this.createPanel.visible       = false
-      this.createPanel.description   = ''
-      this.createPanel.locationName  = ''
+      this.createPanel.visible         = false
+      this.createPanel.description     = ''
+      this.createPanel.locationName    = ''
       this.createPanel.invitedUsername = ''
+      this.createPanel.teamMode        = false
       if (this.tempMarker) { this.tempMarker.remove(); this.tempMarker = null }
     },
 
@@ -458,6 +470,7 @@ export default {
           description: this.createPanel.description || null,
           locationName: this.createPanel.locationName || null,
           invitedUsername: this.createPanel.invitedUsername || null,
+          teamMode: this.createPanel.teamMode && this.isTeamEligible,
         }, { withCredentials: true })
         this.allEvents.push(data)
         this.addMarker(data)
@@ -771,6 +784,15 @@ textarea { resize: vertical; line-height: 1.4; }
   font-size:11px; color:var(--yellow); background:var(--yellow-muted);
   border-radius:var(--r); padding:5px 9px; margin-bottom:8px;
 }
+.team-toggle-label {
+  display:flex; align-items:center; gap:8px;
+  font-size:13px; color:var(--text-primary); cursor:pointer;
+  background:var(--bg-elevated); border:1px solid var(--border);
+  border-radius:var(--r); padding:9px 12px; margin-bottom:12px;
+  transition:border-color var(--transition);
+}
+.team-toggle-label:hover { border-color:var(--brand); }
+.team-checkbox { accent-color:var(--brand); width:15px; height:15px; cursor:pointer; }
 
 .accept-safety {
   display: flex;

@@ -13,4 +13,6 @@ public class GameEventCreateRequest {
     private String description;
     private String locationName;
     private String invitedUsername;
+    /** True when the creator wants to play with a team (only valid for team-eligible game types). */
+    private boolean teamMode;
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -99,6 +100,7 @@ public class FriendController {
     }
 
     /** Last 20 FINISHED games involving any of the current user's friends. */
+    @Transactional(readOnly = true)
     @GetMapping("/activity")
     public ResponseEntity<List<ActivityDto>> getActivity(Authentication auth) {
         User user = resolveUser(auth);

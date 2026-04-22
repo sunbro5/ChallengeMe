@@ -13,7 +13,12 @@ public interface GameEventRepository extends JpaRepository<GameEvent, Long> {
 
     List<GameEvent> findByStatus(EventStatus status);
 
-    List<GameEvent> findByStatusIn(List<EventStatus> statuses);
+    /**
+     * Load events by status with all participants fetched in a single JOIN — avoids
+     * LazyInitializationException when toDto() accesses participants after the transaction closes.
+     */
+    @Query("SELECT DISTINCT e FROM GameEvent e JOIN FETCH e.participants WHERE e.status IN :statuses")
+    List<GameEvent> findByStatusIn(@Param("statuses") List<EventStatus> statuses);
 
     /** 200 newest OPEN events for the public home-page cache. */
     List<GameEvent> findTop200ByStatusOrderByCreatedAtDesc(EventStatus status);
@@ -26,11 +31,25 @@ public interface GameEventRepository extends JpaRepository<GameEvent, Long> {
     @Query("SELECT e FROM GameEvent e WHERE e.winner = :user")
     List<GameEvent> findByWinner(@Param("user") User user);
 
+    /**
+     * Load a single event with all participants fetched in one query.
+     * Use this instead of findById() whenever toDto() will be called after the transaction closes.
+     */
+    @Query("SELECT DISTINCT e FROM GameEvent e JOIN FETCH e.participants WHERE e.id = :id")
+    java.util.Optional<GameEvent> findByIdWithParticipants(@Param("id") Long id);
+
     @Query("SELECT e FROM GameEvent e JOIN e.participants p WHERE p = :user")
     List<GameEvent> findByParticipantsContaining(@Param("user") User user);
 
-    /** All events where the user is any participant, newest scheduled first. */
-    @Query("SELECT e FROM GameEvent e JOIN e.participants p WHERE p = :user ORDER BY e.scheduledAt DESC")
+    /**
+     * All events where the user is any participant, newest scheduled first.
+     * Uses JOIN FETCH so participants are loaded in one query — safe to use
+     * outside a transaction (e.g. inside toDto in the controller layer).
+     */
+    @Query("SELECT DISTINCT e FROM GameEvent e " +
+           "JOIN FETCH e.participants " +
+           "JOIN e.participants p " +
+           "WHERE p = :user ORDER BY e.scheduledAt DESC")
     List<GameEvent> findAllByParticipantOrderByScheduledAtDesc(@Param("user") User user);
 
     /** OPEN events whose scheduledAt is before the given cutoff (stale open). */

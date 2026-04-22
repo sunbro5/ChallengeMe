@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -26,10 +27,14 @@ public class ChatController {
      * REST send — saves the message and pushes it over WebSocket to the receiver's
      * personal topic so their ChatPopup / EventDetailPage updates in real time.
      */
+    @Transactional
     @PostMapping("/send")
     public ResponseEntity<ChatMessageDto> sendMessage(
             @RequestBody SendMessageRequest req, Authentication auth) {
         if (req.getContent() == null || req.getContent().isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+        if (req.getContent().length() > 1000) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -46,6 +51,7 @@ public class ChatController {
         return ResponseEntity.ok(dto);
     }
 
+    @Transactional(readOnly = true)
     @GetMapping("/history")
     public ResponseEntity<List<ChatMessageDto>> getHistory(
             @RequestParam String friendUsername, Authentication auth) {

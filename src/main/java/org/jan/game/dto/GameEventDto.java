@@ -39,4 +39,17 @@ public class GameEventDto {
     String locationName;
     /** If set, only this username can accept (direct invite). */
     String invitedUsername;
+
+    // ── Team quiz fields (only populated for PUB_QUIZ events) ────────────────
+    /** True when gameType == PUB_QUIZ — enables the team UI on the frontend. */
+    Boolean isTeamEvent;
+    /** Creator's username + all CREATOR-side team members. */
+    List<String> creatorTeam;
+    /** Challenger's username + all CHALLENGER-side team members (null if no challenger yet). */
+    List<String> challengerTeam;
+    /**
+     * Which side the viewing user is on: "CREATOR", "CHALLENGER", or null.
+     * Captains also get this field set so the frontend knows not to offer a join button.
+     */
+    String myTeamSide;
 }

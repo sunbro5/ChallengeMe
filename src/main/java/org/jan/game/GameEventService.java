@@ -41,7 +41,8 @@ public class GameEventService {
     @Transactional
     public GameEvent createEvent(User creator, double latitude, double longitude,
                                   GameType gameType, LocalDateTime scheduledAt,
-                                  String description, String locationName, String invitedUsername) {
+                                  String description, String locationName, String invitedUsername,
+                                  boolean teamMode) {
         LocalDateTime startOfDay = LocalDateTime.now().toLocalDate().atStartOfDay();
         long todayCount = gameEventRepository.countByCreatorSince(creator, startOfDay);
         if (todayCount >= DAILY_EVENT_LIMIT) {
@@ -63,6 +64,7 @@ public class GameEventService {
                 ? locationName.strip() : null);
         event.setInvitedUsername(invitedUsername != null && !invitedUsername.isBlank()
                 ? invitedUsername.strip() : null);
+        event.setTeamMode(teamMode);
         event.setCreatedAt(LocalDateTime.now());
         event.setStatus(EventStatus.OPEN);
         event.getParticipants().add(creator);
@@ -253,7 +255,9 @@ public class GameEventService {
     // ── Private helpers ───────────────────────────────────────────────────────
 
     private GameEvent load(Long id) {
-        return gameEventRepository.findById(id)
+        // findByIdWithParticipants uses JOIN FETCH so participants are initialised
+        // even after the transaction closes (e.g. when toDto() runs in the controller).
+        return gameEventRepository.findByIdWithParticipants(id)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found"));
     }
 

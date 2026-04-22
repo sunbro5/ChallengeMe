@@ -28,10 +28,10 @@
 
           <!-- Details row -->
           <div class="card-meta">
-            <span>📅 {{ formatDate(ev.scheduledAt) }}</span>
-            <a :href="mapsLink(ev)" target="_blank" class="map-link">📍 {{ $t('common.openInMaps') }}</a>
+            <span>{{ formatDate(ev.scheduledAt) }}</span>
+            <a :href="mapsLink(ev)" target="_blank" class="map-link">{{ $t('common.openInMaps') }}</a>
           </div>
-          <div v-if="ev.locationName" class="location-name">📍 {{ ev.locationName }}</div>
+          <div v-if="ev.locationName" class="location-name">{{ ev.locationName }}</div>
 
           <!-- Challenger section -->
           <div class="challenger-section">
@@ -86,7 +86,7 @@
             </div>
 
             <div v-else-if="ev.status === 'CANCELLED'" class="result-info cancelled">
-              ✕ {{ $t('status.cancelled') }}
+              {{ $t('status.cancelled') }}
             </div>
 
           </div>
@@ -196,7 +196,7 @@ export default {
       const m = this.gameMeta[type]
       if (!m) return type || ''
       const name = this.$i18n?.locale === 'cs' ? m.nameCs : m.nameEn
-      return `${m.icon} ${name}`
+      return name
     },
     opponentName(ev) {
       return ev.isCreator ? ev.challengerUsername : ev.creatorUsername

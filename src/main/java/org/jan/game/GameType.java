@@ -29,5 +29,8 @@ public enum GameType {
     VOLLEYBALL,
     BASKETBALL,
     TENNIS,
-    FARKLE
+    FARKLE,
+    UNO,
+    ZOLIKY,
+    PUB_QUIZ
 }

@@ -13,7 +13,7 @@
         v-for="g in games" :key="g.key"
         :class="['filter-btn', { active: selectedGame === g.key }]"
         @click="selectGame(g.key)"
-      >{{ g.icon }} {{ currentLocale === 'cs' ? g.nameCs : g.nameEn }}</button>
+      >{{ currentLocale === 'cs' ? g.nameCs : g.nameEn }}</button>
     </div>
 
     <div v-if="loading" class="state-msg">{{ $t('common.loading') }}</div>
@@ -38,14 +38,14 @@
           :class="{ me: row.username === currentUser, podium: i < 3 }"
         >
           <td class="rank">
-            <span v-if="i === 0">🥇</span>
-            <span v-else-if="i === 1">🥈</span>
-            <span v-else-if="i === 2">🥉</span>
-            <span v-else>{{ i + 1 }}</span>
+            <span :class="i < 3 ? `top${i+1}` : ''">{{ i + 1 }}</span>
           </td>
           <td class="username">
             {{ row.username }}
             <span v-if="row.username === currentUser" class="you-tag">{{ $t('leaderboard.you') }}</span>
+            <span class="rank-badge" :style="{ color: rowRank(row).color, borderColor: rowRank(row).color }">
+              {{ $t(`rank.${rowRank(row).key}`) }}
+            </span>
           </td>
           <td v-if="!selectedGame" class="elo-col">
             <span class="elo-badge">{{ row.rating || 1000 }}</span>
@@ -63,6 +63,7 @@
 <script>
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
+import { getRank } from '../utils/rank.js'
 
 export default {
   name: 'LeaderboardPage',
@@ -114,6 +115,8 @@ export default {
       this.selectedGame = key
       await this.loadLeaderboard()
     },
+
+    rowRank(row) { return getRank(row.rating || 1000) },
   },
 }
 </script>
@@ -196,7 +199,10 @@ td {
   color: var(--text-primary);
 }
 
-.rank { font-size: 15px; width: 48px; text-align: center; }
+.rank { font-size: 13px; width: 48px; text-align: center; font-weight: 600; color: var(--text-muted); }
+.rank .top1 { color: #c9a227; font-weight: 700; }
+.rank .top2 { color: #8a9ba8; font-weight: 700; }
+.rank .top3 { color: #a0673a; font-weight: 700; }
 .username { font-weight: 600; }
 .wins { color: var(--brand); font-weight: 700; }
 .total { color: var(--text-muted); font-size: 12px; }
@@ -211,6 +217,18 @@ td {
   font-size: 12px;
   font-weight: 700;
   letter-spacing: .01em;
+}
+
+.rank-badge {
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 1px 7px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  margin-left: 6px;
+  vertical-align: middle;
+  opacity: .85;
 }
 
 .you-tag {

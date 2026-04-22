@@ -10,7 +10,7 @@
       <p class="tagline">{{ $t('home.tagline') }}</p>
 
       <div class="stats-row" v-if="eventCount > 0">
-        <span class="stat-pill">📍 {{ eventCount }} {{ $t('home.activeEvents') }}</span>
+        <span class="stat-pill">{{ eventCount }} {{ $t('home.activeEvents') }}</span>
       </div>
 
       <form class="login-form" @submit.prevent="handleLogin">
@@ -47,18 +47,9 @@
       </p>
 
       <div class="features">
-        <div class="feature">
-          <span class="feature-icon">📍</span>
-          <span>{{ $t('home.feature1') }}</span>
-        </div>
-        <div class="feature">
-          <span class="feature-icon">⚔️</span>
-          <span>{{ $t('home.feature2') }}</span>
-        </div>
-        <div class="feature">
-          <span class="feature-icon">🏆</span>
-          <span>{{ $t('home.feature3') }}</span>
-        </div>
+        <div class="feature"><span>{{ $t('home.feature1') }}</span></div>
+        <div class="feature"><span>{{ $t('home.feature2') }}</span></div>
+        <div class="feature"><span>{{ $t('home.feature3') }}</span></div>
       </div>
     </div>
 

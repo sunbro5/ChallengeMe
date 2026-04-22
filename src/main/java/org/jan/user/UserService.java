@@ -22,15 +22,22 @@ public class UserService {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    @Transactional
     public User registerUser(String username, String password, String email, int birthYear) {
         if (username == null || username.trim().isEmpty()) {
             throw new IllegalArgumentException("Username cannot be empty");
         }
-        if (password == null || password.length() < 6) {
-            throw new IllegalArgumentException("Password must be at least 6 characters");
+        if (username.trim().length() > 30) {
+            throw new IllegalArgumentException("Username cannot exceed 30 characters");
+        }
+        if (password == null || password.length() < 8) {
+            throw new IllegalArgumentException("Password must be at least 8 characters");
         }
         if (email == null || !email.contains("@")) {
             throw new IllegalArgumentException("Invalid email");
+        }
+        if (email.length() > 100) {
+            throw new IllegalArgumentException("Email cannot exceed 100 characters");
         }
         int currentYear = java.time.Year.now().getValue();
         if (birthYear <= 0 || birthYear > currentYear) {
@@ -52,6 +59,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional(readOnly = true)
     public User authenticateUser(String username, String password) {
         User user = userRepository.findByUsername(username);
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {

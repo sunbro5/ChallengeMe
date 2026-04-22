@@ -144,13 +144,13 @@
           </div>
           <div class="report-actions">
             <button class="resolve-btn" @click="resolveDispute(d, d.creatorUsername)">
-              ✅ {{ d.creatorUsername }}
+              {{ d.creatorUsername }}
             </button>
             <button class="resolve-btn" @click="resolveDispute(d, d.challengerUsername)">
-              ✅ {{ d.challengerUsername }}
+              {{ d.challengerUsername }}
             </button>
             <button class="resolve-btn" @click="resolveDispute(d, null)">
-              🤝 {{ $t('common.draw') }}
+              {{ $t('common.draw') }}
             </button>
           </div>
         </div>

@@ -95,6 +95,10 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Token and password are required.");
         }
 
+        if (password.length() < 8) {
+            return ResponseEntity.badRequest().body("Password must be at least 8 characters.");
+        }
+
         PasswordResetToken prt = resetRepository.findByToken(token).orElse(null);
         if (prt == null || prt.isExpired()) {
             return ResponseEntity.badRequest().body("Invalid or expired reset link.");

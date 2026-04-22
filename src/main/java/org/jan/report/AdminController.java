@@ -81,6 +81,7 @@ public class AdminController {
         return ResponseEntity.ok(dtos);
     }
 
+    @Transactional
     @PostMapping("/disputes/{eventId}/resolve")
     public ResponseEntity<String> resolveDispute(
             @PathVariable Long eventId,
@@ -164,6 +165,7 @@ public class AdminController {
     }
 
     /** Reset a user's ELO rating back to the starting value (1 000). */
+    @Transactional
     @PostMapping("/users/{userId}/reset-elo")
     public ResponseEntity<String> resetElo(@PathVariable Long userId) {
         User user = userRepository.findById(userId).orElse(null);

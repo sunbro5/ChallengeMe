@@ -5,6 +5,7 @@ import org.jan.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class NotificationController {
         return userRepository.findByUsername(auth.getName());
     }
 
+    @Transactional(readOnly = true)
     @GetMapping
     public ResponseEntity<List<NotificationDto>> getNotifications(Authentication auth) {
         User user = resolve(auth);
@@ -31,17 +33,20 @@ public class NotificationController {
         return ResponseEntity.ok(dtos);
     }
 
+    @Transactional(readOnly = true)
     @GetMapping("/unread-count")
     public ResponseEntity<Long> getUnreadCount(Authentication auth) {
         return ResponseEntity.ok(notificationService.countUnread(resolve(auth)));
     }
 
+    @Transactional
     @PostMapping("/read-all")
     public ResponseEntity<Void> markAllRead(Authentication auth) {
         notificationService.markAllRead(resolve(auth));
         return ResponseEntity.ok().build();
     }
 
+    @Transactional
     @PostMapping("/{id}/read")
     public ResponseEntity<Void> markRead(@PathVariable Long id, Authentication auth) {
         notificationService.markRead(id, resolve(auth));

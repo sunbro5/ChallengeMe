@@ -93,6 +93,11 @@ export default {
     async handleRegister() {
       this.message = ''
 
+      if (this.form.password.length < 8) {
+        this.message   = this.$t('register.passwordTooShort')
+        this.isSuccess = false
+        return
+      }
       if (this.form.password !== this.form.passwordConfirm) {
         this.message   = this.$t('register.passwordsMismatch')
         this.isSuccess = false

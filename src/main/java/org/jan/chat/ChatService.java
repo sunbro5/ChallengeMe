@@ -18,7 +18,12 @@ public class ChatService {
     @Autowired private ProfanityFilter   profanityFilter;
     @Autowired private BlockRepository   blockRepository;
 
+    @Transactional
     public Message saveMessage(String senderUsername, String receiverUsername, String content) {
+        if (content == null || content.isBlank())
+            throw new IllegalArgumentException("Message cannot be empty");
+        if (content.length() > 1000)
+            throw new IllegalArgumentException("Message cannot exceed 1000 characters");
         User sender = userRepository.findByUsername(senderUsername);
         User receiver = userRepository.findByUsername(receiverUsername);
         if (sender == null || receiver == null) throw new IllegalArgumentException("User not found");

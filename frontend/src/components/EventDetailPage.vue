@@ -16,7 +16,7 @@
         </div>
 
         <div class="card-meta">
-          <span>📅 {{ formatDate(event.scheduledAt) }}</span>
+          <span>{{ formatDate(event.scheduledAt) }}</span>
           <a :href="mapsLink(event)" target="_blank" class="link">{{ $t('eventDetail.openInMaps') }}</a>
 
           <!-- Share button — native sheet on mobile, dropdown on desktop -->
@@ -56,7 +56,7 @@
         </div>
 
         <p v-if="event.description" class="event-description">{{ event.description }}</p>
-        <p v-if="event.locationName" class="location-name-badge">📍 {{ event.locationName }}</p>
+        <p v-if="event.locationName" class="location-name-badge">{{ event.locationName }}</p>
         <p v-if="event.invitedUsername" class="private-invite-badge">
           {{ $t('eventDetail.privateInvite', { username: event.invitedUsername }) }}
         </p>
@@ -72,17 +72,83 @@
             v-for="p in event.participants" :key="p"
             :to="`/player/${p}`"
             class="participant-tag"
-          >👤 {{ p }}</router-link>
+          >{{ p }}</router-link>
           <span v-if="event.participants.length === 1" class="participant-tag empty">
             {{ $t('eventDetail.waitingForChallenger') }}
           </span>
+        </div>
+
+        <!-- ── Team panels (PUB_QUIZ only) ───────────────────────────────── -->
+        <div v-if="event.isTeamEvent && event.status !== 'OPEN'" class="team-section">
+          <div class="team-section-title">{{ $t('teamQuiz.title') }}</div>
+          <div class="team-columns">
+
+            <!-- Team A -->
+            <div class="team-panel team-a">
+              <div class="team-header">
+                <span class="team-name">{{ $t('teamQuiz.teamA') }}</span>
+                <span class="team-count">{{ (event.creatorTeam || []).length }}</span>
+              </div>
+              <div class="team-members-list">
+                <div v-for="member in (event.creatorTeam || [])" :key="member" class="team-member-row">
+                  <router-link :to="`/player/${member}`" class="team-member-link">{{ member }}</router-link>
+                  <span v-if="member === event.creatorUsername" class="captain-tag">{{ $t('teamQuiz.captain') }}</span>
+                </div>
+              </div>
+              <button
+                v-if="isLoggedIn && !event.joined && !event.myTeamSide && event.status === 'IN_PROGRESS' && event.challengerUsername"
+                class="btn-join-team"
+                :disabled="teamBusy"
+                @click="joinTeam('CREATOR')"
+              >{{ teamBusy ? $t('teamQuiz.joining') : $t('teamQuiz.joinTeamA') }}</button>
+              <div v-if="event.myTeamSide === 'CREATOR' && !event.joined" class="on-team-note">
+                {{ $t('teamQuiz.onTeamA') }}
+              </div>
+            </div>
+
+            <!-- Team B -->
+            <div class="team-panel team-b" :class="{ 'team-empty': !event.challengerUsername }">
+              <div class="team-header">
+                <span class="team-name">{{ $t('teamQuiz.teamB') }}</span>
+                <span class="team-count">{{ (event.challengerTeam || []).length }}</span>
+              </div>
+              <div class="team-members-list">
+                <template v-if="event.challengerTeam">
+                  <div v-for="member in event.challengerTeam" :key="member" class="team-member-row">
+                    <router-link :to="`/player/${member}`" class="team-member-link">{{ member }}</router-link>
+                    <span v-if="member === event.challengerUsername" class="captain-tag">{{ $t('teamQuiz.captain') }}</span>
+                  </div>
+                </template>
+                <span v-else class="team-waiting">{{ $t('eventDetail.waitingForChallenger') }}</span>
+              </div>
+              <button
+                v-if="isLoggedIn && !event.joined && !event.myTeamSide && event.status === 'IN_PROGRESS' && event.challengerUsername"
+                class="btn-join-team"
+                :disabled="teamBusy"
+                @click="joinTeam('CHALLENGER')"
+              >{{ teamBusy ? $t('teamQuiz.joining') : $t('teamQuiz.joinTeamB') }}</button>
+              <div v-if="event.myTeamSide === 'CHALLENGER' && !event.joined" class="on-team-note">
+                {{ $t('teamQuiz.onTeamB') }}
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Leave button (non-captains only) -->
+          <button
+            v-if="isLoggedIn && event.myTeamSide && !event.joined && event.status === 'IN_PROGRESS'"
+            class="btn-leave-team"
+            :disabled="teamBusy"
+            @click="leaveTeam"
+          >{{ teamBusy ? $t('teamQuiz.leaving') : $t('teamQuiz.leaveTeam') }}</button>
+
+          <p v-if="teamError" class="error-msg">{{ teamError }}</p>
         </div>
 
         <!-- ── Actions ────────────────────────────────────────────────────── -->
         <template v-if="isLoggedIn">
 
           <div v-if="event.status === 'OPEN' && !event.isCreator && !event.joined" class="accept-safety">
-            <span class="accept-safety-icon">⚠️</span>
             <span>{{ $t('safety.acceptWarning') }} <router-link to="/tos" target="_blank" class="tos-link">{{ $t('safety.tosLink') }}</router-link></span>
           </div>
 
@@ -111,7 +177,7 @@
 
           <div v-if="event.status === 'IN_PROGRESS' && event.joined" class="meetup-box">
             <p>{{ $t('eventDetail.headToPin') }}</p>
-            <div class="safety-inline">⚠️ {{ $t('safety.meetupWarning') }}</div>
+            <div class="safety-inline">{{ $t('safety.meetupWarning') }}</div>
             <div class="submit-status">
               <span :class="event.creatorResultSubmitted ? 'done' : 'pending'">
                 {{ event.creatorUsername }}: {{ event.creatorResultSubmitted ? $t('eventDetail.submitted') : $t('eventDetail.notYet') }}
@@ -132,6 +198,16 @@
             <span v-if="event.winnerUsername">{{ $t('eventDetail.won', { username: event.winnerUsername }) }}</span>
             <span v-else>{{ $t('common.draw') }}</span>
             <span v-if="event.resultNote" class="result-note">"{{ event.resultNote }}"</span>
+          </div>
+
+          <!-- ── Sportsmanship voting ───────────────────────────────── -->
+          <div v-if="event.status === 'FINISHED' && event.joined && otherUser" class="sport-vote-box">
+            <span class="sport-vote-label">{{ $t('reputation.voteTitle') }}</span>
+            <div v-if="!sportVoted" class="sport-vote-btns">
+              <button class="btn-thumbs up"   :disabled="sportVoting" @click="submitVote(true)">👍</button>
+              <button class="btn-thumbs down" :disabled="sportVoting" @click="submitVote(false)">👎</button>
+            </div>
+            <span v-else class="sport-voted-ok">{{ $t('reputation.voted') }}</span>
           </div>
 
           <button
@@ -243,6 +319,10 @@ export default {
       resultModal: { visible: false, winner: '', note: '', busy: false, error: '' },
       shareMenu:   false,
       shareCopied: false,
+      sportVoted:  false,
+      sportVoting: false,
+      teamBusy:    false,
+      teamError:   '',
     }
   },
   computed: {
@@ -278,6 +358,9 @@ export default {
     await this.loadEvent()
     this.setupPolling()
     document.addEventListener('click', this.onShareDocClick)
+    if (this.isLoggedIn && this.event?.status === 'FINISHED') {
+      this.loadVoteStatus()
+    }
   },
   beforeUnmount() {
     clearInterval(this.pollTimer)
@@ -442,6 +525,56 @@ export default {
       } catch (e) {
         this.resultModal.error = e.response?.data || this.$t('eventDetail.couldNotSaveResult')
       } finally { this.resultModal.busy = false }
+    },
+
+    async loadVoteStatus() {
+      try {
+        const { data } = await axios.get(
+          `/api/sportsmanship/check/${this.$route.params.id}`,
+          { withCredentials: true }
+        )
+        this.sportVoted = data.voted
+      } catch { /* non-fatal */ }
+    },
+
+    async submitVote(positive) {
+      this.sportVoting = true
+      try {
+        await axios.post('/api/sportsmanship', {
+          eventId:  this.event.id,
+          positive,
+        }, { withCredentials: true })
+        this.sportVoted = true
+      } catch { /* non-fatal */ } finally {
+        this.sportVoting = false
+      }
+    },
+
+    async joinTeam(side) {
+      this.teamBusy = true; this.teamError = ''
+      try {
+        const { data } = await axios.post(
+          `/api/events/${this.event.id}/team/join`,
+          { side },
+          { withCredentials: true }
+        )
+        this.event = data
+      } catch (e) {
+        this.teamError = e.response?.data || this.$t('teamQuiz.couldNotJoin')
+      } finally { this.teamBusy = false }
+    },
+
+    async leaveTeam() {
+      this.teamBusy = true; this.teamError = ''
+      try {
+        const { data } = await axios.delete(
+          `/api/events/${this.event.id}/team/leave`,
+          { withCredentials: true }
+        )
+        this.event = data
+      } catch (e) {
+        this.teamError = e.response?.data || this.$t('teamQuiz.couldNotLeave')
+      } finally { this.teamBusy = false }
     },
 
     gameLabel(type) {
@@ -621,6 +754,85 @@ html.light .si-icon { filter: none; }
 .participant-tag:hover { background: var(--bg-overlay); }
 .participant-tag.empty { color: var(--text-muted); font-style: italic; }
 
+/* ── Team quiz panels ────────────────────────────────────────────────────── */
+.team-section {
+  margin: 4px 0 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.team-section-title {
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 14px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--text-muted);
+}
+.team-columns {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+}
+.team-panel {
+  padding: 12px 14px;
+}
+.team-panel.team-b { border-left: 1px solid var(--border); }
+.team-panel.team-empty { opacity: .6; }
+
+.team-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.team-name {
+  font-size: 12px; font-weight: 700; color: var(--text-primary);
+}
+.team-panel.team-a .team-name { color: var(--brand); }
+.team-panel.team-b .team-name { color: var(--blue); }
+.team-count {
+  font-size: 11px; color: var(--text-muted);
+  background: var(--bg-elevated); border-radius: var(--r-full);
+  padding: 1px 7px;
+}
+.team-members-list {
+  display: flex; flex-direction: column; gap: 4px; min-height: 28px; margin-bottom: 10px;
+}
+.team-member-row {
+  display: flex; align-items: center; gap: 6px; font-size: 12px;
+}
+.team-member-link {
+  color: var(--text-primary); text-decoration: none;
+}
+.team-member-link:hover { text-decoration: underline; color: var(--brand); }
+.captain-tag {
+  font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+  color: var(--text-muted); background: var(--bg-elevated);
+  border: 1px solid var(--border); border-radius: var(--r-full); padding: 1px 5px;
+}
+.team-waiting { font-size: 12px; color: var(--text-muted); font-style: italic; }
+
+.btn-join-team {
+  width: 100%; background: var(--bg-elevated); border: 1px solid var(--border);
+  color: var(--text-primary); border-radius: var(--r); padding: 6px 10px;
+  font-size: 12px; font-family: var(--font); cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+}
+.team-panel.team-a .btn-join-team:hover:not(:disabled) { border-color: var(--brand); color: var(--brand); background: var(--brand-muted); }
+.team-panel.team-b .btn-join-team:hover:not(:disabled) { border-color: var(--blue);  color: var(--blue);  background: var(--blue-muted); }
+.btn-join-team:disabled { opacity: .5; cursor: default; }
+
+.on-team-note {
+  font-size: 11px; font-weight: 600; color: var(--brand);
+  text-align: center; padding-top: 4px;
+}
+.team-panel.team-b .on-team-note { color: var(--blue); }
+
+.btn-leave-team {
+  display: block; width: calc(100% - 28px); margin: 0 14px 12px;
+  background: transparent; border: 1px solid rgba(248,81,73,.3); color: var(--red);
+  border-radius: var(--r); padding: 5px 10px; font-size: 12px; font-family: var(--font);
+  cursor: pointer; transition: background var(--transition);
+}
+.btn-leave-team:hover:not(:disabled) { background: var(--red-muted); }
+.btn-leave-team:disabled { opacity: .5; cursor: default; }
+
 .waiting-note {
   background: var(--yellow-muted); border: 1px solid rgba(210,153,34,.2); border-radius: var(--r);
   padding: 10px 14px; font-size: 13px; color: var(--yellow); margin-bottom: 10px;
@@ -679,6 +891,23 @@ html.light .si-icon { filter: none; }
   font-family: var(--font); transition: background var(--transition);
 }
 .btn-danger:hover:not(:disabled) { background: rgba(248,81,73,.2); }
+
+.sport-vote-box {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 10px 14px; margin-bottom: 10px;
+}
+.sport-vote-label { font-size: 12px; color: var(--text-secondary); flex: 1; }
+.sport-vote-btns  { display: flex; gap: 6px; }
+.btn-thumbs {
+  background: var(--bg-surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 4px 12px; font-size: 18px;
+  cursor: pointer; transition: background var(--transition);
+}
+.btn-thumbs.up:hover:not(:disabled)   { background: var(--brand-muted); border-color: var(--brand); }
+.btn-thumbs.down:hover:not(:disabled) { background: var(--red-muted);   border-color: var(--red); }
+.btn-thumbs:disabled { opacity: .5; cursor: default; }
+.sport-voted-ok { font-size: 12px; color: var(--brand); font-weight: 600; }
 
 .btn-rematch {
   background: var(--brand-muted); color: var(--brand);
