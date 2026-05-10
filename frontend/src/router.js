@@ -14,8 +14,9 @@ import MyGamesPage         from './components/MyGamesPage.vue'
 import EventDetailPage     from './components/EventDetailPage.vue'
 import ForgotPasswordPage    from './components/ForgotPasswordPage.vue'
 import ResetPasswordPage     from './components/ResetPasswordPage.vue'
-import TournamentListPage    from './components/TournamentListPage.vue'
-import TournamentDetailPage  from './components/TournamentDetailPage.vue'
+import TournamentListPage         from './components/TournamentListPage.vue'
+import TournamentDetailPage        from './components/TournamentDetailPage.vue'
+import TeamTournamentDetailPage    from './components/TeamTournamentDetailPage.vue'
 
 const routes = [
   { path: '/',                    component: HomePage },
@@ -32,8 +33,9 @@ const routes = [
   { path: '/games',               component: GameRulesPage,   meta: { requiresAuth: true } },
   { path: '/my-games',            component: MyGamesPage,     meta: { requiresAuth: true } },
   { path: '/event/:id',           component: EventDetailPage,     meta: { requiresAuth: true } },
-  { path: '/tournaments',         component: TournamentListPage,  meta: { requiresAuth: true } },
-  { path: '/tournaments/:id',     component: TournamentDetailPage,meta: { requiresAuth: true } },
+  { path: '/tournaments',         component: TournamentListPage,      meta: { requiresAuth: true } },
+  { path: '/tournaments/:id',     component: TournamentDetailPage,    meta: { requiresAuth: true } },
+  { path: '/team-tournaments/:id', component: TeamTournamentDetailPage, meta: { requiresAuth: true } },
   {
     path: '/admin',
     component: AdminPage,

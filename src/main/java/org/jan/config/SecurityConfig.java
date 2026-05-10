@@ -34,7 +34,7 @@ public class SecurityConfig {
         CorsConfiguration cfg = new CorsConfiguration();
         cfg.setAllowedOrigins(allowedOrigins);
         cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        cfg.setAllowedHeaders(List.of("*"));
+        cfg.setAllowedHeaders(List.of("Content-Type", "Authorization", "X-Requested-With"));
         cfg.setAllowCredentials(true);
         cfg.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -50,7 +50,7 @@ public class SecurityConfig {
             .addFilterBefore(sessionAuthFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> auth
                 // Auth endpoints — always public
-                .requestMatchers(HttpMethod.GET,  "/api/auth/captcha").permitAll()
+                .requestMatchers(HttpMethod.GET,  "/api/auth/captcha", "/api/auth/me").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register",
                         "/api/auth/forgot-password", "/api/auth/reset-password").permitAll()
                 // Public read endpoints — home page map, game catalogue, player profiles, leaderboard

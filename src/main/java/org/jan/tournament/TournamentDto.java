@@ -8,6 +8,7 @@ public record TournamentDto(
         String name,
         String gameType,
         int capacity,
+        String format,
         String status,
         String creatorUsername,
         String winnerUsername,
@@ -20,7 +21,9 @@ public record TournamentDto(
             Long userId,
             String username,
             int seed,
-            boolean eliminated
+            boolean eliminated,
+            int wins,
+            int losses
     ) {}
 
     public record MatchDto(

@@ -1,5 +1,7 @@
 package org.jan.game;
 
+import org.jan.friend.Friendship;
+import org.jan.friend.FriendshipRepository;
 import org.jan.game.dto.ChallengeNotificationDto;
 import org.jan.game.dto.GameEventDto;
 import org.jan.notification.NotificationService;
@@ -14,11 +16,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,6 +34,7 @@ public class GameEventController {
     @Autowired private SimpMessagingTemplate messagingTemplate;
     @Autowired private NotificationService   notificationService;
     @Autowired private TeamMemberRepository  teamMemberRepository;
+    @Autowired private FriendshipRepository  friendshipRepository;
 
     /**
      * Game types that support the team-join feature.
@@ -51,7 +56,19 @@ public class GameEventController {
     // ── DTO builder ───────────────────────────────────────────────────────────
 
     /**
-     * Single-event variant — fetches team members from DB if needed.
+     * Loads the accepted friend IDs of {@code viewer} (empty set if viewer is null).
+     * Used for visibility filtering and the creatorIsFriend DTO field.
+     */
+    private Set<Long> loadFriendIds(User viewer) {
+        if (viewer == null) return Collections.emptySet();
+        return friendshipRepository.findAcceptedFriendships(viewer).stream()
+                .map(f -> f.getRequester().getId().equals(viewer.getId())
+                        ? f.getAddressee().getId() : f.getRequester().getId())
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * Single-event variant — fetches team members and friend IDs from DB.
      * Use for single-event endpoints (getEvent, accept, approve …).
      */
     private GameEventDto toDto(GameEvent event, User viewer) {
@@ -59,22 +76,26 @@ public class GameEventController {
         List<TeamMember> members = isTeamEvent
                 ? teamMemberRepository.findByEvent(event)
                 : List.of();
-        return buildDto(event, viewer, members);
+        return buildDto(event, viewer, members, loadFriendIds(viewer));
     }
 
     /**
-     * List-endpoint variant — uses pre-fetched team members to avoid N+1.
-     * Call {@link #batchTeamMembers} first, then pass the per-event slice here.
+     * List-endpoint variant — uses pre-fetched team members and friend IDs to avoid N+1.
+     * Call {@link #batchTeamMembers} and {@link #loadFriendIds} first, then pass slices here.
      */
-    private GameEventDto toDto(GameEvent event, User viewer, List<TeamMember> preloadedMembers) {
-        return buildDto(event, viewer, preloadedMembers);
+    private GameEventDto toDto(GameEvent event, User viewer, List<TeamMember> preloadedMembers,
+                                Set<Long> viewerFriendIds) {
+        return buildDto(event, viewer, preloadedMembers, viewerFriendIds);
     }
 
     /** Core DTO assembly — shared by both toDto() overloads. */
-    private GameEventDto buildDto(GameEvent event, User viewer, List<TeamMember> members) {
+    private GameEventDto buildDto(GameEvent event, User viewer, List<TeamMember> members,
+                                   Set<Long> viewerFriendIds) {
         boolean joined       = viewer != null && event.getParticipants().stream()
                 .anyMatch(p -> p.getId().equals(viewer.getId()));
         boolean isCreator    = viewer != null && event.getCreator().getId().equals(viewer.getId());
+        boolean creatorIsFriend = viewer != null && !isCreator
+                && viewerFriendIds.contains(event.getCreator().getId());
         boolean isChallenger = joined && !isCreator;
         boolean iHaveSubmitted = (isCreator    && event.isCreatorResultSubmitted())
                               || (isChallenger && event.isChallengerResultSubmitted());
@@ -148,6 +169,8 @@ public class GameEventController {
                 .creatorTeam(creatorTeam)
                 .challengerTeam(challengerTeam)
                 .myTeamSide(myTeamSide)
+                .visibility(event.getVisibility() != null ? event.getVisibility() : "PUBLIC")
+                .creatorIsFriend(creatorIsFriend)
                 .build();
     }
 
@@ -177,10 +200,27 @@ public class GameEventController {
     @GetMapping("/api/events")
     public ResponseEntity<List<GameEventDto>> getActiveEvents(Authentication auth) {
         User viewer = resolve(auth);
-        List<GameEvent> events = gameEventService.getActiveEvents();
+        List<GameEvent> allEvents = gameEventService.getActiveEvents();
+        Set<Long> friendIds = loadFriendIds(viewer);
+
+        // Filter events based on visibility and viewer's relationship to the creator
+        List<GameEvent> events = allEvents.stream().filter(e -> {
+            String vis = e.getVisibility() != null ? e.getVisibility() : "PUBLIC";
+            if ("PUBLIC".equals(vis)) return true;
+            if (viewer == null) return false; // non-public events require login
+            Long creatorId = e.getCreator().getId();
+            if (creatorId.equals(viewer.getId())) return true; // creator always sees own events
+            return switch (vis) {
+                case "FRIENDS"    -> friendIds.contains(creatorId);
+                case "PRIVATE",
+                     "TOURNAMENT" -> viewer.getUsername().equalsIgnoreCase(e.getInvitedUsername());
+                default           -> true;
+            };
+        }).toList();
+
         Map<Long, List<TeamMember>> teamMap = batchTeamMembers(events);
         return ResponseEntity.ok(events.stream()
-                .map(e -> toDto(e, viewer, teamMap.getOrDefault(e.getId(), List.of())))
+                .map(e -> toDto(e, viewer, teamMap.getOrDefault(e.getId(), List.of()), friendIds))
                 .collect(Collectors.toList()));
     }
 
@@ -188,9 +228,10 @@ public class GameEventController {
     public ResponseEntity<List<GameEventDto>> getMyEvents(Authentication auth) {
         User user = resolve(auth);
         List<GameEvent> events = gameEventService.getMyEvents(user);
+        Set<Long> friendIds = loadFriendIds(user);
         Map<Long, List<TeamMember>> teamMap = batchTeamMembers(events);
         return ResponseEntity.ok(events.stream()
-                .map(e -> toDto(e, user, teamMap.getOrDefault(e.getId(), List.of())))
+                .map(e -> toDto(e, user, teamMap.getOrDefault(e.getId(), List.of()), friendIds))
                 .collect(Collectors.toList()));
     }
 
@@ -207,10 +248,14 @@ public class GameEventController {
     public ResponseEntity<?> createEvent(@RequestBody GameEventCreateRequest req, Authentication auth) {
         try {
             User user = resolve(auth);
+            // Users cannot manually create TOURNAMENT events
+            String visibility = req.getVisibility();
+            if ("TOURNAMENT".equalsIgnoreCase(visibility)) visibility = "PUBLIC";
             GameEvent event = gameEventService.createEvent(
                     user, req.getLatitude(), req.getLongitude(),
                     req.getGameType(), req.getScheduledAt(), req.getDescription(),
-                    req.getLocationName(), req.getInvitedUsername(), req.isTeamMode());
+                    req.getLocationName(), req.getInvitedUsername(), req.isTeamMode(),
+                    visibility);
             // Notify the invited user (if any)
             if (req.getInvitedUsername() != null && !req.getInvitedUsername().isBlank()) {
                 User invited = userRepository.findByUsername(req.getInvitedUsername());

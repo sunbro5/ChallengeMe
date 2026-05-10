@@ -18,7 +18,7 @@ public class ChatWebSocketController {
     @Autowired
     private ChatService chatService;
 
-    @MessageMapping("/api/chat.send")
+    @MessageMapping("/chat.send")
     public void sendMessage(@Payload ChatMessage message, Principal principal) {
         // Resolve sender: prefer the authenticated Principal, fall back to the
         // senderUsername field that the client includes in the payload.

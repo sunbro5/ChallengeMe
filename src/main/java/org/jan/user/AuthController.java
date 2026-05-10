@@ -1,5 +1,6 @@
 package org.jan.user;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.jan.user.CaptchaService.CaptchaChallenge;
 import org.jan.user.dto.LoginResponse;
@@ -44,10 +45,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest req, HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest req, HttpServletRequest request) {
         try {
             User user = userService.authenticateUser(req.getUsername(), req.getPassword());
             if (user != null) {
+                // Invalidate any existing session to prevent session fixation attacks,
+                // then create a fresh session for the newly authenticated user.
+                HttpSession existing = request.getSession(false);
+                if (existing != null) existing.invalidate();
+                HttpSession session = request.getSession(true);
                 session.setAttribute("user", user);
                 return ResponseEntity.ok(new LoginResponse(user.getUsername(), user.getRole()));
             }
@@ -55,6 +61,19 @@ public class AuthController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    /**
+     * Returns the current user's basic info if the session is valid.
+     * Used by the frontend on startup to verify whether the stored session is still alive.
+     * Public endpoint — returns 401 JSON (not redirect) when not logged in.
+     */
+    @GetMapping("/me")
+    public ResponseEntity<?> me(HttpSession session) {
+        if (session == null) return ResponseEntity.status(401).body("Not logged in");
+        User user = (User) session.getAttribute("user");
+        if (user == null) return ResponseEntity.status(401).body("Not logged in");
+        return ResponseEntity.ok(new LoginResponse(user.getUsername(), user.getRole()));
     }
 
     @PostMapping("/logout")

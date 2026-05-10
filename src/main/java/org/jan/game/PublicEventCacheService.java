@@ -29,6 +29,9 @@ public class PublicEventCacheService {
         if (cache.asMap().isEmpty()) {
             gameEventRepository
                     .findTop200ByStatusOrderByCreatedAtDesc(EventStatus.OPEN)
+                    .stream()
+                    // Only PUBLIC events are shown on the unauthenticated map
+                    .filter(e -> e.getVisibility() == null || "PUBLIC".equals(e.getVisibility()))
                     .forEach(e -> cache.put(e.getId(), new PublicEventDto(
                             e.getId(), e.getLatitude(), e.getLongitude(), e.getGameType().name())));
         }

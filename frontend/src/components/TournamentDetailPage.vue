@@ -12,9 +12,16 @@
       <div class="t-header">
         <div class="t-title-row">
           <h2>{{ tournament.name }}</h2>
-          <span class="t-status" :class="tournament.status.toLowerCase()">
-            {{ $t(`tournament.${tournament.status.toLowerCase()}`) }}
-          </span>
+          <div class="badge-row">
+            <span v-if="tournament.format" class="t-format">
+              {{ tournament.format === 'ELIMINATION'
+                ? $t('tournament.formatElimination')
+                : $t('tournament.formatRoundRobin') }}
+            </span>
+            <span class="t-status" :class="tournament.status.toLowerCase()">
+              {{ $t(`tournament.${tournament.status.toLowerCase()}`) }}
+            </span>
+          </div>
         </div>
         <p class="t-meta">
           {{ gameIcon(tournament.gameType) }} {{ gameLabel(tournament.gameType) }}
@@ -44,7 +51,7 @@
               {{ p.username }}
             </router-link>
             <span v-if="p.seed > 0" class="p-seed">#{{ p.seed }}</span>
-            <span v-if="p.eliminated" class="p-elim">vyřazen</span>
+            <span v-if="p.eliminated" class="p-elim">{{ $t('tournament.eliminated') }}</span>
           </div>
         </div>
 
@@ -61,9 +68,10 @@
           >{{ $t('tournament.joinBtn') }}</button>
           <span v-else-if="isParticipant" class="joined-tag">{{ $t('tournament.joined') }}</span>
 
-          <!-- Start button (creator only, when full) -->
+          <!-- Start button (creator only):
+               ELIMINATION requires full capacity; ROUND_ROBIN requires ≥ 3 players -->
           <button
-            v-if="isCreator && tournament.participantCount === tournament.capacity"
+            v-if="isCreator && canStart"
             class="btn-start"
             :disabled="actionBusy"
             @click="startTournament"
@@ -73,23 +81,56 @@
         <p v-if="actionError" class="msg-error">{{ actionError }}</p>
       </div>
 
-      <!-- ── Bracket ─────────────────────────────────────────────────────── -->
+      <!-- ── Standings table (ROUND_ROBIN only) ────────────────────────── -->
+      <div v-if="tournament.format === 'ROUND_ROBIN' && tournament.matches.length" class="section">
+        <h3 class="section-title">{{ $t('tournament.standings') }}</h3>
+        <table class="standings-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{ $t('tournament.participants') }}</th>
+              <th>W</th>
+              <th>L</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(p, idx) in sortedParticipants"
+              :key="p.userId"
+              :class="{
+                'my-row': p.username === currentUser,
+                'winner-row': idx === 0 && tournament.status === 'FINISHED'
+              }"
+            >
+              <td class="rank-col">{{ idx + 1 }}</td>
+              <td class="name-col">
+                <router-link :to="`/player/${p.username}`" class="p-name">{{ p.username }}</router-link>
+                <span v-if="tournament.winnerUsername === p.username" class="winner-crown">★</span>
+              </td>
+              <td>{{ p.wins }}</td>
+              <td>{{ p.losses }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── Bracket / Matches ───────────────────────────────────────────── -->
       <div v-if="tournament.matches.length" class="section">
         <h3 class="section-title">{{ $t('tournament.bracket') }}</h3>
 
         <div
-          v-for="(roundMatches, rIdx) in matchesByRound" :key="rIdx"
+          v-for="group in matchesByRound" :key="group.round"
           class="round-block"
         >
           <h4 class="round-label">
-            {{ roundMatches.length === 1
+            {{ tournament.format !== 'ROUND_ROBIN' && group.matches.length === 1
               ? $t('tournament.final')
-              : $t('tournament.round', { n: rIdx + 1 }) }}
+              : $t('tournament.round', { n: group.round }) }}
           </h4>
 
           <div class="matches-list">
             <div
-              v-for="match in roundMatches" :key="match.id"
+              v-for="match in group.matches" :key="match.id"
               class="match-card"
               :class="{ done: !!match.winnerUsername }"
             >
@@ -111,7 +152,7 @@
                 >Detail →</router-link>
 
                 <button
-                  v-if="isCreator && !match.winnerUsername"
+                  v-if="isCreator && !match.winnerUsername && tournament.status === 'IN_PROGRESS'"
                   class="btn-record"
                   @click="openRecordModal(match)"
                 >{{ $t('tournament.recordResult') }}</button>
@@ -188,14 +229,34 @@ export default {
       return this.tournament?.participants?.some(p => p.username === this.currentUser)
     },
 
+    canStart() {
+      if (!this.tournament) return false
+      const count = this.tournament.participantCount
+      if (this.tournament.format === 'ROUND_ROBIN') return count >= 3
+      return count === this.tournament.capacity
+    },
+
+    /** Participants sorted by wins desc, losses asc — for round-robin standings. */
+    sortedParticipants() {
+      if (!this.tournament?.participants) return []
+      return [...this.tournament.participants].sort((a, b) => {
+        if (b.wins !== a.wins) return b.wins - a.wins
+        return a.losses - b.losses
+      })
+    },
+
+    /** Returns [ { round: N, matches: [...] }, ... ] sorted by round number. */
     matchesByRound() {
       if (!this.tournament?.matches?.length) return []
-      const rounds = {}
+      const map = {}
       for (const m of this.tournament.matches) {
-        if (!rounds[m.round]) rounds[m.round] = []
-        rounds[m.round].push(m)
+        if (!map[m.round]) map[m.round] = []
+        map[m.round].push(m)
       }
-      return Object.keys(rounds).sort((a, b) => a - b).map(r => rounds[r])
+      return Object.keys(map)
+        .map(Number)
+        .sort((a, b) => a - b)
+        .map(r => ({ round: r, matches: map[r] }))
     },
   },
   async mounted() {
@@ -239,14 +300,17 @@ export default {
 
     async startTournament() {
       this.actionBusy = true; this.actionError = ''
-      // Get current position for match GameEvent locations
+      // Location is required — every match must appear on the map
       const pos = await this.getPosition()
-      const lat  = pos?.lat  ?? 50.0755
-      const lng  = pos?.lng  ?? 14.4378
+      if (!pos) {
+        this.actionError = this.$t('tournament.locationRequired')
+        this.actionBusy = false
+        return
+      }
       try {
         const { data } = await axios.post(
           `/api/tournaments/${this.tournament.id}/start`,
-          { latitude: lat, longitude: lng },
+          { latitude: pos.lat, longitude: pos.lng },
           { withCredentials: true }
         )
         this.tournament = data
@@ -265,7 +329,7 @@ export default {
       const winnerParticipant = this.tournament.participants.find(
         p => p.username === this.recordModal.winner
       )
-      if (!winnerParticipant) return
+      if (!winnerParticipant) { this.recordModal.error = this.$t('tournament.couldNotRecord'); return }
       this.recordModal.busy = true; this.recordModal.error = ''
       try {
         const { data } = await axios.post(
@@ -321,9 +385,17 @@ export default {
 
 .t-header { margin-bottom: 28px; }
 .t-title-row {
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 6px;
+  display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 6px;
 }
 h2 { font-size: 20px; font-weight: 700; margin: 0; letter-spacing: -.01em; }
+
+.badge-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; flex-shrink: 0; }
+
+.t-format {
+  font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
+  padding: 2px 9px; border-radius: var(--r-full);
+  background: var(--bg-overlay); color: var(--text-secondary);
+}
 
 .t-status {
   font-size: 10px; font-weight: 700; text-transform: uppercase;
@@ -391,6 +463,25 @@ h2 { font-size: 20px; font-weight: 700; margin: 0; letter-spacing: -.01em; }
 }
 .btn-start:hover:not(:disabled) { filter: brightness(1.1); }
 .btn-start:disabled { opacity: .45; cursor: default; }
+
+/* ── Standings table (ROUND_ROBIN) ───────────────────────────── */
+.standings-table {
+  width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 4px;
+}
+.standings-table th {
+  text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .04em; color: var(--text-muted); padding: 5px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.standings-table td {
+  padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--text-primary);
+}
+.standings-table tbody tr:hover { background: var(--bg-elevated); }
+.my-row td { color: var(--brand); }
+.winner-row .name-col { font-weight: 700; }
+.rank-col { color: var(--text-muted); width: 28px; }
+.name-col { font-weight: 500; }
+.winner-crown { color: #c9a227; margin-left: 4px; }
 
 /* ── Bracket ──────────────────────────────────────────────────── */
 .round-block { margin-bottom: 20px; }

@@ -27,9 +27,22 @@ public class Tournament {
     @Column(nullable = false)
     private String gameType;
 
-    /** 4 or 8 */
     @Column(nullable = false)
     private int capacity;
+
+    /** GPS location of the tournament venue — saved when creator starts it. */
+    @Column(columnDefinition = "double precision default 0")
+    private double latitude;
+
+    @Column(columnDefinition = "double precision default 0")
+    private double longitude;
+
+    /**
+     * ELIMINATION — single-elimination bracket (capacity must be 2, 4, 8 or 16)
+     * ROUND_ROBIN — every participant plays every other participant
+     */
+    @Column(nullable = false, length = 20, columnDefinition = "varchar(20) default 'ELIMINATION' not null")
+    private String formatType = "ELIMINATION";
 
     /**
      * OPEN         — accepting sign-ups

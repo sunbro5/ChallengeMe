@@ -2,6 +2,9 @@ package org.jan.game;
 
 import org.jan.achievement.AchievementService;
 import org.jan.config.ProfanityFilter;
+import org.jan.friend.Friendship;
+import org.jan.friend.FriendshipRepository;
+import org.jan.friend.FriendshipStatus;
 import org.jan.user.RatingHistory;
 import org.jan.user.RatingHistoryRepository;
 import org.jan.user.User;
@@ -34,7 +37,14 @@ public class GameEventService {
     @Autowired
     private RatingHistoryRepository ratingHistoryRepository;
 
+    @Autowired
+    private FriendshipRepository friendshipRepository;
+
     static final int DAILY_EVENT_LIMIT = 5;
+    /** Standard ELO K-factor — controls how much a single match shifts the rating. */
+    private static final int ELO_K        = 32;
+    /** Minimum rating floor — no player can drop below this. */
+    private static final int ELO_FLOOR    = 100;
 
     // ── Create ────────────────────────────────────────────────────────────────
 
@@ -42,12 +52,16 @@ public class GameEventService {
     public GameEvent createEvent(User creator, double latitude, double longitude,
                                   GameType gameType, LocalDateTime scheduledAt,
                                   String description, String locationName, String invitedUsername,
-                                  boolean teamMode) {
-        LocalDateTime startOfDay = LocalDateTime.now().toLocalDate().atStartOfDay();
-        long todayCount = gameEventRepository.countByCreatorSince(creator, startOfDay);
-        if (todayCount >= DAILY_EVENT_LIMIT) {
-            throw new IllegalArgumentException(
-                    "You have reached the daily limit of " + DAILY_EVENT_LIMIT + " challenges. Try again tomorrow.");
+                                  boolean teamMode, String visibility) {
+        // Tournament matches are exempt from the daily limit — the system creates them automatically.
+        boolean isTournament = "TOURNAMENT".equalsIgnoreCase(visibility);
+        if (!isTournament) {
+            LocalDateTime startOfDay = LocalDateTime.now().toLocalDate().atStartOfDay();
+            long todayCount = gameEventRepository.countByCreatorSince(creator, startOfDay);
+            if (todayCount >= DAILY_EVENT_LIMIT) {
+                throw new IllegalArgumentException(
+                        "You have reached the daily limit of " + DAILY_EVENT_LIMIT + " challenges. Try again tomorrow.");
+            }
         }
 
         GameEvent event = new GameEvent();
@@ -65,11 +79,19 @@ public class GameEventService {
         event.setInvitedUsername(invitedUsername != null && !invitedUsername.isBlank()
                 ? invitedUsername.strip() : null);
         event.setTeamMode(teamMode);
+        // Validate and normalise visibility; fall back to PUBLIC for unknown values
+        String vis = (visibility != null && !visibility.isBlank()) ? visibility.toUpperCase() : "PUBLIC";
+        if (!vis.equals("PUBLIC") && !vis.equals("FRIENDS")
+                && !vis.equals("PRIVATE") && !vis.equals("TOURNAMENT")) {
+            vis = "PUBLIC";
+        }
+        event.setVisibility(vis);
         event.setCreatedAt(LocalDateTime.now());
         event.setStatus(EventStatus.OPEN);
         event.getParticipants().add(creator);
         GameEvent saved = gameEventRepository.save(event);
-        publicEventCacheService.put(saved);
+        // Only PUBLIC events go into the public (unauthenticated) map cache
+        if ("PUBLIC".equals(vis)) publicEventCacheService.put(saved);
         return saved;
     }
 
@@ -93,6 +115,14 @@ public class GameEventService {
         String invited = event.getInvitedUsername();
         if (invited != null && !invited.equalsIgnoreCase(challenger.getUsername()))
             throw new IllegalArgumentException("This challenge is a private invite for another player");
+
+        // FRIENDS-only events require the challenger to be an accepted friend of the creator
+        if ("FRIENDS".equals(event.getVisibility())) {
+            Friendship friendship = friendshipRepository
+                    .findBetweenUsers(challenger, event.getCreator()).orElse(null);
+            if (friendship == null || friendship.getStatus() != FriendshipStatus.ACCEPTED)
+                throw new IllegalArgumentException("This challenge is only available to friends of the creator");
+        }
 
         event.getParticipants().add(challenger);
         event.setStatus(EventStatus.PENDING_APPROVAL);
@@ -349,9 +379,9 @@ public class GameEventService {
         int rA = pA.getRating();
         int rB = pB.getRating();
         double expA = 1.0 / (1.0 + Math.pow(10, (rB - rA) / 400.0));
-        double K = 32 * kMultiplier;
-        pA.setRating(Math.max(100, rA + (int) Math.round(K * (scoreA - expA))));
-        pB.setRating(Math.max(100, rB + (int) Math.round(K * ((1 - scoreA) - (1 - expA)))));
+        double K = ELO_K * kMultiplier;
+        pA.setRating(Math.max(ELO_FLOOR, rA + (int) Math.round(K * (scoreA - expA))));
+        pB.setRating(Math.max(ELO_FLOOR, rB + (int) Math.round(K * ((1 - scoreA) - (1 - expA)))));
         userRepository.saveAll(List.of(pA, pB));
         // Record history only when ELO actually changes (kMultiplier > 0)
         if (kMultiplier > 0) {

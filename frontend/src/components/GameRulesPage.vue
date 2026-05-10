@@ -25,6 +25,7 @@
         @click="activeKey = activeKey === game.key ? null : game.key"
       >
         <div class="card-header">
+          <span class="game-icon">{{ game.icon }}</span>
           <div class="card-title-block">
             <h3>{{ game.name }}</h3>
             <p class="card-tagline">{{ game.tagline }}</p>
@@ -212,6 +213,11 @@ export default {
   padding: 14px 18px;
   border-left: 3px solid var(--brand);
   user-select: none;
+}
+.game-icon {
+  font-size: 28px;
+  line-height: 1;
+  flex-shrink: 0;
 }
 .card-title-block { flex: 1; }
 .card-title-block h3 { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }

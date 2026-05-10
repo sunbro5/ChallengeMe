@@ -52,4 +52,10 @@ public class GameEventDto {
      * Captains also get this field set so the frontend knows not to offer a join button.
      */
     String myTeamSide;
+
+    // ── Visibility ────────────────────────────────────────────────────────────
+    /** Who can see this event: PUBLIC, FRIENDS, PRIVATE, TOURNAMENT. */
+    String visibility;
+    /** True when the viewing user is an accepted friend of the creator. Used for the friends-only map filter. */
+    Boolean creatorIsFriend;
 }

@@ -83,7 +83,7 @@
       <div class="page-content">
         <router-view />
       </div>
-      <ChatPopup @notification="addToast" />
+      <ChatPopup v-if="showChatPopup" @notification="addToast" />
 
       <!-- Mobile bottom navigation -->
       <nav class="bottom-nav">
@@ -164,6 +164,11 @@ export default {
     },
     isHomePage() {
       return this.$route.path === '/'
+    },
+    // Hide the global chat popup on event detail — it shares the same message store
+    // and would duplicate every conversation the user is already having inline.
+    showChatPopup() {
+      return !this.$route.path.startsWith('/event/')
     },
   },
   mounted() {

@@ -4,7 +4,6 @@ import org.jan.friend.dto.ActivityDto;
 import org.jan.friend.dto.FriendDto;
 import org.jan.friend.dto.FriendRequestDto;
 import org.jan.friend.dto.UserSearchDto;
-import org.jan.game.EventStatus;
 import org.jan.game.GameEvent;
 import org.jan.game.GameEventRepository;
 import org.jan.user.User;

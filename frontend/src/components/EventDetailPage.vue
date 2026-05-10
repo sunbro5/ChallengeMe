@@ -234,31 +234,57 @@
         <p v-if="actionError" class="error-msg">{{ actionError }}</p>
       </div>
 
-      <!-- ── Chat ───────────────────────────────────────────────────────── -->
-      <div v-if="otherUser" class="chat-section">
-        <h3 class="chat-title">{{ $t('eventDetail.chatWith', { username: otherUser }) }}</h3>
+      <!-- ── Match Chat ────────────────────────────────────────────────── -->
+      <div v-if="otherUser" class="match-chat">
 
-        <div class="chat-messages" ref="messagesEl">
+        <!-- Header: both players face to face -->
+        <div class="mc-header">
+          <div class="mc-avatars">
+            <span class="mc-avatar mc-me">{{ currentUser?.[0]?.toUpperCase() }}</span>
+            <span class="mc-vs">vs</span>
+            <span class="mc-avatar mc-them">{{ otherUser[0]?.toUpperCase() }}</span>
+          </div>
+          <div class="mc-header-info">
+            <span class="mc-opponent-name">{{ otherUser }}</span>
+            <span class="mc-label">{{ $t('eventDetail.matchChat') }}</span>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div class="mc-messages" ref="messagesEl">
+          <div v-if="!messages.length" class="mc-empty">{{ $t('eventDetail.noMessages') }}</div>
+
           <div
             v-for="(msg, i) in messages"
             :key="i"
-            :class="['msg', msg.senderUsername === currentUser ? 'mine' : 'theirs']"
+            :class="['mc-row', msg.senderUsername === currentUser ? 'mc-mine' : 'mc-theirs']"
           >
-            <div class="bubble">{{ msg.content }}</div>
-            <div class="time">{{ formatTime(msg.sentAt) }}</div>
+            <!-- Avatar circle -->
+            <div class="mc-avatar-sm">{{ msg.senderUsername?.[0]?.toUpperCase() }}</div>
+
+            <div class="mc-msg-body">
+              <!-- Sender name only for "theirs" -->
+              <span v-if="msg.senderUsername !== currentUser" class="mc-sender">{{ msg.senderUsername }}</span>
+              <div class="mc-bubble">{{ msg.content }}</div>
+              <div class="mc-time">{{ formatTime(msg.sentAt) }}</div>
+            </div>
           </div>
-          <div v-if="!messages.length" class="no-messages">{{ $t('eventDetail.noMessages') }}</div>
         </div>
 
-        <div class="chat-input-row">
+        <!-- Input -->
+        <div class="mc-input-row">
           <input
             v-model="chatInput"
             type="text"
             :placeholder="$t('eventDetail.messagePlaceholder')"
-            class="chat-input"
+            class="mc-input"
             @keyup.enter="sendMessage"
           />
-          <button class="btn-send" @click="sendMessage">➤</button>
+          <button class="mc-send" @click="sendMessage">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
         </div>
       </div>
     </template>
@@ -591,15 +617,17 @@ export default {
     },
     mapsLink(ev) { return `https://www.google.com/maps?q=${ev.latitude},${ev.longitude}` },
     rematch() {
-      this.$router.push({
-        path: '/map',
-        query: {
-          rematch: '1',
-          lat: this.event.latitude,
-          lng: this.event.longitude,
-          gameType: this.event.gameType,
-        }
-      })
+      const q = {
+        rematch: '1',
+        lat: this.event.latitude,
+        lng: this.event.longitude,
+        gameType: this.event.gameType,
+      }
+      if (this.event.description)     q.description     = this.event.description
+      if (this.event.locationName)    q.locationName    = this.event.locationName
+      if (this.event.invitedUsername) q.invitedUsername = this.event.invitedUsername
+      if (this.event.visibility)      q.visibility      = this.event.visibility
+      this.$router.push({ path: '/map', query: q })
     },
     // ── Share ─────────────────────────────────────────────────────────────────
     doShare() {
@@ -928,56 +956,115 @@ html.light .si-icon { filter: none; }
 
 .error-msg { color: var(--red); font-size: 12px; margin-top: 8px; }
 
-.chat-section {
-  background: var(--bg-surface);
+/* ── Match Chat ────────────────────────────────────────────────────────── */
+.match-chat {
   border: 1px solid var(--border);
+  border-left: 3px solid var(--brand);
   border-radius: var(--r-md);
   overflow: hidden;
+  background: var(--bg-surface);
 }
 
-.chat-title {
-  background: var(--bg-elevated); color: var(--text-primary); margin: 0;
-  padding: 12px 16px; font-size: 14px; font-weight: 600;
+.mc-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-surface) 100%);
   border-bottom: 1px solid var(--border);
 }
 
-.chat-messages {
-  height: 280px; overflow-y: auto; padding: 12px;
-  display: flex; flex-direction: column; gap: 8px;
+.mc-avatars {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
-.msg { display: flex; flex-direction: column; }
-.msg.mine   { align-items: flex-end; }
-.msg.theirs { align-items: flex-start; }
-
-.bubble {
-  max-width: 260px; padding: 7px 12px; border-radius: 14px;
-  font-size: 13px; line-height: 1.4; word-break: break-word;
+.mc-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
 }
-.msg.mine   .bubble { background: var(--brand); color: #fff; border-bottom-right-radius: 4px; }
-.msg.theirs .bubble { background: var(--bg-elevated); color: var(--text-primary); border-bottom-left-radius: 4px; }
+.mc-me   { background: var(--brand-muted); color: var(--brand); border: 1px solid rgba(66,184,131,.4); }
+.mc-them { background: var(--bg-overlay);  color: var(--text-secondary); border: 1px solid var(--border); }
 
-.time { font-size: 10px; color: var(--text-muted); margin-top: 2px; padding: 0 4px; }
-.no-messages { text-align: center; color: var(--text-muted); font-size: 13px; padding: 20px 0; }
+.mc-vs {
+  font-size: 10px; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: .06em;
+}
 
-.chat-input-row {
-  display: flex; gap: 8px; padding: 10px;
+.mc-header-info {
+  display: flex; flex-direction: column; gap: 1px;
+}
+.mc-opponent-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.mc-label { font-size: 11px; color: var(--text-muted); letter-spacing: .02em; }
+
+.mc-messages {
+  height: 320px; overflow-y: auto; padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+.mc-empty { text-align: center; color: var(--text-muted); font-size: 13px; padding: 40px 0; }
+
+.mc-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.mc-mine   { flex-direction: row-reverse; }
+.mc-theirs { flex-direction: row; }
+
+.mc-avatar-sm {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--text-secondary);
+  flex-shrink: 0;
+}
+.mc-mine .mc-avatar-sm   { background: var(--brand-muted); color: var(--brand); border-color: rgba(66,184,131,.3); }
+.mc-theirs .mc-avatar-sm { background: var(--bg-elevated); }
+
+.mc-msg-body {
+  display: flex; flex-direction: column; gap: 2px;
+  max-width: calc(100% - 80px);
+}
+.mc-mine   .mc-msg-body { align-items: flex-end; }
+.mc-theirs .mc-msg-body { align-items: flex-start; }
+
+.mc-sender {
+  font-size: 10px; font-weight: 600; color: var(--text-muted);
+  padding: 0 4px; text-transform: uppercase; letter-spacing: .04em;
+}
+
+.mc-bubble {
+  padding: 8px 13px; border-radius: 16px;
+  font-size: 13px; line-height: 1.45; word-break: break-word;
+}
+.mc-mine   .mc-bubble { background: var(--brand); color: #fff; border-bottom-right-radius: 4px; }
+.mc-theirs .mc-bubble { background: var(--bg-elevated); color: var(--text-primary); border-bottom-left-radius: 4px; border: 1px solid var(--border); }
+
+.mc-time { font-size: 10px; color: var(--text-muted); padding: 0 4px; }
+
+.mc-input-row {
+  display: flex; gap: 8px; padding: 10px 12px;
   border-top: 1px solid var(--border);
+  background: var(--bg-surface);
 }
-.chat-input {
-  flex: 1; padding: 7px 12px; background: var(--bg-elevated); color: var(--text-primary);
+.mc-input {
+  flex: 1; padding: 8px 14px; background: var(--bg-elevated); color: var(--text-primary);
   border: 1px solid var(--border); border-radius: var(--r-full); font-size: 13px; outline: none;
   font-family: var(--font); transition: border-color var(--transition);
 }
-.chat-input::placeholder { color: var(--text-muted); }
-.chat-input:focus { border-color: var(--brand); }
-.btn-send {
+.mc-input::placeholder { color: var(--text-muted); }
+.mc-input:focus { border-color: var(--brand); }
+.mc-send {
   background: var(--brand); color: #fff; border: none; border-radius: 50%;
-  width: 34px; height: 34px; cursor: pointer; font-size: 14px;
+  width: 36px; height: 36px; cursor: pointer;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   transition: background var(--transition);
 }
-.btn-send:hover { background: var(--brand-hover); }
+.mc-send:hover { background: var(--brand-hover); }
 
 .modal-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,.7);
@@ -1021,7 +1108,7 @@ label { display: block; font-size: 12px; color: var(--text-secondary); margin-bo
 @media (max-width: 640px) {
   .event-detail-page { padding: 16px 14px 76px; }
   .event-card        { padding: 14px 16px; }
-  .chat-box          { height: 50vh; }
+  .mc-messages       { height: 50vh; }
   .modal             { width: calc(100vw - 32px); }
   /* On narrow screens the dropdown can't safely anchor right — keep it in view */
   .share-dropdown { right: auto; left: 0; }

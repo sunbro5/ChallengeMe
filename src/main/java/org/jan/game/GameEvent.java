@@ -56,6 +56,18 @@ public class GameEvent {
      */
     private boolean teamMode = false;
 
+    /**
+     * Who can see and accept this event on the map.
+     * <ul>
+     *   <li>PUBLIC     — visible to everyone (default)</li>
+     *   <li>FRIENDS    — visible only to creator's accepted friends</li>
+     *   <li>PRIVATE    — visible only to the invited user (invitedUsername must be set)</li>
+     *   <li>TOURNAMENT — created automatically by TournamentService; visible only to participants</li>
+     * </ul>
+     */
+    @Column(length = 20)
+    private String visibility = "PUBLIC";
+
     /** Wall-clock time when the event was posted. Used for the daily creation limit. */
     private LocalDateTime createdAt;
 

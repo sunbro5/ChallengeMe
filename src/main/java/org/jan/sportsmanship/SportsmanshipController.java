@@ -44,7 +44,8 @@ public class SportsmanshipController {
         boolean positive = Boolean.parseBoolean(rawPositive.toString());
 
         User voter = userRepository.findByUsername(auth.getName());
-        GameEvent event = gameEventRepository.findById(eventId).orElse(null);
+        // Use JOIN FETCH to avoid N+1 when accessing event.getParticipants() below.
+        GameEvent event = gameEventRepository.findByIdWithParticipants(eventId).orElse(null);
         if (event == null) return ResponseEntity.notFound().build();
 
         if (event.getStatus() != EventStatus.FINISHED) {
@@ -99,6 +100,8 @@ public class SportsmanshipController {
         if (auth == null) return ResponseEntity.ok(Map.of("voted", false));
 
         User voter = userRepository.findByUsername(auth.getName());
+        // findByIdWithParticipants is cheaper when participants may be accessed elsewhere;
+        // for existsByVoterAndEvent we only need the event identity, so findById is fine.
         GameEvent event = gameEventRepository.findById(eventId).orElse(null);
         if (event == null) return ResponseEntity.ok(Map.of("voted", false));
 

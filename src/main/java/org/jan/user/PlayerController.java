@@ -12,6 +12,7 @@ import org.jan.user.dto.GameTypeStatsDto;
 import org.jan.user.dto.PlayerProfileDto;
 import org.jan.user.dto.RatingPointDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,11 @@ public class PlayerController {
     @Autowired private RatingHistoryRepository   ratingHistoryRepository;
     @Autowired private SportsmanshipRepository   sportsmanshipRepository;
 
+    /** Minimum completed games (W+L+D) before reputation score is computed. Configurable via application.properties. */
+    @Value("${app.reputation.min-games:1}")
+    private int reputationMinGames;
+
+    @Transactional(readOnly = true)
     @GetMapping("/{username}")
     public ResponseEntity<PlayerProfileDto> getProfile(
             @PathVariable String username, Authentication auth) {
@@ -151,6 +157,7 @@ public class PlayerController {
         return ResponseEntity.ok(profile);
     }
 
+    @Transactional(readOnly = true)
     @GetMapping("/{username}/rating-history")
     public ResponseEntity<List<RatingPointDto>> getRatingHistory(@PathVariable String username) {
         User player = userRepository.findByUsername(username);
@@ -181,14 +188,15 @@ public class PlayerController {
     /**
      * Computes a 1–5 reputation score from win rate, dispute cleanliness,
      * sportsmanship votes, and account age.
-     * Returns null when the player has fewer than 5 completed games.
+     * Returns null when the player has fewer than {@code reputationMinGames} completed games.
      */
     private Integer computeReputation(User u, int thumbsUp, int thumbsDown) {
         int total = u.getWins() + u.getLosses() + u.getDraws();
-        if (total < 5) return null;
+        if (total < reputationMinGames) return null;
 
         double winRate   = (double) u.getWins() / total;
-        double cleanRate = 1.0 - (double) u.getDisputes() / total;
+        // Clamp to 0 to handle edge cases where admin manually set disputes > total games.
+        double cleanRate = Math.max(0.0, 1.0 - (double) u.getDisputes() / total);
 
         int    totalVotes = thumbsUp + thumbsDown;
         double sportsRate = totalVotes > 0 ? (double) thumbsUp / totalVotes : 0.5;

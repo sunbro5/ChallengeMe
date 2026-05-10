@@ -153,6 +153,7 @@ export default {
           longitude:       this.longitude,
           invitedUsername: this.targetUsername,
           teamMode:        this.form.teamMode && this.isTeamEligible,
+          visibility:      'PRIVATE', // direct challenge — only the invited player sees it
         }, { withCredentials: true })
         this.success = true
         setTimeout(() => this.$emit('close'), 1400)

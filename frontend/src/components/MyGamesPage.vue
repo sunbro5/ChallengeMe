@@ -13,7 +13,7 @@
 
       <div v-else class="events-list">
         <div
-          v-for="ev in events"
+          v-for="ev in sortedEvents"
           :key="ev.id"
           class="event-card"
           :class="ev.status.toLowerCase()"
@@ -121,6 +121,21 @@ export default {
       errors:  {},
       gameMeta: {},
     }
+  },
+  computed: {
+    // Sort games so the most urgent appear first:
+    // 1. IN_PROGRESS  (currently playing — needs attention)
+    // 2. PENDING_APPROVAL (waiting for creator's decision)
+    // 3. OPEN         (posted, waiting for a challenger)
+    // 4. Everything else (FINISHED, DISPUTED, CANCELLED) — keep original scheduledAt order
+    sortedEvents() {
+      const priority = { IN_PROGRESS: 0, PENDING_APPROVAL: 1, OPEN: 2 }
+      return [...this.events].sort((a, b) => {
+        const pa = priority[a.status] ?? 3
+        const pb = priority[b.status] ?? 3
+        return pa - pb
+      })
+    },
   },
   async mounted() {
     await this.loadGames()

@@ -8,7 +8,11 @@
       "Bash(npm list:*)",
       "Bash(findstr /r /s \"leaderboard\" \"C:\\\\Users\\\\mares\\\\IdeaProjects\\\\ChallengeMe\\\\src\\\\main\\\\java\\\\org\\\\jan\")",
       "Bash(findstr \".java:\")",
-      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('C:/Users/mares/IdeaProjects/ChallengeMe/frontend/src/locales/cs.json','utf8'\\)\\); console.log\\('OK'\\)\")"
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('C:/Users/mares/IdeaProjects/ChallengeMe/frontend/src/locales/cs.json','utf8'\\)\\); console.log\\('OK'\\)\")",
+      "PowerShell(New-Item -Path \"C:\\\\Users\\\\mares\\\\IdeaProjects\\\\ChallengeMe\\\\frontend\\\\src\\\\components\\\\TeamTournamentDetailPage.vue\" -ItemType File -Force)",
+      "Bash(dir \"C:\\\\Users\\\\mares\\\\IdeaProjects\\\\ChallengeMe\\\\frontend\\\\public\")",
+      "Bash(dir \"C:\\\\Users\\\\mares\\\\IdeaProjects\\\\ChallengeMe\\\\data\")",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"C:\\\\Users\\\\mares\\\\IdeaProjects\\\\ChallengeMe\\\\docs\")"
     ]
   }
 }

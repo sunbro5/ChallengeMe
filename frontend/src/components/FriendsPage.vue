@@ -18,7 +18,15 @@
       <div v-for="friend in friends" :key="friend.id" class="friend-item">
         <div class="friend-avatar">{{ friend.username[0].toUpperCase() }}</div>
         <span class="friend-name">{{ friend.username }}</span>
-        <button class="unfriend-btn" @click="unfriend(friend)">{{ $t('friends.unfriend') }}</button>
+        <div class="friend-actions">
+          <router-link :to="`/player/${friend.username}`" class="profile-link">
+            {{ $t('friends.viewProfile') }}
+          </router-link>
+          <button class="challenge-btn" @click="openChallenge(friend.username)">
+            {{ $t('player.challenge') }}
+          </button>
+          <button class="unfriend-btn" @click="unfriend(friend)">{{ $t('friends.unfriend') }}</button>
+        </div>
       </div>
     </div>
 
@@ -91,6 +99,13 @@
       </div>
     </div>
 
+    <!-- Challenge modal -->
+    <ChallengeModal
+      v-if="showChallengeModal"
+      :targetUsername="challengeTarget"
+      @close="showChallengeModal = false"
+    />
+
     <!-- Report modal -->
     <div v-if="reportModal.open" class="modal-overlay" @click.self="closeReport">
       <div class="modal">
@@ -116,9 +131,11 @@
 
 <script>
 import axios from 'axios'
+import ChallengeModal from './ChallengeModal.vue'
 
 export default {
   name: 'FriendsPage',
+  components: { ChallengeModal },
   data() {
     return {
       tab: 'friends',
@@ -132,6 +149,8 @@ export default {
       activity: [],
       activityLoading: false,
       gameMeta: {},
+      showChallengeModal: false,
+      challengeTarget: '',
     }
   },
   mounted() {
@@ -243,6 +262,12 @@ export default {
       } catch (e) {
         console.error('Failed to decline request', e)
       }
+    },
+
+    // Challenge
+    openChallenge(username) {
+      this.challengeTarget = username
+      this.showChallengeModal = true
     },
 
     // Report modal
@@ -401,6 +426,27 @@ export default {
   transition: color var(--transition), border-color var(--transition);
 }
 .decline-btn:hover { color: var(--red); border-color: var(--red); }
+
+.friend-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.challenge-btn {
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  padding: 5px 13px;
+  border-radius: var(--r);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font);
+  transition: background var(--transition);
+}
+.challenge-btn:hover { background: var(--brand-hover); }
 
 .unfriend-btn {
   background: transparent;

@@ -13,7 +13,7 @@
         v-for="g in games" :key="g.key"
         :class="['filter-btn', { active: selectedGame === g.key }]"
         @click="selectGame(g.key)"
-      >{{ currentLocale === 'cs' ? g.nameCs : g.nameEn }}</button>
+      ><span class="btn-icon">{{ g.icon }}</span>{{ currentLocale === 'cs' ? g.nameCs : g.nameEn }}</button>
     </div>
 
     <div v-if="loading" class="state-msg">{{ $t('common.loading') }}</div>
@@ -154,6 +154,13 @@ h2 {
   cursor: pointer;
   font-family: var(--font);
   transition: background var(--transition), color var(--transition), border-color var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn-icon {
+  font-size: 14px;
+  line-height: 1;
 }
 .filter-btn:hover { border-color: var(--brand); color: var(--text-primary); }
 .filter-btn.active {

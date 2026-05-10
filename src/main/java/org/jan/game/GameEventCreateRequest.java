@@ -15,4 +15,11 @@ public class GameEventCreateRequest {
     private String invitedUsername;
     /** True when the creator wants to play with a team (only valid for team-eligible game types). */
     private boolean teamMode;
+
+    /**
+     * Who can see/accept this event.
+     * Accepted values: PUBLIC (default), FRIENDS, PRIVATE.
+     * TOURNAMENT is reserved for the tournament system and cannot be set manually.
+     */
+    private String visibility;
 }

@@ -4,14 +4,36 @@
 
     <!-- ── Filter bar (přihlášení uživatelé) ─────────────────────────────── -->
     <div v-if="isLoggedIn" class="filter-bar">
-      <button
-        :class="['filter-toggle-btn', { active: activeFilters.length > 0 }]"
-        @click="filterPanel.visible = !filterPanel.visible"
-      >
-        {{ $t('map.filterGames') }}
-        <span v-if="activeFilters.length > 0" class="filter-badge">{{ activeFilters.length }}</span>
-        <span class="filter-chevron">{{ filterPanel.visible ? '▲' : '▼' }}</span>
-      </button>
+      <div class="filter-row">
+        <button
+          :class="['filter-toggle-btn', { active: activeFilters.length > 0 }]"
+          @click="filterPanel.visible = !filterPanel.visible"
+        >
+          {{ $t('map.filterGames') }}
+          <span v-if="activeFilters.length > 0" class="filter-badge">{{ activeFilters.length }}</span>
+          <span class="filter-chevron">{{ filterPanel.visible ? '▲' : '▼' }}</span>
+        </button>
+        <button
+          :class="['filter-toggle-btn', { active: friendsOnly }]"
+          @click="toggleFriendsOnly"
+        >{{ $t('map.filterFriendsOnly') }}</button>
+        <button
+          :class="['filter-toggle-btn', { active: nearMe }]"
+          @click="toggleNearMe"
+        >{{ $t('map.filterNearMe') }}</button>
+      </div>
+
+      <!-- Radius slider row — visible when Near me is active -->
+      <div v-if="nearMe" class="radius-row">
+        <input
+          type="range" min="1" max="50" step="1"
+          v-model.number="radiusKm"
+          class="radius-slider"
+          @input="applyFilter"
+        />
+        <span class="radius-val">{{ radiusKm }} km</span>
+      </div>
+      <p v-if="nearMeError" class="radius-error">{{ nearMeError }}</p>
 
       <transition name="filter-drop">
         <div v-if="filterPanel.visible" class="filter-dropdown">
@@ -65,11 +87,30 @@
           class="text-input"
         />
 
-        <label>{{ $t('map.inviteFriendLabel') }}</label>
-        <select v-model="createPanel.invitedUsername">
-          <option value="">{{ $t('map.inviteFriendNone') }}</option>
-          <option v-for="f in friends" :key="f.id" :value="f.username">{{ f.username }}</option>
-        </select>
+        <label>{{ $t('map.visibilityLabel') }}</label>
+        <div class="vis-opts">
+          <label class="vis-opt" :class="{ active: createPanel.visibility === 'PUBLIC' }">
+            <input type="radio" value="PUBLIC" v-model="createPanel.visibility" />
+            {{ $t('map.visibilityPublic') }}
+          </label>
+          <label class="vis-opt" :class="{ active: createPanel.visibility === 'FRIENDS' }">
+            <input type="radio" value="FRIENDS" v-model="createPanel.visibility" />
+            {{ $t('map.visibilityFriends') }}
+          </label>
+          <label class="vis-opt" :class="{ active: createPanel.visibility === 'PRIVATE' }">
+            <input type="radio" value="PRIVATE" v-model="createPanel.visibility" />
+            {{ $t('map.visibilityPrivate') }}
+          </label>
+        </div>
+
+        <!-- Invite specific friend — only for PRIVATE visibility -->
+        <template v-if="createPanel.visibility === 'PRIVATE'">
+          <label>{{ $t('map.inviteFriendLabel') }}</label>
+          <select v-model="createPanel.invitedUsername">
+            <option value="">{{ $t('map.inviteFriendNone') }}</option>
+            <option v-for="f in friends" :key="f.id" :value="f.username">{{ f.username }}</option>
+          </select>
+        </template>
 
         <label v-if="isTeamEligible" class="team-toggle-label">
           <input type="checkbox" v-model="createPanel.teamMode" class="team-checkbox" />
@@ -114,6 +155,10 @@
         </p>
         <p v-if="detailPanel.event.locationName" class="location-name">
           {{ detailPanel.event.locationName }}
+        </p>
+        <p v-if="detailPanel.event.visibility && detailPanel.event.visibility !== 'PUBLIC'"
+           class="vis-badge" :class="detailPanel.event.visibility.toLowerCase()">
+          {{ $t('map.visBadge' + capitalize(detailPanel.event.visibility)) }}
         </p>
         <p v-if="detailPanel.event.invitedUsername" class="private-invite-badge">
           {{ $t('eventDetail.privateInvite', { username: detailPanel.event.invitedUsername }) }}
@@ -302,6 +347,16 @@ import 'leaflet.markercluster'
 import { markRaw } from 'vue'
 import axios from 'axios'
 
+/** Haversine distance in km between two GPS points. */
+function haversine(lat1, lng1, lat2, lng2) {
+  const R = 6371
+  const dLat = (lat2 - lat1) * Math.PI / 180
+  const dLng = (lng2 - lng1) * Math.PI / 180
+  const a = Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+}
+
 const GAME_META_FALLBACK = { icon: '🎮', color: '#42b883' }
 let GAME_META_CACHE = {}
 
@@ -342,10 +397,17 @@ export default {
       friends: [],
       allEvents: [],
       activeFilters: [],
+      friendsOnly: false,
+      nearMe: false,
+      radiusKm: 5,
+      userLat: null,
+      userLng: null,
+      nearMeError: '',
       filterPanel: { visible: false },
       createPanel: {
         visible: false, lat: 0, lng: 0, gameType: '', scheduledAt: '',
         description: '', locationName: '', invitedUsername: '', teamMode: false,
+        visibility: 'PUBLIC',
         busy: false, error: '',
       },
       detailPanel: { visible: false, event: null, busy: false, error: '' },
@@ -372,12 +434,25 @@ export default {
       this.map.setView([lat, lng], 15)
       this.createPanel.lat = lat
       this.createPanel.lng = lng
-      if (q.gameType) this.createPanel.gameType = q.gameType
+      if (q.gameType)        this.createPanel.gameType        = q.gameType
+      if (q.description)     this.createPanel.description     = q.description
+      if (q.locationName)    this.createPanel.locationName    = q.locationName
+      if (q.invitedUsername) this.createPanel.invitedUsername = q.invitedUsername
+      if (q.visibility)      this.createPanel.visibility      = q.visibility
+      // Pre-fill scheduledAt with the current local time (user can adjust before submitting)
+      const now = new Date()
+      const pad = n => String(n).padStart(2, '0')
+      this.createPanel.scheduledAt =
+        `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}` +
+        `T${pad(now.getHours())}:${pad(now.getMinutes())}`
       this.createPanel.visible = true
       this.detailPanel.visible = false
     } else if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(pos =>
-        this.map.setView([pos.coords.latitude, pos.coords.longitude], 13))
+      navigator.geolocation.getCurrentPosition(pos => {
+        this.userLat = pos.coords.latitude
+        this.userLng = pos.coords.longitude
+        this.map.setView([this.userLat, this.userLng], 13)
+      })
     }
   },
   beforeUnmount() { if (this.map) this.map.remove() },
@@ -457,20 +532,27 @@ export default {
       this.createPanel.locationName    = ''
       this.createPanel.invitedUsername = ''
       this.createPanel.teamMode        = false
+      this.createPanel.visibility      = 'PUBLIC'
       if (this.tempMarker) { this.tempMarker.remove(); this.tempMarker = null }
     },
 
     async submitCreate() {
       if (!this.createPanel.scheduledAt) { this.createPanel.error = this.$t('map.pickDateTime'); return }
+      if (new Date(this.createPanel.scheduledAt) <= new Date()) {
+        this.createPanel.error = this.$t('map.scheduledInPast'); return
+      }
       this.createPanel.busy = true; this.createPanel.error = ''
       try {
+        const vis = this.createPanel.visibility || 'PUBLIC'
         const { data } = await axios.post('/api/events', {
           latitude: this.createPanel.lat, longitude: this.createPanel.lng,
           gameType: this.createPanel.gameType, scheduledAt: this.createPanel.scheduledAt,
           description: this.createPanel.description || null,
           locationName: this.createPanel.locationName || null,
-          invitedUsername: this.createPanel.invitedUsername || null,
+          // invitedUsername only sent for PRIVATE visibility
+          invitedUsername: vis === 'PRIVATE' ? (this.createPanel.invitedUsername || null) : null,
           teamMode: this.createPanel.teamMode && this.isTeamEligible,
+          visibility: vis,
         }, { withCredentials: true })
         this.allEvents.push(data)
         this.addMarker(data)
@@ -580,14 +662,56 @@ export default {
       Object.entries(this.markers).forEach(([id, marker]) => {
         const event = this.allEvents.find(e => String(e.id) === String(id))
         if (!event) return
-        const show = this.activeFilters.length === 0 || this.activeFilters.includes(event.gameType)
+        const typeMatch   = this.activeFilters.length === 0 || this.activeFilters.includes(event.gameType)
+        // Friends-only filter: show events where viewer is the creator, joined, or creator is a friend
+        const friendMatch = !this.friendsOnly || event.joined || event.isCreator || event.creatorIsFriend
+        // Radius filter: only when enabled and user location is known
+        const distMatch   = !this.nearMe || this.userLat === null ||
+          haversine(this.userLat, this.userLng, event.latitude, event.longitude) <= this.radiusKm
+        const show = typeMatch && friendMatch && distMatch
         if (show  && !this.clusterGroup.hasLayer(marker)) { this.clusterGroup.addLayer(marker) }
         if (!show &&  this.clusterGroup.hasLayer(marker)) { this.clusterGroup.removeLayer(marker) }
       })
     },
+    toggleFriendsOnly() {
+      this.friendsOnly = !this.friendsOnly
+      this.applyFilter()
+    },
+
+    toggleNearMe() {
+      if (this.nearMe) {
+        this.nearMe = false
+        this.nearMeError = ''
+        this.applyFilter()
+        return
+      }
+      // Already have location — enable immediately
+      if (this.userLat !== null) {
+        this.nearMe = true
+        this.applyFilter()
+        return
+      }
+      // Request location
+      if (!navigator.geolocation) {
+        this.nearMeError = this.$t('map.noLocationForFilter')
+        return
+      }
+      this.nearMeError = ''
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          this.userLat = pos.coords.latitude
+          this.userLng = pos.coords.longitude
+          this.map.setView([this.userLat, this.userLng], 13)
+          this.nearMe = true
+          this.applyFilter()
+        },
+        () => { this.nearMeError = this.$t('map.noLocationForFilter') }
+      )
+    },
     statusLabel(s)  { return this.$t('status.' + s.toLowerCase()) },
     formatDate(iso) { return iso ? new Date(iso).toLocaleString() : '—' },
     mapsLink(e)     { return `https://www.google.com/maps?q=${e.latitude},${e.longitude}` },
+    capitalize(s)   { return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : '' },
   },
 }
 </script>
@@ -814,6 +938,28 @@ textarea { resize: vertical; line-height: 1.4; }
 .panel-slide-enter-active,.panel-slide-leave-active { transition:transform .2s ease,opacity .2s ease; }
 .panel-slide-enter-from,.panel-slide-leave-to       { transform:translateX(30px); opacity:0; }
 
+/* ── Visibility radio options ────────────────────────────────────────────── */
+.vis-opts { display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+.vis-opt {
+  display:flex; align-items:center; gap:8px;
+  background:var(--bg-elevated); border:1px solid var(--border);
+  border-radius:var(--r); padding:8px 12px; cursor:pointer; font-size:13px;
+  transition:border-color var(--transition), background var(--transition);
+  font-weight:400;
+}
+.vis-opt:hover          { background:var(--bg-overlay); }
+.vis-opt.active         { border-color:var(--brand); }
+.vis-opt input          { accent-color:var(--brand); }
+
+/* Visibility badge in detail panel */
+.vis-badge {
+  display:inline-block; font-size:11px; font-weight:600; border-radius:var(--r-full);
+  padding:2px 10px; margin-bottom:8px;
+}
+.vis-badge.friends    { background:rgba(66,184,131,.12); color:var(--brand); border:1px solid rgba(66,184,131,.25); }
+.vis-badge.private    { background:rgba(203,166,247,.12); color:var(--brand); border:1px solid rgba(203,166,247,.3); }
+.vis-badge.tournament { background:rgba(249,226,175,.12); color:var(--yellow); border:1px solid rgba(249,226,175,.3); }
+
 /* ── Filter bar ──────────────────────────────────────────────────────────── */
 .filter-bar {
   position: absolute;
@@ -821,6 +967,7 @@ textarea { resize: vertical; line-height: 1.4; }
   left: 52px;   /* za zoom tlačítky Leafletu */
   z-index: 1000;
 }
+.filter-row { display:flex; gap:8px; flex-wrap:wrap; }
 
 .filter-toggle-btn {
   display: inline-flex;
@@ -853,6 +1000,41 @@ textarea { resize: vertical; line-height: 1.4; }
   line-height: 1.5;
 }
 .filter-chevron { font-size: 9px; color: var(--text-muted); }
+
+/* ── Near me radius row ──────────────────────────────────────────────────── */
+.radius-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--brand);
+  border-radius: var(--r-full);
+  padding: 6px 14px;
+  margin-top: 6px;
+  box-shadow: var(--shadow);
+  width: fit-content;
+}
+.radius-slider {
+  flex: 1;
+  min-width: 120px;
+  max-width: 180px;
+  accent-color: var(--brand);
+  cursor: pointer;
+  height: 4px;
+}
+.radius-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--brand);
+  min-width: 40px;
+  text-align: right;
+  white-space: nowrap;
+}
+.radius-error {
+  font-size: 11px;
+  color: var(--red);
+  margin: 4px 0 0 4px;
+}
 
 .filter-dropdown {
   margin-top: 6px;

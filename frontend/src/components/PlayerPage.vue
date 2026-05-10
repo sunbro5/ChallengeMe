@@ -370,11 +370,11 @@ export default {
     playerRank() {
       return getRank(this.profile?.rating || 1000)
     },
-    // Dispute rate as percentage (0–100). null when fewer than 5 games (not meaningful).
+    // Dispute rate as percentage (0–100). null when no games played yet.
     disputeRate() {
       if (!this.profile) return null
       const total = this.profile.wins + this.profile.losses + this.profile.draws
-      if (total < 5) return null
+      if (!total) return null
       return Math.round((this.profile.disputes / total) * 100)
     },
   },
